@@ -1,14 +1,14 @@
 package app.application.controller;
 
 
-import app.application.utils.YoutubeDownloadListener;
-import app.application.utils.YoutubePlaylistDownloadService;
-import app.application.utils.YoutubeVideoDownloadService;
-import app.application.utils.YoutubeIdExtractor;
+import app.application.event.EventBinder;
+import app.application.utils.*;
 import com.github.kiulian.downloader.model.VideoDetails;
 import com.github.kiulian.downloader.model.playlist.PlaylistDetails;
 import com.github.kiulian.downloader.model.playlist.PlaylistVideoDetails;
 import com.github.kiulian.downloader.model.playlist.YoutubePlaylist;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -58,6 +58,9 @@ public class MainWindowController {
     @FXML
     private Label txtPlaylistTitle;
 
+    @FXML
+    private TextField txtDownloadPath;
+
     @Autowired
     private YoutubeVideoDownloadService youtubeVideoDownloadService;
 
@@ -67,11 +70,15 @@ public class MainWindowController {
     @Autowired
     private YoutubeIdExtractor youtubeIdExtractor;
 
+    @Autowired
+    private UserConfigHandler userConfigHandler;
+
     @FXML
     public void initialize(){
         youtubeVideoDownloadService.setYoutubeDownloadListener(new YoutubeDownloadListener(downloadProgress));
         videoPane.setVisible(false);
         playlistPanel.setVisible(false);
+        txtDownloadPath.textProperty().bindBidirectional(userConfigHandler.getUserConfig().getDownloadDir());
     }
 
 
