@@ -1,14 +1,8 @@
 package app.application.controller;
 
-
-import app.application.utils.YoutubeDownloadListener;
-import app.application.utils.YoutubePlaylistDownloadService;
-import app.application.utils.YoutubeVideoDownloadService;
-import app.application.utils.YoutubeIdExtractor;
+import app.application.utils.*;
 import com.github.kiulian.downloader.model.VideoDetails;
-import com.github.kiulian.downloader.model.playlist.PlaylistDetails;
 import com.github.kiulian.downloader.model.playlist.PlaylistVideoDetails;
-import com.github.kiulian.downloader.model.playlist.YoutubePlaylist;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -17,6 +11,8 @@ import javafx.scene.layout.AnchorPane;
 import net.rgielen.fxweaver.core.FxmlView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 @FxmlView("/views/MainWindow.fxml")
@@ -58,6 +54,9 @@ public class MainWindowController {
     @FXML
     private Label txtPlaylistTitle;
 
+    @FXML
+    private TextField txtDownloadPath;
+
     @Autowired
     private YoutubeVideoDownloadService youtubeVideoDownloadService;
 
@@ -67,11 +66,15 @@ public class MainWindowController {
     @Autowired
     private YoutubeIdExtractor youtubeIdExtractor;
 
+    @Autowired
+    private UserConfigHandler userConfigHandler;
+
     @FXML
     public void initialize(){
         youtubeVideoDownloadService.setYoutubeDownloadListener(new YoutubeDownloadListener(downloadProgress));
         videoPane.setVisible(false);
         playlistPanel.setVisible(false);
+        txtDownloadPath.textProperty().bindBidirectional(userConfigHandler.getUserConfig().getDownloadDir());
     }
 
 
@@ -79,8 +82,7 @@ public class MainWindowController {
         VideoDetails details = youtubeVideoDownloadService.getVideoDetails(youtubeIdExtractor.getVideoIdFromLink(txtDownloadLink.getText()));
         imgThumbnail.setImage(new Image(details.thumbnails().get(0).split("\\?sqp")[0]));
         lblVideoTitle.setText(details.title());
-        boxQuality.getItems().addAll(youtubeVideoDownloadService.getQualityLabels());
-        boxQuality.getSelectionModel().select(0);
+        refreshQualityBox(youtubeVideoDownloadService.getQualityLabels());
         txtDescription.setText(details.description());
         videoPane.setVisible(true);
     }
@@ -102,6 +104,17 @@ public class MainWindowController {
             
         }
         playlistPanel.setVisible(true);
+    }
+
+    public void btnSave_click(){
+        userConfigHandler.writeConfig();
+    }
+
+
+    private void refreshQualityBox(List<String> listWithOptions){
+        boxQuality.getItems().clear();
+        boxQuality.getItems().addAll(listWithOptions);
+        boxQuality.getSelectionModel().select(0);
     }
 
 }

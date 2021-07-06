@@ -42,7 +42,7 @@ public class YoutubeVideoDownloadService extends YoutubeDownloadService {
 
     @SneakyThrows
     private void downloadAsync(Format format) {
-        youtubeVideo.downloadAsync(format, Paths.get(userConfigHandler.getDownloadDir()).toFile(), youtubeDownloadListener);
+        youtubeVideo.downloadAsync(format, Paths.get(userConfigHandler.getUserConfig().getDownloadDir().get()).toFile(), youtubeDownloadListener);
     }
 
 
