@@ -12,6 +12,8 @@ import net.rgielen.fxweaver.core.FxmlView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 @FxmlView("/views/MainWindow.fxml")
 public class MainWindowController {
@@ -80,8 +82,7 @@ public class MainWindowController {
         VideoDetails details = youtubeVideoDownloadService.getVideoDetails(youtubeIdExtractor.getVideoIdFromLink(txtDownloadLink.getText()));
         imgThumbnail.setImage(new Image(details.thumbnails().get(0).split("\\?sqp")[0]));
         lblVideoTitle.setText(details.title());
-        boxQuality.getItems().addAll(youtubeVideoDownloadService.getQualityLabels());
-        boxQuality.getSelectionModel().select(0);
+        refreshQualityBox(youtubeVideoDownloadService.getQualityLabels());
         txtDescription.setText(details.description());
         videoPane.setVisible(true);
     }
@@ -107,6 +108,13 @@ public class MainWindowController {
 
     public void btnSave_click(){
         userConfigHandler.writeConfig();
+    }
+
+
+    private void refreshQualityBox(List<String> listWithOptions){
+        boxQuality.getItems().clear();
+        boxQuality.getItems().addAll(listWithOptions);
+        boxQuality.getSelectionModel().select(0);
     }
 
 }
