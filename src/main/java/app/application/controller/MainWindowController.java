@@ -49,7 +49,7 @@ public class MainWindowController {
     private TextField txtPlaylistLink;
 
     @FXML
-    private ListView listPlaylist;
+    private ListView<String> listPlaylist;
 
     @FXML
     private Label txtPlaylistTitle;
@@ -98,12 +98,10 @@ public class MainWindowController {
 
     public void btnSearchPlaylist_click(){
         String listLink = "https://www.youtube.com/playlist?list=PLwjcmSTfw6SAe2LAvJLnfjUh4wxTw2Ncc";
-//        String listLink = "https://www.youtube.com/playlist?list=PLNmsVeXQZj7o46LI06XkxAqcg4Ucm7pwn";
         txtPlaylistTitle.setText(youtubePlaylistDownloadService.getPlaylistDetails(youtubeIdExtractor.getPlayListIdFromLink(listLink)).title());
-        for (PlaylistVideoDetails video : youtubePlaylistDownloadService.getYoutubePlaylist().videos()) {
-            
-        }
+        listPlaylist.getItems().addAll(youtubePlaylistDownloadService.getVideoTitles());
         playlistPanel.setVisible(true);
+        youtubePlaylistDownloadService.downloadPlaylist();
     }
 
     public void btnSave_click(){
