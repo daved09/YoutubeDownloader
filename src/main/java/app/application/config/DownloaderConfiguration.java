@@ -1,6 +1,7 @@
 package app.application.config;
 
 
+import app.application.utils.UserConfigHandler;
 import com.github.kiulian.downloader.YoutubeDownloader;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,6 +17,13 @@ public class DownloaderConfiguration {
                 "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.121 Safari/537.36");
         youtubeDownloader.setParserRetryOnFailure(1);
         return youtubeDownloader;
+    }
+
+    @Bean
+    public UserConfigHandler userConfigHandler(){
+        UserConfigHandler userConfigHandler = new UserConfigHandler();
+        userConfigHandler.setDownloadDir(System.getProperty("user.home") + "/Videos");
+        return userConfigHandler;
     }
 
 

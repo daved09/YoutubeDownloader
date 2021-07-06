@@ -11,12 +11,8 @@ public abstract class YoutubeDownloadService {
     @Autowired
     protected YoutubeDownloader youtubeDownloader;
 
-    protected String defaultDownloadDir;
-
-    @PostConstruct
-    public void init() {
-        defaultDownloadDir = System.getProperty("user.home") + "\\Videos";
-    }
+    @Autowired
+    protected UserConfigHandler userConfigHandler;
 
 
 }
