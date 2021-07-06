@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import java.io.File;
 
 @Service
-public class ConfigrationFactory {
+public class ConfigurationFactory {
 
 
 
