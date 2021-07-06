@@ -7,6 +7,6 @@ import lombok.Data;
 @Data
 public class UserConfig {
 
-	private SimpleStringProperty downloadDir;
+	private StringProperty downloadDir;
 
 }

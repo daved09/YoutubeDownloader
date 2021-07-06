@@ -1,14 +1,8 @@
 package app.application.controller;
 
-
-import app.application.event.EventBinder;
 import app.application.utils.*;
 import com.github.kiulian.downloader.model.VideoDetails;
-import com.github.kiulian.downloader.model.playlist.PlaylistDetails;
 import com.github.kiulian.downloader.model.playlist.PlaylistVideoDetails;
-import com.github.kiulian.downloader.model.playlist.YoutubePlaylist;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -109,6 +103,10 @@ public class MainWindowController {
             
         }
         playlistPanel.setVisible(true);
+    }
+
+    public void btnSave_click(){
+        userConfigHandler.writeConfig();
     }
 
 }
