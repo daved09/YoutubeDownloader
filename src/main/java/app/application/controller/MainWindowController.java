@@ -55,6 +55,9 @@ public class MainWindowController {
     private Label txtPlaylistTitle;
 
     @FXML
+    private Label lblDownloadProgress;
+
+    @FXML
     private TextField txtDownloadPath;
 
     @Autowired
@@ -72,6 +75,7 @@ public class MainWindowController {
     @FXML
     public void initialize(){
         youtubeVideoDownloadService.setYoutubeDownloadListener(new YoutubeDownloadListener(downloadProgress));
+        youtubePlaylistDownloadService.setLabel(lblDownloadProgress);
         videoPane.setVisible(false);
         playlistPanel.setVisible(false);
         txtDownloadPath.textProperty().bindBidirectional(userConfigHandler.getUserConfig().getDownloadDir());
@@ -104,7 +108,8 @@ public class MainWindowController {
     }
 
     public void btnPlaylistDownload_click(){
-        youtubePlaylistDownloadService.downloadPlaylist();
+        new Thread(() -> youtubePlaylistDownloadService.downloadPlaylist()).start();
+
     }
 
     public void btnSave_click(){

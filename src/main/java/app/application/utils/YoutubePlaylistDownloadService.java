@@ -9,6 +9,9 @@ import com.github.kiulian.downloader.model.playlist.PlaylistVideoDetails;
 import com.github.kiulian.downloader.model.playlist.YoutubePlaylist;
 import com.github.kiulian.downloader.model.quality.VideoQuality;
 import com.github.kiulian.downloader.parser.Parser;
+import javafx.application.Platform;
+import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import lombok.Setter;
 import lombok.SneakyThrows;
@@ -26,7 +29,7 @@ public class YoutubePlaylistDownloadService extends YoutubeDownloadService {
     private YoutubePlaylist youtubePlaylist;
 
     @Setter
-    private ProgressBar progressBar;
+    private Label label;
 
     @SneakyThrows
     public PlaylistDetails getPlaylistDetails(String playListId) {
@@ -44,18 +47,18 @@ public class YoutubePlaylistDownloadService extends YoutubeDownloadService {
         for (PlaylistVideoDetails video : youtubePlaylist.videos()) {
             titles.add(video.title());
         }
+        setLabelProgress(0, titles.size());
         return titles;
     }
 
     @SneakyThrows
     public void downloadPlaylist(){
+        int size = youtubePlaylist.videos().size();
+        int progress = 0;
         for (PlaylistVideoDetails video : youtubePlaylist.videos()) {
-            List<Format> formats = null;
-            try {
-                formats = youtubeDownloader.getVideo(video.videoId()).formats();
-            } catch (YoutubeException e) {
-                e.printStackTrace();
-            }
+            progress++;
+            setLabelProgress(progress, size);
+            List<Format> formats = getFormatsFromVideo(video);
             if(formats.get(1) instanceof AudioVideoFormat){
                 downloadAsync(formats.get(1), video.videoId());
             }
@@ -65,8 +68,23 @@ public class YoutubePlaylistDownloadService extends YoutubeDownloadService {
         }
     }
 
+    private List<Format> getFormatsFromVideo(PlaylistVideoDetails video) {
+        List<Format> formats = new ArrayList<>();
+        try {
+            formats = youtubeDownloader.getVideo(video.videoId()).formats();
+        } catch (YoutubeException e) {
+            e.printStackTrace();
+        }
+        return formats;
+    }
+
     protected void downloadAsync(Format format, String videoId) throws YoutubeException, IOException {
-        youtubeDownloader.getVideo(videoId).downloadAsync(format,
+        youtubeDownloader.getVideo(videoId).download(format,
                 Paths.get(userConfigHandler.getUserConfig().getDownloadDir().get() + File.separator + youtubePlaylist.details().title()).toFile());
     }
+
+    private void setLabelProgress(int current, int max){
+        Platform.runLater(() -> label.setText("Videos: " + current + "/" + max));
+    }
+
 }

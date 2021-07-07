@@ -44,9 +44,10 @@
                   <Button layoutX="718.0" layoutY="14.0" mnemonicParsing="false" onAction="#btnSearchPlaylist_click" text="Suchen" AnchorPane.rightAnchor="14.0" />
                   <AnchorPane fx:id="playlistPanel" layoutX="14.0" layoutY="54.0" prefHeight="378.0" prefWidth="783.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="53.0">
                      <children>
-                        <ListView fx:id="listPlaylist" layoutX="14.0" layoutY="44.0" prefHeight="323.0" prefWidth="749.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="44.0" />
+                        <ListView fx:id="listPlaylist" layoutX="14.0" layoutY="44.0" prefHeight="280.0" prefWidth="749.0" AnchorPane.bottomAnchor="54.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="44.0" />
                         <Label fx:id="txtPlaylistTitle" layoutX="14.0" layoutY="14.0" text="Playlist Titel" />
-                        <Button layoutX="680.0" layoutY="10.0" mnemonicParsing="false" onAction="#btnPlaylistDownload_click" text="Download" />
+                        <Button layoutX="680.0" layoutY="340.0" mnemonicParsing="false" onAction="#btnPlaylistDownload_click" text="Download" />
+                        <Label fx:id="lblDownloadProgress" layoutX="14.0" layoutY="344.0" text="Videos: 0/0" />
                      </children>
                   </AnchorPane>
                </children></AnchorPane>
