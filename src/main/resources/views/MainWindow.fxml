@@ -46,6 +46,7 @@
                      <children>
                         <ListView fx:id="listPlaylist" layoutX="14.0" layoutY="44.0" prefHeight="323.0" prefWidth="749.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="44.0" />
                         <Label fx:id="txtPlaylistTitle" layoutX="14.0" layoutY="14.0" text="Playlist Titel" />
+                        <Button layoutX="680.0" layoutY="10.0" mnemonicParsing="false" onAction="#btnPlaylistDownload_click" text="Download" />
                      </children>
                   </AnchorPane>
                </children></AnchorPane>

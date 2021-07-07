@@ -15,6 +15,5 @@ public abstract class YoutubeDownloadService {
     @Autowired
     protected UserConfigHandler userConfigHandler;
 
-    protected abstract void downloadAsync(Format format);
 
 }

@@ -101,6 +101,9 @@ public class MainWindowController {
         txtPlaylistTitle.setText(youtubePlaylistDownloadService.getPlaylistDetails(youtubeIdExtractor.getPlayListIdFromLink(listLink)).title());
         listPlaylist.getItems().addAll(youtubePlaylistDownloadService.getVideoTitles());
         playlistPanel.setVisible(true);
+    }
+
+    public void btnPlaylistDownload_click(){
         youtubePlaylistDownloadService.downloadPlaylist();
     }
 
