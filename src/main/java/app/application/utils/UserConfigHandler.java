@@ -1,12 +1,10 @@
 package app.application.utils;
 
-import app.application.data.ConfigrationFactory;
+import app.application.data.ConfigurationFactory;
 import app.application.data.UserConfig;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import lombok.Setter;
 import lombok.SneakyThrows;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -19,7 +17,7 @@ public class UserConfigHandler {
 	private UserConfig userConfig;
 
 	@Setter
-	private ConfigrationFactory configrationFactory;
+	private ConfigurationFactory configurationFactory;
 
 	@Setter
 	private Gson gson;
@@ -27,7 +25,7 @@ public class UserConfigHandler {
 	private final String CONFIG_FILE = System.getProperty("user.home") + "/.ytdl.json";
 
 	public void initConfig(){
-		userConfig = configrationFactory.createDefaultConfiguration();
+		userConfig = configurationFactory.createDefaultConfiguration();
 	}
 
 	public void loadConfig() throws IOException {

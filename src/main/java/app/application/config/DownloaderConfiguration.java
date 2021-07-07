@@ -1,15 +1,10 @@
 package app.application.config;
 
 
-import app.application.config.adapter.InterfaceAdapter;
-import app.application.config.adapter.StringPropertyAdapter;
-import app.application.data.ConfigrationFactory;
+import app.application.data.ConfigurationFactory;
 import app.application.utils.UserConfigHandler;
 import com.github.kiulian.downloader.YoutubeDownloader;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.sun.javafx.binding.ExpressionHelper;
-import javafx.beans.property.StringProperty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,13 +14,13 @@ import java.io.IOException;
 @Configuration
 public class DownloaderConfiguration {
 
-    private final ConfigrationFactory configrationFactory;
+    private final ConfigurationFactory configurationFactory;
 
     private final Gson gson;
 
     @Autowired
-    public DownloaderConfiguration(ConfigrationFactory configrationFactory, Gson gson) {
-        this.configrationFactory = configrationFactory;
+    public DownloaderConfiguration(ConfigurationFactory configurationFactory, Gson gson) {
+        this.configurationFactory = configurationFactory;
         this.gson = gson;
     }
 
@@ -41,7 +36,7 @@ public class DownloaderConfiguration {
     @Bean
     public UserConfigHandler userConfigHandler() throws IOException {
         UserConfigHandler userConfigHandler = new UserConfigHandler();
-        userConfigHandler.setConfigrationFactory(configrationFactory);
+        userConfigHandler.setConfigurationFactory(configurationFactory);
         userConfigHandler.setGson(gson);
         userConfigHandler.loadConfig();
         return userConfigHandler;
