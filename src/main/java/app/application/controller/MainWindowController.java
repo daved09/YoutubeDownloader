@@ -97,8 +97,8 @@ public class MainWindowController {
     }
 
     public void btnSearchPlaylist_click(){
-        String listLink = "https://www.youtube.com/playlist?list=PLwjcmSTfw6SAe2LAvJLnfjUh4wxTw2Ncc";
-        txtPlaylistTitle.setText(youtubePlaylistDownloadService.getPlaylistDetails(youtubeIdExtractor.getPlayListIdFromLink(listLink)).title());
+        txtPlaylistTitle.setText(youtubePlaylistDownloadService.getPlaylistDetails(
+                youtubeIdExtractor.getPlayListIdFromLink(txtPlaylistLink.getText())).title());
         listPlaylist.getItems().addAll(youtubePlaylistDownloadService.getVideoTitles());
         playlistPanel.setVisible(true);
     }
