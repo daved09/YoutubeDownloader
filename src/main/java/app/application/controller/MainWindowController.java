@@ -72,8 +72,6 @@ public class MainWindowController {
     @FXML
     public void initialize(){
         youtubeVideoDownloadService.setYoutubeDownloadListener(new YoutubeDownloadListener(downloadProgress));
-        videoPane.setVisible(false);
-        playlistPanel.setVisible(false);
         txtDownloadPath.textProperty().bindBidirectional(userConfigHandler.getUserConfig().getDownloadDir());
     }
 
