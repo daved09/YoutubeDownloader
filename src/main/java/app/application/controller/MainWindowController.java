@@ -76,8 +76,6 @@ public class MainWindowController {
     public void initialize(){
         youtubeVideoDownloadService.setYoutubeDownloadListener(new YoutubeDownloadListener(downloadProgress));
         youtubePlaylistDownloadService.setLabel(lblDownloadProgress);
-        videoPane.setVisible(false);
-        playlistPanel.setVisible(false);
         txtDownloadPath.textProperty().bindBidirectional(userConfigHandler.getUserConfig().getDownloadDir());
     }
 
@@ -109,7 +107,6 @@ public class MainWindowController {
 
     public void btnPlaylistDownload_click(){
         new Thread(() -> youtubePlaylistDownloadService.downloadPlaylist()).start();
-
     }
 
     public void btnSave_click(){
