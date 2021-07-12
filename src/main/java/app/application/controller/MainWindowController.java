@@ -49,10 +49,13 @@ public class MainWindowController {
     private TextField txtPlaylistLink;
 
     @FXML
-    private ListView listPlaylist;
+    private ListView<String> listPlaylist;
 
     @FXML
     private Label txtPlaylistTitle;
+
+    @FXML
+    private Label lblDownloadProgress;
 
     @FXML
     private TextField txtDownloadPath;
@@ -72,6 +75,7 @@ public class MainWindowController {
     @FXML
     public void initialize(){
         youtubeVideoDownloadService.setYoutubeDownloadListener(new YoutubeDownloadListener(downloadProgress));
+        youtubePlaylistDownloadService.setLabel(lblDownloadProgress);
         txtDownloadPath.textProperty().bindBidirectional(userConfigHandler.getUserConfig().getDownloadDir());
     }
 
@@ -95,13 +99,14 @@ public class MainWindowController {
     }
 
     public void btnSearchPlaylist_click(){
-        String listLink = "https://www.youtube.com/playlist?list=PLwjcmSTfw6SAe2LAvJLnfjUh4wxTw2Ncc";
-//        String listLink = "https://www.youtube.com/playlist?list=PLNmsVeXQZj7o46LI06XkxAqcg4Ucm7pwn";
-        txtPlaylistTitle.setText(youtubePlaylistDownloadService.getPlaylistDetails(youtubeIdExtractor.getPlayListIdFromLink(listLink)).title());
-        for (PlaylistVideoDetails video : youtubePlaylistDownloadService.getYoutubePlaylist().videos()) {
-            
-        }
+        txtPlaylistTitle.setText(youtubePlaylistDownloadService.getPlaylistDetails(
+                youtubeIdExtractor.getPlayListIdFromLink(txtPlaylistLink.getText())).title());
+        listPlaylist.getItems().addAll(youtubePlaylistDownloadService.getVideoTitles());
         playlistPanel.setVisible(true);
+    }
+
+    public void btnPlaylistDownload_click(){
+        new Thread(() -> youtubePlaylistDownloadService.downloadPlaylist()).start();
     }
 
     public void btnSave_click(){
