@@ -1,5 +1,6 @@
 package app.application.controller;
 
+import app.application.data.VersionProperties;
 import app.application.utils.*;
 import com.github.kiulian.downloader.model.VideoDetails;
 import com.github.kiulian.downloader.model.playlist.PlaylistVideoDetails;
@@ -68,6 +69,9 @@ public class MainWindowController {
     @FXML
     private Button btnSearchPlaylist;
 
+    @FXML
+    private TextField txtVerion;
+
     @Autowired
     private YoutubeVideoDownloadService youtubeVideoDownloadService;
 
@@ -80,6 +84,9 @@ public class MainWindowController {
     @Autowired
     private UserConfigHandler userConfigHandler;
 
+    @Autowired
+    private VersionProperties versionProperties;
+
     @FXML
     public void initialize(){
         youtubeVideoDownloadService.setYoutubeDownloadListener(new YoutubeDownloadListener(downloadProgress));
@@ -87,6 +94,7 @@ public class MainWindowController {
         txtDownloadPath.textProperty().bindBidirectional(userConfigHandler.getUserConfig().getDownloadDir());
         btnSearch.disableProperty().bind(Bindings.isEmpty(txtDownloadLink.textProperty()));
         btnSearchPlaylist.disableProperty().bind(Bindings.isEmpty(txtPlaylistLink.textProperty()));
+        txtVerion.textProperty().bind(versionProperties.getVersion());
     }
 
 

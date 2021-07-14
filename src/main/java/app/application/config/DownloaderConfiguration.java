@@ -6,12 +6,14 @@ import app.application.utils.UserConfigHandler;
 import com.github.kiulian.downloader.YoutubeDownloader;
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.io.IOException;
 
 @Configuration
+@EnableConfigurationProperties
 public class DownloaderConfiguration {
 
     private final ConfigurationFactory configurationFactory;
