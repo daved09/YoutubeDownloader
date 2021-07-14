@@ -1,4 +1,4 @@
-package app.application.controller;
+package app.application.controller.main_window;
 
 import app.application.data.VersionProperties;
 import app.application.utils.*;
@@ -21,32 +21,9 @@ import java.util.List;
 @FxmlView("/views/MainWindow.fxml")
 public class MainWindowController {
 
-    @FXML
-    private TextField txtDownloadLink;
-
-    @FXML
-    private ImageView imgThumbnail;
-
-    @FXML
-    private AnchorPane videoPane;
 
     @FXML
     private AnchorPane playlistPanel;
-
-    @FXML
-    private Label lblVideoTitle;
-
-    @FXML
-    private ComboBox<String> boxQuality;
-
-    @FXML
-    private TextArea txtDescription;
-
-    @FXML
-    private ProgressBar downloadProgress;
-
-    @FXML
-    private CheckBox chkAudioOnly;
 
     @FXML
     private TextField txtPlaylistLink;
@@ -63,8 +40,6 @@ public class MainWindowController {
     @FXML
     private TextField txtDownloadPath;
 
-    @FXML
-    private Button btnSearch;
 
     @FXML
     private Button btnSearchPlaylist;
@@ -72,8 +47,6 @@ public class MainWindowController {
     @FXML
     private TextField txtVerion;
 
-    @Autowired
-    private YoutubeVideoDownloadService youtubeVideoDownloadService;
 
     @Autowired
     private YoutubePlaylistDownloadService youtubePlaylistDownloadService;
@@ -89,32 +62,13 @@ public class MainWindowController {
 
     @FXML
     public void initialize(){
-        youtubeVideoDownloadService.setYoutubeDownloadListener(new YoutubeDownloadListener(downloadProgress));
         youtubePlaylistDownloadService.setLabel(lblDownloadProgress);
         txtDownloadPath.textProperty().bindBidirectional(userConfigHandler.getUserConfig().getDownloadDir());
-        btnSearch.disableProperty().bind(Bindings.isEmpty(txtDownloadLink.textProperty()));
         btnSearchPlaylist.disableProperty().bind(Bindings.isEmpty(txtPlaylistLink.textProperty()));
         txtVerion.textProperty().bind(versionProperties.getVersion());
     }
 
 
-    public void btnSearch_click(){
-        VideoDetails details = youtubeVideoDownloadService.getVideoDetails(youtubeIdExtractor.getVideoIdFromLink(txtDownloadLink.getText()));
-        imgThumbnail.setImage(new Image(details.thumbnails().get(0).split("\\?sqp")[0]));
-        lblVideoTitle.setText(details.title());
-        refreshQualityBox(youtubeVideoDownloadService.getQualityLabels());
-        txtDescription.setText(details.description());
-        videoPane.setVisible(true);
-    }
-
-    public void btnDownloadVideo_click(){
-        if(chkAudioOnly.isSelected()){
-            youtubeVideoDownloadService.downloadAudioOnlyAsync();
-        }
-        else{
-            youtubeVideoDownloadService.downloadVideoAsync(boxQuality.getSelectionModel().getSelectedItem());
-        }
-    }
 
     public void btnSearchPlaylist_click(){
         txtPlaylistTitle.setText(youtubePlaylistDownloadService.getPlaylistDetails(
@@ -131,11 +85,5 @@ public class MainWindowController {
         userConfigHandler.writeConfig();
     }
 
-
-    private void refreshQualityBox(List<String> listWithOptions){
-        boxQuality.getItems().clear();
-        boxQuality.getItems().addAll(listWithOptions);
-        boxQuality.getSelectionModel().select(0);
-    }
 
 }

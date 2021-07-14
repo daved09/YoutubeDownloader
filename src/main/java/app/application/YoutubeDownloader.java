@@ -1,7 +1,7 @@
 package app.application;
 
 import app.MyApp;
-import app.application.controller.MainWindowController;
+import app.application.controller.main_window.MainWindowController;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Parent;
