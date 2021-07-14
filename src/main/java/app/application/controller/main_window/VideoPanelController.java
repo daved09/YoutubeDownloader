@@ -22,7 +22,6 @@ import java.util.List;
 @FxmlView("/views/VideoPanel.fxml")
 public class VideoPanelController {
 
-
 	@FXML
 	private TextField txtDownloadLink;
 
@@ -31,7 +30,6 @@ public class VideoPanelController {
 
 	@FXML
 	private AnchorPane videoPane;
-
 
 	@FXML
 	private Label lblVideoTitle;
