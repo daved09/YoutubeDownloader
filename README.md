@@ -2,7 +2,7 @@
 
 ## Downloads
 
-[Download](daluba.de:3000/dave/YoutubeDownloader/releases/latest)
+[Download](http://daluba.de:3000/dave/YoutubeDownloader/releases/latest)
 
 ## Screenshots
 
