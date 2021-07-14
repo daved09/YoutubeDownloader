@@ -3,6 +3,8 @@ package app.application.controller;
 import app.application.utils.*;
 import com.github.kiulian.downloader.model.VideoDetails;
 import com.github.kiulian.downloader.model.playlist.PlaylistVideoDetails;
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -60,6 +62,12 @@ public class MainWindowController {
     @FXML
     private TextField txtDownloadPath;
 
+    @FXML
+    private Button btnSearch;
+
+    @FXML
+    private Button btnSearchPlaylist;
+
     @Autowired
     private YoutubeVideoDownloadService youtubeVideoDownloadService;
 
@@ -77,6 +85,8 @@ public class MainWindowController {
         youtubeVideoDownloadService.setYoutubeDownloadListener(new YoutubeDownloadListener(downloadProgress));
         youtubePlaylistDownloadService.setLabel(lblDownloadProgress);
         txtDownloadPath.textProperty().bindBidirectional(userConfigHandler.getUserConfig().getDownloadDir());
+        btnSearch.disableProperty().bind(Bindings.isEmpty(txtDownloadLink.textProperty()));
+        btnSearchPlaylist.disableProperty().bind(Bindings.isEmpty(txtPlaylistLink.textProperty()));
     }
 
 
