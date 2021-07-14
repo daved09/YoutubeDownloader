@@ -27,7 +27,7 @@
       </Tab>
       <Tab closable="false" text="Einstellungen">
         <content>
-            <fx:include source="SettinsPanel.fxml"/>
+            <fx:include source="SettingsPanel.fxml"/>
         </content>
       </Tab>
    </tabs>

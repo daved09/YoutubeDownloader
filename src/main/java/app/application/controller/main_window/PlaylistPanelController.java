@@ -1,7 +1,5 @@
 package app.application.controller.main_window;
 
-import app.application.data.VersionProperties;
-import app.application.utils.UserConfigHandler;
 import app.application.utils.YoutubeIdExtractor;
 import app.application.utils.YoutubePlaylistDownloadService;
 import javafx.beans.binding.Bindings;
@@ -11,12 +9,10 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
-import net.rgielen.fxweaver.core.FxmlView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-@FxmlView("/views/PlaylistPanel.fxml")
 public class PlaylistPanelController {
 
 	@FXML

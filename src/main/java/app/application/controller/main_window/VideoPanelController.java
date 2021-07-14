@@ -1,7 +1,5 @@
 package app.application.controller.main_window;
 
-import app.application.data.VersionProperties;
-import app.application.utils.UserConfigHandler;
 import app.application.utils.YoutubeDownloadListener;
 import app.application.utils.YoutubeIdExtractor;
 import app.application.utils.YoutubeVideoDownloadService;
@@ -12,14 +10,12 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-import net.rgielen.fxweaver.core.FxmlView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Component
-@FxmlView("/views/VideoPanel.fxml")
 public class VideoPanelController {
 
 	@FXML

@@ -4,12 +4,10 @@ import app.application.data.VersionProperties;
 import app.application.utils.UserConfigHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
-import net.rgielen.fxweaver.core.FxmlView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-@FxmlView("/views/MainWindow.fxml")
 public class SettingsPanelController {
 
 	@FXML
