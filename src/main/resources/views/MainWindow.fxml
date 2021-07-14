@@ -22,19 +22,7 @@
       </Tab>
       <Tab closable="false" text="Playlist">
         <content>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-               <children>
-                  <TextField fx:id="txtPlaylistLink" layoutX="14.0" layoutY="14.0" prefHeight="25.0" prefWidth="708.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="83.0" />
-                  <Button fx:id="btnSearchPlaylist" layoutX="718.0" layoutY="14.0" mnemonicParsing="false" onAction="#btnSearchPlaylist_click" text="Suchen" AnchorPane.rightAnchor="14.0" />
-                  <AnchorPane fx:id="playlistPanel" layoutX="14.0" layoutY="54.0" prefHeight="378.0" prefWidth="783.0" visible="false" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="53.0">
-                     <children>
-                        <ListView fx:id="listPlaylist" layoutX="14.0" layoutY="44.0" prefHeight="280.0" prefWidth="749.0" AnchorPane.bottomAnchor="54.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="44.0" />
-                        <Label fx:id="txtPlaylistTitle" layoutX="14.0" layoutY="14.0" text="Playlist Titel" />
-                        <Button layoutX="680.0" layoutY="340.0" mnemonicParsing="false" onAction="#btnPlaylistDownload_click" text="Download" />
-                        <Label fx:id="lblDownloadProgress" layoutX="14.0" layoutY="344.0" text="Videos: 0/0" />
-                     </children>
-                  </AnchorPane>
-               </children></AnchorPane>
+            <fx:include source="PlaylistPanel.fxml"/>
         </content>
       </Tab>
       <Tab closable="false" text="Einstellungen">

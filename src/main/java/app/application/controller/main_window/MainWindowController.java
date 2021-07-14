@@ -22,27 +22,10 @@ import java.util.List;
 public class MainWindowController {
 
 
-    @FXML
-    private AnchorPane playlistPanel;
 
-    @FXML
-    private TextField txtPlaylistLink;
-
-    @FXML
-    private ListView<String> listPlaylist;
-
-    @FXML
-    private Label txtPlaylistTitle;
-
-    @FXML
-    private Label lblDownloadProgress;
 
     @FXML
     private TextField txtDownloadPath;
-
-
-    @FXML
-    private Button btnSearchPlaylist;
 
     @FXML
     private TextField txtVerion;
@@ -62,24 +45,12 @@ public class MainWindowController {
 
     @FXML
     public void initialize(){
-        youtubePlaylistDownloadService.setLabel(lblDownloadProgress);
         txtDownloadPath.textProperty().bindBidirectional(userConfigHandler.getUserConfig().getDownloadDir());
-        btnSearchPlaylist.disableProperty().bind(Bindings.isEmpty(txtPlaylistLink.textProperty()));
         txtVerion.textProperty().bind(versionProperties.getVersion());
     }
 
 
 
-    public void btnSearchPlaylist_click(){
-        txtPlaylistTitle.setText(youtubePlaylistDownloadService.getPlaylistDetails(
-                youtubeIdExtractor.getPlayListIdFromLink(txtPlaylistLink.getText())).title());
-        listPlaylist.getItems().addAll(youtubePlaylistDownloadService.getVideoTitles());
-        playlistPanel.setVisible(true);
-    }
-
-    public void btnPlaylistDownload_click(){
-        new Thread(() -> youtubePlaylistDownloadService.downloadPlaylist()).start();
-    }
 
     public void btnSave_click(){
         userConfigHandler.writeConfig();
