@@ -1,7 +1,9 @@
 package app.application.controller.main_window;
 
+import app.application.utils.DialogManager;
 import app.application.utils.YoutubeIdExtractor;
 import app.application.utils.YoutubePlaylistDownloadService;
+import app.application.utils.YoutubeUrlValidator;
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -39,6 +41,11 @@ public class PlaylistPanelController {
 	@Autowired
 	private YoutubeIdExtractor youtubeIdExtractor;
 
+	@Autowired
+	private YoutubeUrlValidator youtubeUrlValidator;
+
+	@Autowired
+	private DialogManager dialogManager;
 
 	@FXML
 	public void initialize(){
@@ -47,6 +54,10 @@ public class PlaylistPanelController {
 	}
 
 	public void btnSearchPlaylist_click(){
+		if(youtubeUrlValidator.isYoutubeUrlInvalid(txtPlaylistLink.getText())){
+			dialogManager.openWarningDialog("Ungültige Url", "Bitte trage eine gültige Url ein.");
+			return;
+		}
 		txtPlaylistTitle.setText(youtubePlaylistDownloadService.getPlaylistDetails(
 						youtubeIdExtractor.getPlayListIdFromLink(txtPlaylistLink.getText())).title());
 		listPlaylist.getItems().addAll(youtubePlaylistDownloadService.getVideoTitles());
