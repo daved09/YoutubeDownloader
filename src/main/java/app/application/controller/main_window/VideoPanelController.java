@@ -1,9 +1,8 @@
 package app.application.controller.main_window;
 
 import app.application.utils.*;
-import com.github.kiulian.downloader.model.VideoDetails;
+import com.github.kiulian.downloader.model.videos.VideoDetails;
 import javafx.beans.binding.Bindings;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -68,21 +67,23 @@ public class VideoPanelController {
 			dialogManager.openWarningDialog("Ungültige Url", "Bitte trage eine gültige Url ein.");
 			return;
 		}
-		VideoDetails details = youtubeVideoDownloadService.getVideoDetails(youtubeIdExtractor.getVideoIdFromLink(txtDownloadLink.getText()));
-		imgThumbnail.setImage(new Image(details.thumbnails().get(0).split("\\?sqp")[0]));
-		lblVideoTitle.setText(details.title());
+		VideoDetails videoDetails = youtubeVideoDownloadService.getVideoDetails(youtubeIdExtractor.getVideoIdFromLink(txtDownloadLink.getText()));
+		imgThumbnail.setImage(new Image(videoDetails.thumbnails().get(0).split("\\?sqp")[0]));
+		lblVideoTitle.setText(videoDetails.title());
 		refreshQualityBox(youtubeVideoDownloadService.getQualityLabels());
-		txtDescription.setText(details.description());
+		txtDescription.setText(videoDetails.description());
 		videoPane.setVisible(true);
 	}
 
 	public void btnDownloadVideo_click(){
-		if(chkAudioOnly.isSelected()){
-			youtubeVideoDownloadService.downloadAudioOnlyAsync();
-		}
-		else{
-			youtubeVideoDownloadService.downloadVideoAsync(boxQuality.getSelectionModel().getSelectedItem());
-		}
+		new Thread(() -> {
+			if(chkAudioOnly.isSelected()){
+				youtubeVideoDownloadService.downloadAudioOnlyAsync();
+			}
+			else{
+				youtubeVideoDownloadService.downloadVideoAsync(boxQuality.getSelectionModel().getSelectedItem());
+			}
+		}).start();
 	}
 
 

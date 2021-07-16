@@ -36,5 +36,6 @@ public class YoutubeDownloader extends Application {
     public void stop() throws Exception {
         applicationContext.close();
         Platform.exit();
+        System.exit(0);
     }
 }
