@@ -28,7 +28,6 @@ public class YoutubeDownloader extends Application {
         Scene scene = new Scene(root);
         stage.setTitle("Youtube Downloader");
         stage.setScene(scene);
-        stage.setResizable(false);
         stage.show();
     }
 
