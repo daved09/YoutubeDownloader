@@ -44,6 +44,7 @@ public class YoutubeVideoDownloadService extends YoutubeDownloadService {
         RequestVideoFileDownload requestVideoFileDownload = new RequestVideoFileDownload(format);
         requestVideoFileDownload.callback(youtubeDownloadListener)
                 .renameTo(videoInfo.details().title()).async()
+                .overwriteIfExists(userConfigHandler.getUserConfig().getOverwriteExistingVideo().get())
                 .saveTo(Paths.get(userConfigHandler.getUserConfig().getDownloadDir().get()).toFile());
         youtubeDownloader.downloadVideoFile(requestVideoFileDownload).data();
     }

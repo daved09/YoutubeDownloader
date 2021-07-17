@@ -3,6 +3,7 @@ package app.application.controller.main_window;
 import app.application.data.VersionProperties;
 import app.application.utils.UserConfigHandler;
 import javafx.fxml.FXML;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -16,6 +17,9 @@ public class SettingsPanelController {
 	@FXML
 	private TextField txtVerion;
 
+	@FXML
+	private CheckBox chkOverwriteVideos;
+
 	@Autowired
 	private UserConfigHandler userConfigHandler;
 
@@ -25,6 +29,7 @@ public class SettingsPanelController {
 	@FXML
 	public void initialize(){
 		txtDownloadPath.textProperty().bindBidirectional(userConfigHandler.getUserConfig().getDownloadDir());
+		chkOverwriteVideos.selectedProperty().bindBidirectional(userConfigHandler.getUserConfig().getOverwriteExistingVideo());
 		txtVerion.textProperty().bind(versionProperties.getVersion());
 	}
 
