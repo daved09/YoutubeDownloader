@@ -6,14 +6,14 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="445.0" prefWidth="819.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.application.controller.main_window.SettingsPanelController">
+<AnchorPane prefHeight="445.0" prefWidth="819.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.application.controller.main_window.SettingsPanelController">
 <children>
-    <Label layoutX="14.0" layoutY="14.0" text="Downloadpfad" AnchorPane.leftAnchor="14.0" />
+    <Label layoutX="14.0" layoutY="14.0" prefHeight="16.0" prefWidth="111.0" text="Downloadpfad" AnchorPane.leftAnchor="14.0" />
     <TextField fx:id="txtDownloadPath" layoutX="132.0" layoutY="10.0" prefHeight="24.0" prefWidth="659.0" AnchorPane.leftAnchor="132.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="10.0" />
     <Button layoutX="729.0" layoutY="407.0" mnemonicParsing="false" onAction="#btnSave_click" text="Speichern" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0" />
     <Label layoutX="14.0" layoutY="411.0" text="Version: " AnchorPane.bottomAnchor="18.0" AnchorPane.leftAnchor="14.0" />
     <TextField fx:id="txtVerion" editable="false" layoutX="72.0" layoutY="407.0" prefHeight="24.0" prefWidth="64.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="72.0" />
-      <Label layoutX="14.0" layoutY="50.0" prefHeight="17.0" prefWidth="196.0" text="Existierende Videos überschreiben" AnchorPane.leftAnchor="14.0" />
+      <Label layoutX="14.0" layoutY="50.0" prefHeight="17.0" prefWidth="673.0" text="Existierende Videos überschreiben" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="132.0" />
       <CheckBox fx:id="chkOverwriteVideos" layoutX="605.0" layoutY="50.0" mnemonicParsing="false" AnchorPane.rightAnchor="14.0" />
 </children>
 </AnchorPane>
