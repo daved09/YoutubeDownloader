@@ -1,17 +1,15 @@
 package app.application.utils;
 
 
-import com.github.kiulian.downloader.YoutubeDownloader;
-import com.github.kiulian.downloader.YoutubeException;
-import com.github.kiulian.downloader.model.VideoDetails;
-import com.github.kiulian.downloader.model.YoutubeVideo;
-import com.github.kiulian.downloader.model.formats.AudioVideoFormat;
-import com.github.kiulian.downloader.model.formats.Format;
-import com.github.kiulian.downloader.model.playlist.PlaylistDetails;
+import com.github.kiulian.downloader.downloader.request.RequestVideoFileDownload;
+import com.github.kiulian.downloader.downloader.request.RequestVideoInfo;
+import com.github.kiulian.downloader.model.videos.VideoDetails;
+import com.github.kiulian.downloader.model.videos.VideoInfo;
+import com.github.kiulian.downloader.model.videos.formats.Format;
+import com.github.kiulian.downloader.model.videos.formats.VideoWithAudioFormat;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +17,7 @@ import java.util.List;
 @Service
 public class YoutubeVideoDownloadService extends YoutubeDownloadService {
 
-    private YoutubeVideo youtubeVideo;
+    private VideoInfo videoInfo;
 
     private YoutubeDownloadListener youtubeDownloadListener;
 
@@ -30,36 +28,42 @@ public class YoutubeVideoDownloadService extends YoutubeDownloadService {
     }
 
     public void downloadAudioOnlyAsync() {
-        downloadAsync(youtubeVideo.audioFormats().get(0));
+        downloadAsync(videoInfo.audioFormats().get(0));
     }
 
 
     @SneakyThrows
     public VideoDetails getVideoDetails(String id) {
-        this.youtubeVideo = youtubeDownloader.getVideo(id);
-        return youtubeVideo.details();
+        RequestVideoInfo requestVideoInfo = new RequestVideoInfo(id);
+        this.videoInfo = youtubeDownloader.getVideoInfo(requestVideoInfo).data();
+        return videoInfo.details();
     }
 
     @SneakyThrows
     protected void downloadAsync(Format format) {
-        youtubeVideo.downloadAsync(format, Paths.get(userConfigHandler.getUserConfig().getDownloadDir().get()).toFile(), youtubeDownloadListener);
+        RequestVideoFileDownload requestVideoFileDownload = new RequestVideoFileDownload(format);
+        requestVideoFileDownload.callback(youtubeDownloadListener)
+                .renameTo(videoInfo.details().title()).async()
+                .overwriteIfExists(userConfigHandler.getUserConfig().getOverwriteExistingVideo().get())
+                .saveTo(Paths.get(userConfigHandler.getUserConfig().getDownloadDir().get()).toFile());
+        youtubeDownloader.downloadVideoFile(requestVideoFileDownload).data();
     }
 
 
-    private AudioVideoFormat selectAudioVideoFormat(String quality) {
-        List<AudioVideoFormat> audioVideoFormats = youtubeVideo.videoWithAudioFormats();
+    private VideoWithAudioFormat selectAudioVideoFormat(String quality) {
+        List<VideoWithAudioFormat> audioVideoFormats = videoInfo.videoWithAudioFormats();
         audioVideoFormats.removeIf(audioVideoFormat -> !audioVideoFormat.qualityLabel().equals(quality));
         return audioVideoFormats.get(0);
     }
 
-    public YoutubeVideo getVideo() {
-        return youtubeVideo;
+    public VideoInfo getVideo() {
+        return videoInfo;
     }
 
     public List<String> getQualityLabels() {
-        List<AudioVideoFormat> audioVideoFormats = youtubeVideo.videoWithAudioFormats();
+        List<VideoWithAudioFormat> audioVideoFormats = videoInfo.videoWithAudioFormats();
         List<String> qualityLabels = new ArrayList<>();
-        for (AudioVideoFormat audioVideoFormat : audioVideoFormats) {
+        for (VideoWithAudioFormat audioVideoFormat : audioVideoFormats) {
             qualityLabels.add(audioVideoFormat.qualityLabel());
         }
         return qualityLabels;

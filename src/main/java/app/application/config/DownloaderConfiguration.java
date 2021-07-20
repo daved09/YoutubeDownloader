@@ -3,6 +3,7 @@ package app.application.config;
 
 import app.application.data.ConfigurationFactory;
 import app.application.utils.UserConfigHandler;
+import com.github.kiulian.downloader.Config;
 import com.github.kiulian.downloader.YoutubeDownloader;
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.io.IOException;
+import java.util.concurrent.Executors;
 
 @Configuration
 @EnableConfigurationProperties
@@ -28,11 +30,8 @@ public class DownloaderConfiguration {
 
     @Bean
     public YoutubeDownloader youtubeDownloader(){
-        YoutubeDownloader youtubeDownloader = new YoutubeDownloader();
-        youtubeDownloader.setParserRequestProperty("User-Agend",
-                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.121 Safari/537.36");
-        youtubeDownloader.setParserRetryOnFailure(1);
-        return youtubeDownloader;
+        Config config = new Config.Builder().maxRetries(1).executorService(Executors.newCachedThreadPool()).build();
+        return new YoutubeDownloader(config);
     }
 
     @Bean

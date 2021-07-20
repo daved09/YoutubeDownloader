@@ -1,24 +1,18 @@
 package app.application.utils;
 
-import com.github.kiulian.downloader.YoutubeException;
-import com.github.kiulian.downloader.model.formats.AudioVideoFormat;
-import com.github.kiulian.downloader.model.formats.Format;
-import com.github.kiulian.downloader.model.formats.VideoFormat;
-import com.github.kiulian.downloader.model.playlist.PlaylistDetails;
+import com.github.kiulian.downloader.downloader.request.RequestPlaylistInfo;
+import com.github.kiulian.downloader.downloader.request.RequestVideoFileDownload;
+import com.github.kiulian.downloader.downloader.request.RequestVideoInfo;
+import com.github.kiulian.downloader.model.playlist.PlaylistInfo;
 import com.github.kiulian.downloader.model.playlist.PlaylistVideoDetails;
-import com.github.kiulian.downloader.model.playlist.YoutubePlaylist;
-import com.github.kiulian.downloader.model.quality.VideoQuality;
-import com.github.kiulian.downloader.parser.Parser;
+import com.github.kiulian.downloader.model.videos.VideoInfo;
 import javafx.application.Platform;
-import javafx.fxml.FXML;
 import javafx.scene.control.Label;
-import javafx.scene.control.ProgressBar;
 import lombok.Setter;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,25 +20,22 @@ import java.util.List;
 @Service
 public class YoutubePlaylistDownloadService extends YoutubeDownloadService {
 
-    private YoutubePlaylist youtubePlaylist;
+    private PlaylistInfo playlistInfo;
 
     @Setter
     private Label label;
 
     @SneakyThrows
-    public PlaylistDetails getPlaylistDetails(String playListId) {
-        this.youtubePlaylist = youtubeDownloader.getPlaylist(playListId);
-        return youtubePlaylist.details();
+    public PlaylistInfo getPlaylistInfo(String playListId) {
+        RequestPlaylistInfo requestPlaylistInfo = new RequestPlaylistInfo(playListId);
+        playlistInfo = youtubeDownloader.getPlaylistInfo(requestPlaylistInfo).data();
+        return playlistInfo;
     }
 
-
-    public YoutubePlaylist getYoutubePlaylist() {
-        return youtubePlaylist;
-    }
 
     public List<String> getVideoTitles(){
         List<String> titles = new ArrayList<>();
-        for (PlaylistVideoDetails video : youtubePlaylist.videos()) {
+        for (PlaylistVideoDetails video : playlistInfo.videos()) {
             titles.add(video.title());
         }
         setLabelProgress(0, titles.size());
@@ -53,34 +44,26 @@ public class YoutubePlaylistDownloadService extends YoutubeDownloadService {
 
     @SneakyThrows
     public void downloadPlaylist(){
-        int size = youtubePlaylist.videos().size();
+        int size = playlistInfo.videos().size();
         int progress = 0;
-        for (PlaylistVideoDetails video : youtubePlaylist.videos()) {
+        for (PlaylistVideoDetails video : playlistInfo.videos()) {
             progress++;
             setLabelProgress(progress, size);
-            List<Format> formats = getFormatsFromVideo(video);
-            if(formats.get(1) instanceof AudioVideoFormat){
-                downloadAsync(formats.get(1), video.videoId());
-            }
-            else{
-                downloadAsync(formats.get(0), video.videoId());
-            }
+            downloadAsync(getVideoInfo(video.videoId()));
         }
     }
 
-    private List<Format> getFormatsFromVideo(PlaylistVideoDetails video) {
-        List<Format> formats = new ArrayList<>();
-        try {
-            formats = youtubeDownloader.getVideo(video.videoId()).formats();
-        } catch (YoutubeException e) {
-            e.printStackTrace();
-        }
-        return formats;
+
+    private VideoInfo getVideoInfo(String videoID){
+        RequestVideoInfo requestVideoInfo = new RequestVideoInfo(videoID);
+        return youtubeDownloader.getVideoInfo(requestVideoInfo).data();
     }
 
-    protected void downloadAsync(Format format, String videoId) throws YoutubeException, IOException {
-        youtubeDownloader.getVideo(videoId).download(format,
-                Paths.get(userConfigHandler.getUserConfig().getDownloadDir().get() + File.separator + youtubePlaylist.details().title()).toFile());
+    protected void downloadAsync(VideoInfo videoInfo){
+        RequestVideoFileDownload requestVideoFileDownload = new RequestVideoFileDownload(videoInfo.bestVideoWithAudioFormat());
+        requestVideoFileDownload.renameTo(videoInfo.details().title()).async().overwriteIfExists(true)
+                .saveTo(Paths.get(userConfigHandler.getUserConfig().getDownloadDir().get() + File.separator + playlistInfo.details().title()).toFile());
+        youtubeDownloader.downloadVideoFile(requestVideoFileDownload);
     }
 
     private void setLabelProgress(int current, int max){

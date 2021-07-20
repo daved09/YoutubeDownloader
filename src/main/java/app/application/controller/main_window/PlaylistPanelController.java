@@ -58,8 +58,8 @@ public class PlaylistPanelController {
 			dialogManager.openWarningDialog("Ungültige Url", "Bitte trage eine gültige Url ein.");
 			return;
 		}
-		txtPlaylistTitle.setText(youtubePlaylistDownloadService.getPlaylistDetails(
-						youtubeIdExtractor.getPlayListIdFromLink(txtPlaylistLink.getText())).title());
+		txtPlaylistTitle.setText(youtubePlaylistDownloadService.getPlaylistInfo(
+						youtubeIdExtractor.getPlayListIdFromLink(txtPlaylistLink.getText())).details().title());
 		listPlaylist.getItems().addAll(youtubePlaylistDownloadService.getVideoTitles());
 		playlistPanel.setVisible(true);
 	}

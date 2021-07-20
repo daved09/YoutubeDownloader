@@ -1,6 +1,6 @@
 package app.application.utils;
 
-import com.github.kiulian.downloader.OnYoutubeDownloadListener;
+import com.github.kiulian.downloader.downloader.YoutubeProgressCallback;
 import javafx.application.Platform;
 import javafx.scene.control.ProgressBar;
 import lombok.AllArgsConstructor;
@@ -8,16 +8,15 @@ import lombok.AllArgsConstructor;
 import java.io.File;
 
 @AllArgsConstructor
-public class YoutubeDownloadListener implements OnYoutubeDownloadListener {
+public class YoutubeDownloadListener implements YoutubeProgressCallback<File> {
 
-    private ProgressBar progressBar;
+    private final ProgressBar progressBar;
 
     @Override
     public void onDownloading(int progress) {
         Platform.runLater(() -> progressBar.setProgress(Double.parseDouble(Integer.toString(progress)) / 100));
     }
 
-    @Override
     public void onFinished(File file) {
 
     }
