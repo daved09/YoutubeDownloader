@@ -8,7 +8,6 @@ import lombok.SneakyThrows;
 
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
@@ -28,7 +27,8 @@ public class UserConfigHandler {
 		userConfig = configurationFactory.createDefaultConfiguration();
 	}
 
-	public void loadConfig() throws IOException {
+	@SneakyThrows
+	public void loadConfig() {
 		if(!Files.exists(Paths.get(CONFIG_FILE))){
 			initConfig();
 			writeConfig();
