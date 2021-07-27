@@ -32,6 +32,9 @@ public class YoutubePlaylistDownloadService extends YoutubeDownloadService {
         return playlistInfo;
     }
 
+    public List<PlaylistVideoDetails> getVideoInfos(){
+        return playlistInfo.videos();
+    }
 
     public List<String> getVideoTitles(){
         List<String> titles = new ArrayList<>();
