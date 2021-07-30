@@ -3,7 +3,6 @@ package app.application.utils;
 
 import com.github.kiulian.downloader.downloader.request.RequestVideoFileDownload;
 import com.github.kiulian.downloader.downloader.request.RequestVideoInfo;
-import com.github.kiulian.downloader.model.videos.VideoDetails;
 import com.github.kiulian.downloader.model.videos.VideoInfo;
 import com.github.kiulian.downloader.model.videos.formats.Format;
 import com.github.kiulian.downloader.model.videos.formats.VideoWithAudioFormat;
@@ -38,7 +37,7 @@ public class YoutubeVideoDownloadService extends YoutubeDownloadService {
     protected void downloadAsync(VideoInfo videoInfo, Format format) {
         RequestVideoFileDownload requestVideoFileDownload = new RequestVideoFileDownload(format);
         requestVideoFileDownload.callback(youtubeDownloadListener)
-                .renameTo(videoInfo.details().title()).async()
+                .renameTo(videoInfo.details().title())
                 .overwriteIfExists(userConfigHandler.getUserConfig().getOverwriteExistingVideo().get())
                 .saveTo(Paths.get(userConfigHandler.getUserConfig().getDownloadDir().get()).toFile());
         youtubeDownloader.downloadVideoFile(requestVideoFileDownload).data();
