@@ -2,7 +2,10 @@ package app.application.controller.main_window;
 
 import app.application.components.VideoElement;
 import app.application.factories.VideoElementFactory;
-import app.application.utils.*;
+import app.application.utils.DialogManager;
+import app.application.utils.YoutubeIdExtractor;
+import app.application.utils.YoutubePlaylistDownloadService;
+import app.application.utils.YoutubeUrlValidator;
 import com.github.kiulian.downloader.model.playlist.PlaylistInfo;
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
@@ -11,9 +14,14 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
-import net.rgielen.fxweaver.core.FxWeaver;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.concurrent.CancellationException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 @Component
 public class PlaylistPanelController {
@@ -36,6 +44,7 @@ public class PlaylistPanelController {
 	@FXML
 	private Button btnSearchPlaylist;
 
+
 	@Autowired
 	private YoutubePlaylistDownloadService youtubePlaylistDownloadService;
 
@@ -52,6 +61,8 @@ public class PlaylistPanelController {
 	private VideoElementFactory videoElementFactory;
 
 	private PlaylistInfo playlistInfo;
+
+	private ExecutorService downloadExecutor;
 
 	@FXML
 	public void initialize(){
@@ -73,6 +84,17 @@ public class PlaylistPanelController {
 	}
 
 	public void btnPlaylistDownload_click(){
-		new Thread(() -> youtubePlaylistDownloadService.downloadPlaylist(playlistInfo)).start();
+		downloadExecutor = Executors.newSingleThreadExecutor();
+		downloadExecutor.execute(new Thread(() -> youtubePlaylistDownloadService.downloadPlaylist(playlistInfo)));
 	}
+
+	@SneakyThrows
+	public void btnAbort_click(){
+		downloadExecutor.shutdownNow();
+		try{
+			downloadExecutor.awaitTermination(1, TimeUnit.SECONDS);
+		}
+		catch (CancellationException ignored){}
+	}
+
 }
