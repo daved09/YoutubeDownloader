@@ -1,7 +1,7 @@
 package app.application.controller.main_window;
 
 import app.application.utils.*;
-import com.github.kiulian.downloader.model.videos.VideoDetails;
+import com.github.kiulian.downloader.model.videos.VideoInfo;
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -55,6 +55,8 @@ public class VideoPanelController {
 	@Autowired
 	private DialogManager dialogManager;
 
+	private VideoInfo tmpVideoInfo;
+
 	@FXML
 	private void initialize(){
 		youtubeVideoDownloadService.setYoutubeDownloadListener(new YoutubeDownloadListener(downloadProgress));
@@ -67,21 +69,21 @@ public class VideoPanelController {
 			dialogManager.openWarningDialog("Ungültige Url", "Bitte trage eine gültige Url ein.");
 			return;
 		}
-		VideoDetails videoDetails = youtubeVideoDownloadService.getVideoDetails(youtubeIdExtractor.getVideoIdFromLink(txtDownloadLink.getText()));
-		imgThumbnail.setImage(new Image(videoDetails.thumbnails().get(0).split("\\?sqp")[0]));
-		lblVideoTitle.setText(videoDetails.title());
-		refreshQualityBox(youtubeVideoDownloadService.getQualityLabels());
-		txtDescription.setText(videoDetails.description());
+		tmpVideoInfo = youtubeVideoDownloadService.getVideoInfo(youtubeIdExtractor.getVideoIdFromLink(txtDownloadLink.getText()));
+		imgThumbnail.setImage(new Image(tmpVideoInfo.details().thumbnails().get(0).split("\\?sqp")[0]));
+		lblVideoTitle.setText(tmpVideoInfo.details().title());
+		refreshQualityBox(youtubeVideoDownloadService.getQualityLabels(tmpVideoInfo));
+		txtDescription.setText(tmpVideoInfo.details().description());
 		videoPane.setVisible(true);
 	}
 
 	public void btnDownloadVideo_click(){
 		new Thread(() -> {
 			if(chkAudioOnly.isSelected()){
-				youtubeVideoDownloadService.downloadAudioOnlyAsync();
+				youtubeVideoDownloadService.downloadAudioOnlyAsync(tmpVideoInfo);
 			}
 			else{
-				youtubeVideoDownloadService.downloadVideoAsync(boxQuality.getSelectionModel().getSelectedItem());
+				youtubeVideoDownloadService.downloadVideoAsync(tmpVideoInfo, boxQuality.getSelectionModel().getSelectedItem());
 			}
 		}).start();
 	}
