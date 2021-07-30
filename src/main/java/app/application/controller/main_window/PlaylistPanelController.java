@@ -1,18 +1,17 @@
 package app.application.controller.main_window;
 
 import app.application.components.VideoElement;
-import app.application.utils.DialogManager;
-import app.application.utils.YoutubeIdExtractor;
-import app.application.utils.YoutubePlaylistDownloadService;
-import app.application.utils.YoutubeUrlValidator;
+import app.application.factories.VideoElementFactory;
+import app.application.utils.*;
+import com.github.kiulian.downloader.model.playlist.PlaylistInfo;
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
+import net.rgielen.fxweaver.core.FxWeaver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -49,6 +48,11 @@ public class PlaylistPanelController {
 	@Autowired
 	private DialogManager dialogManager;
 
+	@Autowired
+	private VideoElementFactory videoElementFactory;
+
+	private PlaylistInfo playlistInfo;
+
 	@FXML
 	public void initialize(){
 		youtubePlaylistDownloadService.setLabel(lblDownloadProgress);
@@ -60,18 +64,15 @@ public class PlaylistPanelController {
 			dialogManager.openWarningDialog("Ungültige Url", "Bitte trage eine gültige Url ein.");
 			return;
 		}
-		txtPlaylistTitle.setText(youtubePlaylistDownloadService.getPlaylistInfo(
-						youtubeIdExtractor.getPlayListIdFromLink(txtPlaylistLink.getText())).details().title());
-//		listPlaylist.getItems().addAll(youtubePlaylistDownloadService.getVideoTitles());
-		youtubePlaylistDownloadService.getVideoInfos().forEach(playlistVideoDetails -> {
-			VideoElement videoElement = new VideoElement();
-			videoElement.setThumpNail(new Image(playlistVideoDetails.thumbnails().get(0).split("\\?sqp")[0]));
-			listPlaylist.getItems().add(videoElement);
-		});
+		playlistInfo = youtubePlaylistDownloadService.getPlaylistInfo(youtubeIdExtractor.getPlayListIdFromLink(txtPlaylistLink.getText()));
+		txtPlaylistTitle.setText(playlistInfo.details().title());
+		playlistInfo.videos().forEach(playlistVideoDetails ->
+						listPlaylist.getItems().add(videoElementFactory.createVideoElement(playlistVideoDetails))
+		);
 		playlistPanel.setVisible(true);
 	}
 
 	public void btnPlaylistDownload_click(){
-		new Thread(() -> youtubePlaylistDownloadService.downloadPlaylist()).start();
+		new Thread(() -> youtubePlaylistDownloadService.downloadPlaylist(playlistInfo)).start();
 	}
 }
