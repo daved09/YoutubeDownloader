@@ -12,6 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.concurrent.CancellationException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 @Component
 public class VideoPanelController {
@@ -57,6 +61,8 @@ public class VideoPanelController {
 
 	private VideoInfo tmpVideoInfo;
 
+	private ExecutorService downloadExecutorService;
+
 	@FXML
 	private void initialize(){
 		youtubeVideoDownloadService.setYoutubeDownloadListener(new YoutubeDownloadListener(downloadProgress));
@@ -78,16 +84,23 @@ public class VideoPanelController {
 	}
 
 	public void btnDownloadVideo_click(){
-		new Thread(() -> {
+		downloadExecutorService = Executors.newSingleThreadExecutor();
+		downloadExecutorService.execute(new Thread(() -> {
 			if(chkAudioOnly.isSelected()){
 				youtubeVideoDownloadService.downloadAudioOnlyAsync(tmpVideoInfo);
 			}
 			else{
 				youtubeVideoDownloadService.downloadVideoAsync(tmpVideoInfo, boxQuality.getSelectionModel().getSelectedItem());
 			}
-		}).start();
+		}));
 	}
 
+	public void btnAbord_click(){
+		downloadExecutorService.shutdownNow();
+		try {
+			downloadExecutorService.awaitTermination(1, TimeUnit.SECONDS);
+		} catch (CancellationException | InterruptedException ignored) {}
+	}
 
 
 	private void refreshQualityBox(List<String> listWithOptions){
