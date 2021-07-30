@@ -1,6 +1,6 @@
 package app.application.utils;
 
-import app.application.data.ConfigurationFactory;
+import app.application.factories.ConfigurationFactory;
 import app.application.data.UserConfig;
 import com.google.gson.Gson;
 import lombok.Setter;

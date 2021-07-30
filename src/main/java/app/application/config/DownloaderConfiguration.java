@@ -1,7 +1,7 @@
 package app.application.config;
 
 
-import app.application.data.ConfigurationFactory;
+import app.application.factories.ConfigurationFactory;
 import app.application.utils.UserConfigHandler;
 import com.github.kiulian.downloader.Config;
 import com.github.kiulian.downloader.YoutubeDownloader;
