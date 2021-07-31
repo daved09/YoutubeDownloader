@@ -14,7 +14,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
-import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -88,13 +87,12 @@ public class PlaylistPanelController {
 		downloadExecutor.execute(new Thread(() -> youtubePlaylistDownloadService.downloadPlaylist(playlistInfo)));
 	}
 
-	@SneakyThrows
 	public void btnAbort_click(){
 		downloadExecutor.shutdownNow();
 		try{
 			downloadExecutor.awaitTermination(1, TimeUnit.SECONDS);
 		}
-		catch (CancellationException ignored){}
+		catch (CancellationException | InterruptedException ignored){}
 	}
 
 }

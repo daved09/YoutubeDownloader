@@ -7,7 +7,7 @@
     <children>
         <TextField fx:id="txtDownloadLink" layoutX="15.0" layoutY="14.0" prefHeight="25.0" prefWidth="709.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="81.0" />
         <Button fx:id="btnSearch" layoutX="738.0" layoutY="14.0" mnemonicParsing="false" onAction="#btnSearch_click" text="Suchen" AnchorPane.rightAnchor="14.0" />
-        <AnchorPane fx:id="videoPane" layoutX="14.0" layoutY="50.0" prefHeight="375.0" prefWidth="791.0" visible="false" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="56.0">
+        <AnchorPane fx:id="videoPane" layoutX="14.0" layoutY="50.0" prefHeight="375.0" prefWidth="791.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="56.0">
             <children>
                 <ImageView fx:id="imgThumbnail" fitHeight="190.0" fitWidth="222.0" layoutX="14.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="171.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="555.0" AnchorPane.topAnchor="14.0" />
                 <Label fx:id="lblVideoTitle" layoutX="252.0" layoutY="14.0" text="Videoname" />
@@ -15,7 +15,8 @@
                 <TextArea fx:id="txtDescription" editable="false" layoutX="252.0" layoutY="44.0" prefHeight="112.0" prefWidth="511.0" wrapText="true" AnchorPane.bottomAnchor="219.0" AnchorPane.leftAnchor="252.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="44.0" />
                 <Button layoutX="697.0" layoutY="175.0" mnemonicParsing="false" onAction="#btnDownloadVideo_click" text="Download" AnchorPane.bottomAnchor="175.0" AnchorPane.rightAnchor="14.0" />
                 <ProgressBar fx:id="downloadProgress" layoutX="11.0" layoutY="343.0" prefHeight="18.0" prefWidth="757.0" progress="0.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" />
-                <CheckBox fx:id="chkAudioOnly" layoutX="508.0" layoutY="179.0" mnemonicParsing="false" text="Audio only" AnchorPane.bottomAnchor="178.0" />
+                <CheckBox fx:id="chkAudioOnly" layoutX="482.0" layoutY="179.0" mnemonicParsing="false" text="Audio only" AnchorPane.bottomAnchor="179.0" />
+            <Button layoutX="636.0" layoutY="175.0" mnemonicParsing="false" onAction="#btnAbord_click" text="Abbrechen" />
             </children>
         </AnchorPane>
     </children>
