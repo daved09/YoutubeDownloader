@@ -3,13 +3,11 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-
-
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.application.controller.VideoDetailsController">
+<?import javafx.scene.layout.*?>
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.application.controller.VideoDetailsController">
    <children>
       <ImageView fx:id="imgThumbnail" fitHeight="150.0" fitWidth="200.0" layoutX="14.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true" />
-      <TextArea fx:id="txtVideoDescription" layoutX="14.0" layoutY="186.0" prefHeight="200.0" prefWidth="574.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="12.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="186.0" />
+      <TextArea fx:id="txtVideoDescription" editable="false" layoutX="14.0" layoutY="186.0" prefHeight="200.0" prefWidth="574.0" wrapText="true" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="12.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="186.0" />
       <Label fx:id="lblVideoTitle" layoutX="214.0" layoutY="14.0" prefHeight="16.0" prefWidth="356.0" text="Label" AnchorPane.leftAnchor="230.0" AnchorPane.rightAnchor="14.0" />
    </children>
 </AnchorPane>
