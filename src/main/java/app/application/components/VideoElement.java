@@ -1,10 +1,11 @@
 package app.application.components;
 
 import app.application.controller.VideoDetailsController;
+import app.application.data.Video;
 import app.application.utils.ComponentUtils;
 import app.application.utils.YoutubeVideoDownloadService;
-import com.github.kiulian.downloader.model.playlist.PlaylistVideoDetails;
 import javafx.fxml.FXML;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -22,6 +23,9 @@ public class VideoElement extends AnchorPane {
 	@FXML
 	private Label lblVideoTitle;
 
+	@FXML
+	private CheckBox chkIgnore;
+
 	@Autowired
 	private YoutubeVideoDownloadService youtubeVideoDownloadService;
 
@@ -32,17 +36,18 @@ public class VideoElement extends AnchorPane {
 	private VideoDetailsController videoDetailsController;
 
 	@Setter
-	private PlaylistVideoDetails playlistVideoDetails;
+	private Video video;
 
-	public VideoElement(PlaylistVideoDetails playlistVideoDetails) {
+	public VideoElement(Video video) {
 		ComponentUtils.loadComponent(this);
-		setVideo(playlistVideoDetails);
+		loadVideoDetails(video);
 	}
 
-	private void setVideo(PlaylistVideoDetails playlistVideoDetails){
-		setPlaylistVideoDetails(playlistVideoDetails);
-		imgThumbnail.setImage(new Image(playlistVideoDetails.thumbnails().get(0).split("\\?sqp")[0]));
-		lblVideoTitle.setText(playlistVideoDetails.title());
+	private void loadVideoDetails(Video video){
+		setVideo(video);
+		imgThumbnail.setImage(new Image(video.getPlaylistVideoDetails().thumbnails().get(0).split("\\?sqp")[0]));
+		lblVideoTitle.setText(video.getPlaylistVideoDetails().title());
+		chkIgnore.selectedProperty().bindBidirectional(video.getIgnore());
 	}
 
 	public void mouseClicked(MouseEvent event){
@@ -50,7 +55,7 @@ public class VideoElement extends AnchorPane {
 			return;
 		}
 		videoDetailsController.open();
-		videoDetailsController.setVideoInfos(playlistVideoDetails.videoId());
+		videoDetailsController.setVideoInfos(video.getPlaylistVideoDetails().videoId());
 	}
 
 

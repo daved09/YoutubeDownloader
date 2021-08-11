@@ -1,10 +1,10 @@
 package app.application.utils;
 
+import app.application.data.Video;
 import com.github.kiulian.downloader.downloader.request.RequestPlaylistInfo;
 import com.github.kiulian.downloader.downloader.request.RequestVideoFileDownload;
 import com.github.kiulian.downloader.downloader.request.RequestVideoInfo;
 import com.github.kiulian.downloader.model.playlist.PlaylistInfo;
-import com.github.kiulian.downloader.model.playlist.PlaylistVideoDetails;
 import com.github.kiulian.downloader.model.videos.VideoInfo;
 import javafx.application.Platform;
 import javafx.scene.control.Label;
@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.nio.file.Paths;
+import java.util.List;
 
 @Service
 public class YoutubePlaylistDownloadService extends YoutubeDownloadService {
@@ -31,13 +32,15 @@ public class YoutubePlaylistDownloadService extends YoutubeDownloadService {
     }
 
     @SneakyThrows
-    public void downloadPlaylist(PlaylistInfo playlistInfo){
-        int size = playlistInfo.videos().size();
+    public void downloadPlaylist(String title, List<Video> videoList){
+        int size = videoList.size();
         int progress = 0;
-        for (PlaylistVideoDetails video : playlistInfo.videos()) {
+        for (Video video : videoList) {
             progress++;
             setLabelProgress(progress, size);
-            downloadAsync(playlistInfo, getVideoInfo(video.videoId()));
+            if(!video.getIgnore().get()){
+                downloadAsync(title, getVideoInfo(video.getPlaylistVideoDetails().videoId()));
+            }
         }
     }
 
@@ -47,10 +50,10 @@ public class YoutubePlaylistDownloadService extends YoutubeDownloadService {
         return youtubeDownloader.getVideoInfo(requestVideoInfo).data();
     }
 
-    protected void downloadAsync(PlaylistInfo playlistInfo, VideoInfo videoInfo){
+    protected void downloadAsync(String playlistTitle, VideoInfo videoInfo){
         RequestVideoFileDownload requestVideoFileDownload = new RequestVideoFileDownload(videoInfo.bestVideoWithAudioFormat());
         requestVideoFileDownload.renameTo(videoInfo.details().title()).overwriteIfExists(true)
-                .saveTo(Paths.get(userConfigHandler.getUserConfig().getDownloadDir().get() + File.separator + playlistInfo.details().title()).toFile());
+                .saveTo(Paths.get(userConfigHandler.getUserConfig().getDownloadDir().get() + File.separator + playlistTitle).toFile());
         youtubeDownloader.downloadVideoFile(requestVideoFileDownload);
     }
 
