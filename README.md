@@ -13,7 +13,7 @@
 ---
 **Hinweis**
 
-Java 11 muss installiert werden.
+Java 11 muss installiert sein.
 
 ---
 
