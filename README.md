@@ -8,6 +8,15 @@
 
 [Download](http://daluba.de:3000/dave/YoutubeDownloader/releases/latest)
 
+## Systemanforderungen
+
+---
+**Hinweis**
+
+Java 11 muss installiert werden.
+
+---
+
 ## Screenshots
 
 ### Haupttab
