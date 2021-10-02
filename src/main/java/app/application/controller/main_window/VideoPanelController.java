@@ -1,6 +1,10 @@
 package app.application.controller.main_window;
 
-import app.application.utils.*;
+import app.application.listener.YoutubeVideoDownloadListener;
+import app.application.utils.DialogManager;
+import app.application.utils.YoutubeIdExtractor;
+import app.application.utils.YoutubeUrlValidator;
+import app.application.utils.YoutubeVideoDownloadService;
 import com.github.kiulian.downloader.model.videos.VideoInfo;
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
@@ -65,7 +69,7 @@ public class VideoPanelController {
 
 	@FXML
 	private void initialize(){
-		youtubeVideoDownloadService.setYoutubeDownloadListener(new YoutubeDownloadListener(downloadProgress));
+		youtubeVideoDownloadService.setYoutubeDownloadListener(new YoutubeVideoDownloadListener(downloadProgress, dialogManager));
 		btnSearch.disableProperty().bind(Bindings.isEmpty(txtDownloadLink.textProperty()));
 	}
 
@@ -95,7 +99,7 @@ public class VideoPanelController {
 		}));
 	}
 
-	public void btnAbord_click(){
+	public void btnAbort_click(){
 		downloadExecutorService.shutdownNow();
 		try {
 			downloadExecutorService.awaitTermination(1, TimeUnit.SECONDS);

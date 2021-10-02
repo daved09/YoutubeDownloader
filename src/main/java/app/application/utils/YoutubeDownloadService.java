@@ -1,7 +1,9 @@
 package app.application.utils;
 
 
+import app.application.listener.YoutubeDownloadListener;
 import com.github.kiulian.downloader.YoutubeDownloader;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public abstract class YoutubeDownloadService {
@@ -12,5 +14,7 @@ public abstract class YoutubeDownloadService {
     @Autowired
     protected UserConfigHandler userConfigHandler;
 
+    @Setter
+    protected YoutubeDownloadListener youtubeDownloadListener;
 
 }
