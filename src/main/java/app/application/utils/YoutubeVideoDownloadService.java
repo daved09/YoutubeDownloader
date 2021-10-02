@@ -16,9 +16,6 @@ import java.util.List;
 @Service
 public class YoutubeVideoDownloadService extends YoutubeDownloadService {
 
-    private YoutubeDownloadListener youtubeDownloadListener;
-
-
     @SneakyThrows
     public void downloadVideoAsync(VideoInfo videoInfo, String quality) {
         downloadAsync(videoInfo, selectAudioVideoFormat(videoInfo, quality));
@@ -59,7 +56,4 @@ public class YoutubeVideoDownloadService extends YoutubeDownloadService {
         return qualityLabels;
     }
 
-    public void setYoutubeDownloadListener(YoutubeDownloadListener youtubeDownloadListener) {
-        this.youtubeDownloadListener = youtubeDownloadListener;
-    }
 }
