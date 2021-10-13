@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -64,17 +65,13 @@ public class YoutubeVideoDownloadService extends YoutubeDownloadService {
         if(!youtubeDownloadListener.isDownloadFinished()){
             for (File file : getFilesToDelete(Paths.get(userConfigHandler.getUserConfig().getDownloadDir().get())
                     .toFile(), videoInfo.details().title())) {
-                System.out.println(file.toString());
+                file.delete();
             }
         }
     }
 
     private File[] getFilesToDelete(File dir, String fileName){
-        return dir.listFiles(new FileFilter() {
-            @Override public boolean accept(File file) {
-                return fileName.matches(fileName + "*");
-            }
-        });
+        return dir.listFiles((file, name) -> name.matches(fileName + ".*"));
     }
 
 }
