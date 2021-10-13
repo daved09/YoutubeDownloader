@@ -14,6 +14,9 @@ public abstract class YoutubeDownloadService {
     @Autowired
     protected UserConfigHandler userConfigHandler;
 
+    @Autowired
+    protected DialogManager dialogManager;
+
     @Setter
     protected YoutubeDownloadListener youtubeDownloadListener;
 

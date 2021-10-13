@@ -9,6 +9,10 @@ import com.github.kiulian.downloader.model.videos.formats.VideoWithAudioFormat;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
+import java.io.FileFilter;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
@@ -54,6 +58,23 @@ public class YoutubeVideoDownloadService extends YoutubeDownloadService {
             qualityLabels.add(audioVideoFormat.qualityLabel());
         }
         return qualityLabels;
+    }
+
+    public void deleteUnfinishedDownload(VideoInfo videoInfo){
+        if(!youtubeDownloadListener.isDownloadFinished()){
+            for (File file : getFilesToDelete(Paths.get(userConfigHandler.getUserConfig().getDownloadDir().get())
+                    .toFile(), videoInfo.details().title())) {
+                System.out.println(file.toString());
+            }
+        }
+    }
+
+    private File[] getFilesToDelete(File dir, String fileName){
+        return dir.listFiles(new FileFilter() {
+            @Override public boolean accept(File file) {
+                return fileName.matches(fileName + "*");
+            }
+        });
     }
 
 }
