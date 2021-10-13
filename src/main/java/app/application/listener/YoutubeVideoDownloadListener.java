@@ -8,7 +8,10 @@ import java.io.File;
 
 public class YoutubeVideoDownloadListener extends YoutubeDownloadListener {
 
+    public static final int FINISHED_PROGRESS = 100;
     private final ProgressBar progressBar;
+
+    private int currentProgress;
 
     public YoutubeVideoDownloadListener(ProgressBar progressBar, DialogManager dialogManager) {
         super(dialogManager);
@@ -22,7 +25,13 @@ public class YoutubeVideoDownloadListener extends YoutubeDownloadListener {
 
     @Override
     public void onDownloading(int progress) {
+        this.currentProgress = progress;
         Platform.runLater(() -> progressBar.setProgress(Double.parseDouble(Integer.toString(progress)) / 100));
+    }
+
+    @Override
+    public boolean isDownloadFinished() {
+        return currentProgress >= FINISHED_PROGRESS;
     }
 
 }

@@ -104,6 +104,7 @@ public class VideoPanelController {
 		try {
 			downloadExecutorService.awaitTermination(1, TimeUnit.SECONDS);
 		} catch (CancellationException | InterruptedException ignored) {}
+		youtubeVideoDownloadService.deleteUnfinishedDownload(tmpVideoInfo);
 	}
 
 

@@ -4,8 +4,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import org.springframework.stereotype.Service;
 
-import static javafx.scene.control.Alert.AlertType.INFORMATION;
-import static javafx.scene.control.Alert.AlertType.WARNING;
+import static javafx.scene.control.Alert.AlertType.*;
 
 @Service
 public class DialogManager {
@@ -18,7 +17,11 @@ public class DialogManager {
         openDialog(INFORMATION, "Information", title, message);
     }
 
-    public void openDialog(AlertType alertType, String title, String headerText, String contentText){
+    public void openErrorDialog(String title, String message){
+        openDialog(ERROR, "Error", title, message);
+    }
+
+    private void openDialog(AlertType alertType, String title, String headerText, String contentText){
         Alert alert = new Alert(alertType);
         alert.setTitle(title);
         alert.setHeaderText(headerText);

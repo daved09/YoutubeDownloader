@@ -27,4 +27,9 @@ public class YoutubePlaylistDownloadListener extends YoutubeDownloadListener{
             Platform.runLater(() -> dialogManager.openInformationDialog("Download fertig.", ""));
         }
     }
+
+    @Override
+    public boolean isDownloadFinished() {
+        return false;
+    }
 }

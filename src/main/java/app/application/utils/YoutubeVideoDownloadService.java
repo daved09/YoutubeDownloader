@@ -1,6 +1,5 @@
 package app.application.utils;
 
-
 import com.github.kiulian.downloader.downloader.request.RequestVideoFileDownload;
 import com.github.kiulian.downloader.downloader.request.RequestVideoInfo;
 import com.github.kiulian.downloader.model.videos.VideoInfo;
@@ -9,6 +8,7 @@ import com.github.kiulian.downloader.model.videos.formats.VideoWithAudioFormat;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
@@ -54,6 +54,19 @@ public class YoutubeVideoDownloadService extends YoutubeDownloadService {
             qualityLabels.add(audioVideoFormat.qualityLabel());
         }
         return qualityLabels;
+    }
+
+    public void deleteUnfinishedDownload(VideoInfo videoInfo){
+        if(!youtubeDownloadListener.isDownloadFinished()){
+            for (File file : getFilesToDelete(Paths.get(userConfigHandler.getUserConfig().getDownloadDir().get())
+                    .toFile(), videoInfo.details().title())) {
+                file.delete();
+            }
+        }
+    }
+
+    private File[] getFilesToDelete(File dir, String fileName){
+        return dir.listFiles((file, name) -> name.matches(fileName + ".*"));
     }
 
 }
