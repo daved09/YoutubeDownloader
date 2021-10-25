@@ -1,6 +1,7 @@
 package app.application.controller.main_window;
 
 import app.application.data.VersionProperties;
+import app.application.utils.DialogManager;
 import app.application.utils.UserConfigHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
@@ -26,6 +27,9 @@ public class SettingsPanelController {
 	@Autowired
 	private VersionProperties versionProperties;
 
+	@Autowired
+	private DialogManager dialogManager;
+
 	@FXML
 	public void initialize(){
 		txtDownloadPath.textProperty().bindBidirectional(userConfigHandler.getUserConfig().getDownloadDir());
@@ -35,6 +39,7 @@ public class SettingsPanelController {
 
 	public void btnSave_click(){
 		userConfigHandler.writeConfig();
+		dialogManager.openInformationDialog("Speichern erfolgreich", "");
 	}
 
 }
