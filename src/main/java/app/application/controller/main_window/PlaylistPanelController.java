@@ -88,9 +88,6 @@ public class PlaylistPanelController {
 		videoList.forEach(video ->
 				listPlaylist.getItems().add(videoElementFactory.createVideoElement(video))
 		);
-//		playlistInfo.videos().forEach(playlistVideoDetails ->
-//						listPlaylist.getItems().add(videoElementFactory.createVideoElement(playlistVideoDetails))
-//		);
 		playlistPanel.setVisible(true);
 	}
 
