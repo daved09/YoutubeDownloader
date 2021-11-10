@@ -4,8 +4,8 @@ import app.application.data.entities.YoutubePlaylist;
 import app.application.data.entities.YoutubePlaylistVideoDetail;
 import app.application.data.entities.YoutubeVideo;
 import app.application.listener.YoutubePlaylistDownloadListener;
+import app.application.utils.service.data.YoutubeVideoDataService;
 import com.github.kiulian.downloader.downloader.request.RequestVideoFileDownload;
-import com.github.kiulian.downloader.downloader.request.RequestVideoInfo;
 import javafx.application.Platform;
 import javafx.scene.control.Label;
 import lombok.Setter;
@@ -17,6 +17,12 @@ import java.nio.file.Paths;
 
 @Service
 public class YoutubePlaylistDownloadService extends YoutubeDownloadService {
+
+    private YoutubeVideoDataService youtubeVideoDataService;
+
+    public YoutubePlaylistDownloadService(YoutubeVideoDataService youtubeVideoDataService) {
+        this.youtubeVideoDataService = youtubeVideoDataService;
+    }
 
     @Setter
     private Label label;
@@ -30,15 +36,9 @@ public class YoutubePlaylistDownloadService extends YoutubeDownloadService {
             progress++;
             setLabelProgress(progress, size);
             if(!video.getIgnore().get()){
-                downloadAsync(youtubePlaylist.getPlaylistTitle(), getVideoInfo(video.getVideoId()));
+                downloadAsync(youtubePlaylist.getPlaylistTitle(), youtubeVideoDataService.getYoutubeVideo(video.getVideoId()));
             }
         }
-    }
-
-
-    private YoutubeVideo getVideoInfo(String videoID){
-        RequestVideoInfo requestVideoInfo = new RequestVideoInfo(videoID);
-        return new YoutubeVideo(youtubeDownloader.getVideoInfo(requestVideoInfo).data());
     }
 
     protected void downloadAsync(String playlistTitle, YoutubeVideo youtubeVideo){
