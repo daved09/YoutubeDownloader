@@ -27,7 +27,6 @@ public class VideoElement extends AnchorPane {
 	@Autowired
 	private VideoDetailsController videoDetailsController;
 
-	@Setter
 	private YoutubePlaylistVideoDetail youtubePlaylistVideoDetail;
 
 	public VideoElement() {
@@ -35,7 +34,7 @@ public class VideoElement extends AnchorPane {
 	}
 
 	public void loadVideoDetails(YoutubePlaylistVideoDetail youtubePlaylistVideoDetail){
-		setYoutubePlaylistVideoDetail(youtubePlaylistVideoDetail);
+		this.youtubePlaylistVideoDetail = youtubePlaylistVideoDetail;
 		imgThumbnail.setImage(new Image(youtubePlaylistVideoDetail.getVideoThumbnailUrl()));
 		lblVideoTitle.setText(youtubePlaylistVideoDetail.getVideoTitle());
 		chkIgnore.selectedProperty().bindBidirectional(youtubePlaylistVideoDetail.getIgnore());
