@@ -3,6 +3,7 @@ package app.application.controller.main_window;
 import app.application.data.entities.YoutubeVideo;
 import app.application.listener.YoutubeVideoDownloadListener;
 import app.application.utils.*;
+import app.application.utils.service.data.YoutubeVideoDataService;
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -47,6 +48,8 @@ public class VideoPanelController {
 	@FXML
 	private Button btnSearch;
 
+	private final YoutubeVideoDataService youtubeVideoDataService;
+
 	private final YoutubeVideoDownloadService youtubeVideoDownloadService;
 
 	private final YoutubeIdExtractor youtubeIdExtractor;
@@ -59,11 +62,13 @@ public class VideoPanelController {
 
 	public VideoPanelController(
 					YoutubeVideoDownloadService youtubeVideoDownloadService,
+					YoutubeVideoDataService youtubeVideoDataService,
 					YoutubeIdExtractor youtubeIdExtractor,
 					YoutubeUrlValidator youtubeUrlValidator,
 					DialogManager dialogManager,
 					QualityLabelExtractor qualityLabelExtractor) {
 		this.youtubeVideoDownloadService = youtubeVideoDownloadService;
+		this.youtubeVideoDataService = youtubeVideoDataService;
 		this.youtubeIdExtractor = youtubeIdExtractor;
 		this.youtubeUrlValidator = youtubeUrlValidator;
 		this.dialogManager = dialogManager;
@@ -86,7 +91,7 @@ public class VideoPanelController {
 			dialogManager.openWarningDialog("Ungültige Url", "Bitte trage eine gültige Url ein.");
 			return;
 		}
-		tmpYoutubeVideo = youtubeVideoDownloadService.getYoutubeVideo(youtubeIdExtractor.getVideoIdFromLink(txtDownloadLink.getText()));
+		tmpYoutubeVideo = youtubeVideoDataService.getYoutubeVideo(youtubeIdExtractor.getVideoIdFromLink(txtDownloadLink.getText()));
 		imgThumbnail.setImage(new Image(tmpYoutubeVideo.getVideoThumbnailUrl()));
 		lblVideoTitle.setText(tmpYoutubeVideo.getVideoTitle());
 		refreshQualityBox(qualityLabelExtractor.getQualityLabels(tmpYoutubeVideo));
