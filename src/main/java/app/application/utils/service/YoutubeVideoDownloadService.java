@@ -1,8 +1,7 @@
-package app.application.utils;
+package app.application.utils.service;
 
 import app.application.data.entities.YoutubeVideo;
 import com.github.kiulian.downloader.downloader.request.RequestVideoFileDownload;
-import com.github.kiulian.downloader.downloader.request.RequestVideoInfo;
 import com.github.kiulian.downloader.model.videos.formats.Format;
 import com.github.kiulian.downloader.model.videos.formats.VideoWithAudioFormat;
 import lombok.SneakyThrows;

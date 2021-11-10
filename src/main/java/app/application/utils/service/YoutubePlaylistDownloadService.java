@@ -1,18 +1,15 @@
-package app.application.utils;
+package app.application.utils.service;
 
 import app.application.data.entities.YoutubePlaylist;
 import app.application.data.entities.YoutubePlaylistVideoDetail;
 import app.application.data.entities.YoutubeVideo;
 import app.application.listener.YoutubePlaylistDownloadListener;
-import com.github.kiulian.downloader.downloader.request.RequestPlaylistInfo;
 import com.github.kiulian.downloader.downloader.request.RequestVideoFileDownload;
 import com.github.kiulian.downloader.downloader.request.RequestVideoInfo;
-import com.github.kiulian.downloader.model.playlist.PlaylistInfo;
 import javafx.application.Platform;
 import javafx.scene.control.Label;
 import lombok.Setter;
 import lombok.SneakyThrows;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.File;

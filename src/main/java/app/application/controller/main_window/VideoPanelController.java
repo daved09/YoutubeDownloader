@@ -3,6 +3,7 @@ package app.application.controller.main_window;
 import app.application.data.entities.YoutubeVideo;
 import app.application.listener.YoutubeVideoDownloadListener;
 import app.application.utils.*;
+import app.application.utils.service.YoutubeVideoDownloadService;
 import app.application.utils.service.data.YoutubeVideoDataService;
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;

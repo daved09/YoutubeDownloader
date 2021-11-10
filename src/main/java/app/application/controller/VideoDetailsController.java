@@ -1,7 +1,6 @@
 package app.application.controller;
 
 import app.application.data.entities.YoutubeVideo;
-import app.application.utils.YoutubeVideoDownloadService;
 import app.application.utils.service.data.YoutubeVideoDataService;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
@@ -13,7 +12,6 @@ import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import net.rgielen.fxweaver.core.FxWeaver;
 import net.rgielen.fxweaver.core.FxmlView;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 
