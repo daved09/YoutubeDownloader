@@ -21,24 +21,12 @@ import java.nio.file.Paths;
 @Service
 public class YoutubePlaylistDownloadService extends YoutubeDownloadService {
 
-    @Autowired
-    private DialogManager dialogManager;
-
     @Setter
     private Label label;
 
     @SneakyThrows
-    public YoutubePlaylist getPlaylistInfo(String playListId) {
-        RequestPlaylistInfo requestPlaylistInfo = new RequestPlaylistInfo(playListId);
-        PlaylistInfo playlistInfo = youtubeDownloader.getPlaylistInfo(requestPlaylistInfo).data();
-        YoutubePlaylist youtubePlaylist = new YoutubePlaylist(playlistInfo);
-        setLabelProgress(0, youtubePlaylist.getPlaylistSize());
-        this.youtubeDownloadListener = new YoutubePlaylistDownloadListener(dialogManager, youtubePlaylist.getPlaylistSize());
-        return youtubePlaylist;
-    }
-
-    @SneakyThrows
     public void downloadPlaylist(YoutubePlaylist youtubePlaylist){
+        this.youtubeDownloadListener = new YoutubePlaylistDownloadListener(dialogManager, youtubePlaylist.getPlaylistSize());
         int size = youtubePlaylist.getPlaylistSize();
         int progress = 0;
         for (YoutubePlaylistVideoDetail video : youtubePlaylist.getPlaylistVideos()) {

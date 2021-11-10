@@ -24,10 +24,7 @@ public class YoutubeVideoDownloadService extends YoutubeDownloadService {
         downloadAsync(youtubeVideo, youtubeVideo.getAudioFormat());
     }
 
-    public YoutubeVideo getVideoInfo(String videoId){
-        RequestVideoInfo requestVideoInfo = new RequestVideoInfo(videoId);
-        return new YoutubeVideo(youtubeDownloader.getVideoInfo(requestVideoInfo).data());
-    }
+
 
     @SneakyThrows
     protected void downloadAsync(YoutubeVideo youtubeVideo, Format format) {

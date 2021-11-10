@@ -13,7 +13,7 @@ public class VideoElementFactory {
 	private AutowireCapableBeanFactory autowireCapableBeanFactory;
 
 	public VideoElement createVideoElement(YoutubePlaylistVideoDetail youtubePlaylistVideoDetail){
-		VideoElement videoElement = new VideoElement(youtubePlaylistVideoDetail);
+		VideoElement videoElement = new VideoElement();
 		autowireCapableBeanFactory.autowireBean(videoElement);
 		videoElement.loadVideoDetails(youtubePlaylistVideoDetail);
 		return videoElement;

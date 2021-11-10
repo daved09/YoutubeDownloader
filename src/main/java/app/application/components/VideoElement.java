@@ -30,7 +30,7 @@ public class VideoElement extends AnchorPane {
 	@Setter
 	private YoutubePlaylistVideoDetail youtubePlaylistVideoDetail;
 
-	public VideoElement(YoutubePlaylistVideoDetail youtubePlaylistVideoDetail) {
+	public VideoElement() {
 		ComponentUtils.loadComponent(this);
 	}
 

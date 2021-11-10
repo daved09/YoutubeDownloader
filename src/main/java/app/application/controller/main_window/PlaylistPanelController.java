@@ -7,6 +7,8 @@ import app.application.utils.DialogManager;
 import app.application.utils.YoutubeIdExtractor;
 import app.application.utils.YoutubePlaylistDownloadService;
 import app.application.utils.YoutubeUrlValidator;
+import app.application.utils.service.data.YoutubeDataService;
+import app.application.utils.service.data.YoutubePlaylistDataService;
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -43,6 +45,7 @@ public class PlaylistPanelController {
 	@FXML
 	private Button btnSearchPlaylist;
 
+	private final YoutubePlaylistDataService youtubePlaylistDataService;
 
 	private final YoutubePlaylistDownloadService youtubePlaylistDownloadService;
 
@@ -56,11 +59,13 @@ public class PlaylistPanelController {
 
 	public PlaylistPanelController(
 					YoutubePlaylistDownloadService youtubePlaylistDownloadService,
+					YoutubePlaylistDataService youtubePlaylistDataService,
 					YoutubeIdExtractor youtubeIdExtractor,
 					YoutubeUrlValidator youtubeUrlValidator,
 					DialogManager dialogManager,
 					VideoElementFactory videoElementFactory) {
 		this.youtubePlaylistDownloadService = youtubePlaylistDownloadService;
+		this.youtubePlaylistDataService = youtubePlaylistDataService;
 		this.youtubeIdExtractor = youtubeIdExtractor;
 		this.youtubeUrlValidator = youtubeUrlValidator;
 		this.dialogManager = dialogManager;
@@ -83,7 +88,8 @@ public class PlaylistPanelController {
 			dialogManager.openWarningDialog("Ungültige Url", "Bitte trage eine gültige Url ein.");
 			return;
 		}
-		youtubePlaylist = youtubePlaylistDownloadService.getPlaylistInfo(youtubeIdExtractor.getPlayListIdFromLink(txtPlaylistLink.getText()));
+		youtubePlaylist = youtubePlaylistDataService.getPlaylistInfo(youtubeIdExtractor.getPlayListIdFromLink(txtPlaylistLink.getText()));
+		lblDownloadProgress.setText("Videos: 0/" + youtubePlaylist.getPlaylistSize());
 		txtPlaylistTitle.setText(youtubePlaylist.getPlaylistTitle());
 		youtubePlaylist.getPlaylistVideos().forEach(video ->
 				listPlaylist.getItems().add(videoElementFactory.createVideoElement(video))

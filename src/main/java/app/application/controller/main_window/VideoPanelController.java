@@ -9,7 +9,6 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -87,7 +86,7 @@ public class VideoPanelController {
 			dialogManager.openWarningDialog("Ungültige Url", "Bitte trage eine gültige Url ein.");
 			return;
 		}
-		tmpYoutubeVideo = youtubeVideoDownloadService.getVideoInfo(youtubeIdExtractor.getVideoIdFromLink(txtDownloadLink.getText()));
+		tmpYoutubeVideo = youtubeVideoDownloadService.getYoutubeVideo(youtubeIdExtractor.getVideoIdFromLink(txtDownloadLink.getText()));
 		imgThumbnail.setImage(new Image(tmpYoutubeVideo.getVideoThumbnailUrl()));
 		lblVideoTitle.setText(tmpYoutubeVideo.getVideoTitle());
 		refreshQualityBox(qualityLabelExtractor.getQualityLabels(tmpYoutubeVideo));
