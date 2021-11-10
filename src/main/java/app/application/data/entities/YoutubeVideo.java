@@ -3,6 +3,7 @@ package app.application.data.entities;
 import com.github.kiulian.downloader.model.videos.VideoDetails;
 import com.github.kiulian.downloader.model.videos.VideoInfo;
 import com.github.kiulian.downloader.model.videos.formats.AudioFormat;
+import com.github.kiulian.downloader.model.videos.formats.Format;
 import com.github.kiulian.downloader.model.videos.formats.VideoWithAudioFormat;
 
 import java.util.List;
@@ -41,5 +42,7 @@ public class YoutubeVideo extends YoutubeEntity<VideoInfo>{
 		return reference.audioFormats().get(0);
 	}
 
-
+	public Format getBestVideoWithAudioFormat() {
+		return reference.bestVideoWithAudioFormat();
+	}
 }

@@ -1,7 +1,7 @@
 package app.application.components;
 
 import app.application.controller.VideoDetailsController;
-import app.application.data.Video;
+import app.application.data.entities.YoutubePlaylistVideoDetail;
 import app.application.utils.ComponentUtils;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
@@ -28,18 +28,17 @@ public class VideoElement extends AnchorPane {
 	private VideoDetailsController videoDetailsController;
 
 	@Setter
-	private Video video;
+	private YoutubePlaylistVideoDetail youtubePlaylistVideoDetail;
 
-	public VideoElement(Video video) {
+	public VideoElement(YoutubePlaylistVideoDetail youtubePlaylistVideoDetail) {
 		ComponentUtils.loadComponent(this);
-		loadVideoDetails(video);
 	}
 
-	private void loadVideoDetails(Video video){
-		setVideo(video);
-		imgThumbnail.setImage(new Image(video.getPlaylistVideoDetails().thumbnails().get(0).split("\\?sqp")[0]));
-		lblVideoTitle.setText(video.getPlaylistVideoDetails().title());
-		chkIgnore.selectedProperty().bindBidirectional(video.getIgnore());
+	public void loadVideoDetails(YoutubePlaylistVideoDetail youtubePlaylistVideoDetail){
+		setYoutubePlaylistVideoDetail(youtubePlaylistVideoDetail);
+		imgThumbnail.setImage(new Image(youtubePlaylistVideoDetail.getVideoThumbnailUrl()));
+		lblVideoTitle.setText(youtubePlaylistVideoDetail.getVideoTitle());
+		chkIgnore.selectedProperty().bindBidirectional(youtubePlaylistVideoDetail.getIgnore());
 	}
 
 	public void mouseClicked(MouseEvent event){
@@ -47,7 +46,7 @@ public class VideoElement extends AnchorPane {
 			return;
 		}
 		videoDetailsController.open();
-		videoDetailsController.setVideoInfos(video.getPlaylistVideoDetails().videoId());
+		videoDetailsController.setVideoInfos(youtubePlaylistVideoDetail.getVideoId());
 	}
 
 

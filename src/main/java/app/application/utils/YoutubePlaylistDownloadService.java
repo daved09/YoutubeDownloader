@@ -1,12 +1,13 @@
 package app.application.utils;
 
-import app.application.data.Video;
+import app.application.data.entities.YoutubePlaylist;
+import app.application.data.entities.YoutubePlaylistVideoDetail;
+import app.application.data.entities.YoutubeVideo;
 import app.application.listener.YoutubePlaylistDownloadListener;
 import com.github.kiulian.downloader.downloader.request.RequestPlaylistInfo;
 import com.github.kiulian.downloader.downloader.request.RequestVideoFileDownload;
 import com.github.kiulian.downloader.downloader.request.RequestVideoInfo;
 import com.github.kiulian.downloader.model.playlist.PlaylistInfo;
-import com.github.kiulian.downloader.model.videos.VideoInfo;
 import javafx.application.Platform;
 import javafx.scene.control.Label;
 import lombok.Setter;
@@ -16,7 +17,6 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.nio.file.Paths;
-import java.util.List;
 
 @Service
 public class YoutubePlaylistDownloadService extends YoutubeDownloadService {
@@ -28,36 +28,37 @@ public class YoutubePlaylistDownloadService extends YoutubeDownloadService {
     private Label label;
 
     @SneakyThrows
-    public PlaylistInfo getPlaylistInfo(String playListId) {
+    public YoutubePlaylist getPlaylistInfo(String playListId) {
         RequestPlaylistInfo requestPlaylistInfo = new RequestPlaylistInfo(playListId);
         PlaylistInfo playlistInfo = youtubeDownloader.getPlaylistInfo(requestPlaylistInfo).data();
-        setLabelProgress(0, playlistInfo.videos().size());
-        this.youtubeDownloadListener = new YoutubePlaylistDownloadListener(dialogManager, playlistInfo.videos().size());
-        return playlistInfo;
+        YoutubePlaylist youtubePlaylist = new YoutubePlaylist(playlistInfo);
+        setLabelProgress(0, youtubePlaylist.getPlaylistSize());
+        this.youtubeDownloadListener = new YoutubePlaylistDownloadListener(dialogManager, youtubePlaylist.getPlaylistSize());
+        return youtubePlaylist;
     }
 
     @SneakyThrows
-    public void downloadPlaylist(String title, List<Video> videoList){
-        int size = videoList.size();
+    public void downloadPlaylist(YoutubePlaylist youtubePlaylist){
+        int size = youtubePlaylist.getPlaylistSize();
         int progress = 0;
-        for (Video video : videoList) {
+        for (YoutubePlaylistVideoDetail video : youtubePlaylist.getPlaylistVideos()) {
             progress++;
             setLabelProgress(progress, size);
             if(!video.getIgnore().get()){
-                downloadAsync(title, getVideoInfo(video.getPlaylistVideoDetails().videoId()));
+                downloadAsync(youtubePlaylist.getPlaylistTitle(), getVideoInfo(video.getVideoId()));
             }
         }
     }
 
 
-    private VideoInfo getVideoInfo(String videoID){
+    private YoutubeVideo getVideoInfo(String videoID){
         RequestVideoInfo requestVideoInfo = new RequestVideoInfo(videoID);
-        return youtubeDownloader.getVideoInfo(requestVideoInfo).data();
+        return new YoutubeVideo(youtubeDownloader.getVideoInfo(requestVideoInfo).data());
     }
 
-    protected void downloadAsync(String playlistTitle, VideoInfo videoInfo){
-        RequestVideoFileDownload requestVideoFileDownload = new RequestVideoFileDownload(videoInfo.bestVideoWithAudioFormat());
-        requestVideoFileDownload.renameTo(videoInfo.details().title()).overwriteIfExists(true)
+    protected void downloadAsync(String playlistTitle, YoutubeVideo youtubeVideo){
+        RequestVideoFileDownload requestVideoFileDownload = new RequestVideoFileDownload(youtubeVideo.getBestVideoWithAudioFormat());
+        requestVideoFileDownload.renameTo(youtubeVideo.getVideoTitle()).overwriteIfExists(true)
                 .saveTo(Paths.get(userConfigHandler.getUserConfig().getDownloadDir().get() + File.separator + playlistTitle).toFile())
                 .callback(youtubeDownloadListener);
         youtubeDownloader.downloadVideoFile(requestVideoFileDownload);

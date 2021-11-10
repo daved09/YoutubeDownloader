@@ -58,7 +58,6 @@ public class VideoPanelController {
 
 	private final QualityLabelExtractor qualityLabelExtractor;
 
-	@Autowired
 	public VideoPanelController(
 					YoutubeVideoDownloadService youtubeVideoDownloadService,
 					YoutubeIdExtractor youtubeIdExtractor,
