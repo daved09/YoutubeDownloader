@@ -1,5 +1,6 @@
 package app.application.controller;
 
+import app.application.data.entities.YoutubeVideo;
 import app.application.utils.YoutubeVideoDownloadService;
 import com.github.kiulian.downloader.model.videos.VideoDetails;
 import com.github.kiulian.downloader.model.videos.VideoInfo;
@@ -37,10 +38,10 @@ public class VideoDetailsController {
 	private YoutubeVideoDownloadService youtubeVideoDownloadService;
 
 	public void setVideoInfos(String videoId) {
-		VideoDetails videoDetails = youtubeVideoDownloadService.getVideoInfo(videoId).details();
-		imgThumbnail.setImage(new Image(videoDetails.thumbnails().get(0).split("\\?sqp")[0]));
-		txtVideoDescription.setText(videoDetails.description());
-		lblVideoTitle.setText(videoDetails.title());
+		YoutubeVideo youtubeVideo = youtubeVideoDownloadService.getVideoInfo(videoId);
+		imgThumbnail.setImage(new Image(youtubeVideo.getVideoThumbnailUrl()));
+		txtVideoDescription.setText(youtubeVideo.getVideoDescription());
+		lblVideoTitle.setText(youtubeVideo.getVideoTitle());
 	}
 
 	public void open(){

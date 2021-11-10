@@ -1,11 +1,8 @@
 package app.application.controller.main_window;
 
+import app.application.data.entities.YoutubeVideo;
 import app.application.listener.YoutubeVideoDownloadListener;
-import app.application.utils.DialogManager;
-import app.application.utils.YoutubeIdExtractor;
-import app.application.utils.YoutubeUrlValidator;
-import app.application.utils.YoutubeVideoDownloadService;
-import com.github.kiulian.downloader.model.videos.VideoInfo;
+import app.application.utils.*;
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -51,19 +48,31 @@ public class VideoPanelController {
 	@FXML
 	private Button btnSearch;
 
-	@Autowired
-	private YoutubeVideoDownloadService youtubeVideoDownloadService;
+	private final YoutubeVideoDownloadService youtubeVideoDownloadService;
+
+	private final YoutubeIdExtractor youtubeIdExtractor;
+
+	private final YoutubeUrlValidator youtubeUrlValidator;
+
+	private final DialogManager dialogManager;
+
+	private final QualityLabelExtractor qualityLabelExtractor;
 
 	@Autowired
-	private YoutubeIdExtractor youtubeIdExtractor;
+	public VideoPanelController(
+					YoutubeVideoDownloadService youtubeVideoDownloadService,
+					YoutubeIdExtractor youtubeIdExtractor,
+					YoutubeUrlValidator youtubeUrlValidator,
+					DialogManager dialogManager,
+					QualityLabelExtractor qualityLabelExtractor) {
+		this.youtubeVideoDownloadService = youtubeVideoDownloadService;
+		this.youtubeIdExtractor = youtubeIdExtractor;
+		this.youtubeUrlValidator = youtubeUrlValidator;
+		this.dialogManager = dialogManager;
+		this.qualityLabelExtractor = qualityLabelExtractor;
+	}
 
-	@Autowired
-	private YoutubeUrlValidator youtubeUrlValidator;
-
-	@Autowired
-	private DialogManager dialogManager;
-
-	private VideoInfo tmpVideoInfo;
+	private YoutubeVideo tmpYoutubeVideo;
 
 	private ExecutorService downloadExecutorService;
 
@@ -79,11 +88,11 @@ public class VideoPanelController {
 			dialogManager.openWarningDialog("Ungültige Url", "Bitte trage eine gültige Url ein.");
 			return;
 		}
-		tmpVideoInfo = youtubeVideoDownloadService.getVideoInfo(youtubeIdExtractor.getVideoIdFromLink(txtDownloadLink.getText()));
-		imgThumbnail.setImage(new Image(tmpVideoInfo.details().thumbnails().get(0).split("\\?sqp")[0]));
-		lblVideoTitle.setText(tmpVideoInfo.details().title());
-		refreshQualityBox(youtubeVideoDownloadService.getQualityLabels(tmpVideoInfo));
-		txtDescription.setText(tmpVideoInfo.details().description());
+		tmpYoutubeVideo = youtubeVideoDownloadService.getVideoInfo(youtubeIdExtractor.getVideoIdFromLink(txtDownloadLink.getText()));
+		imgThumbnail.setImage(new Image(tmpYoutubeVideo.getVideoThumbnailUrl()));
+		lblVideoTitle.setText(tmpYoutubeVideo.getVideoTitle());
+		refreshQualityBox(qualityLabelExtractor.getQualityLabels(tmpYoutubeVideo));
+		txtDescription.setText(tmpYoutubeVideo.getVideoDescription());
 		videoPane.setVisible(true);
 	}
 
@@ -91,10 +100,10 @@ public class VideoPanelController {
 		downloadExecutorService = Executors.newSingleThreadExecutor();
 		downloadExecutorService.execute(new Thread(() -> {
 			if(chkAudioOnly.isSelected()){
-				youtubeVideoDownloadService.downloadAudioOnlyAsync(tmpVideoInfo);
+				youtubeVideoDownloadService.downloadAudioOnlyAsync(tmpYoutubeVideo);
 			}
 			else{
-				youtubeVideoDownloadService.downloadVideoAsync(tmpVideoInfo, boxQuality.getSelectionModel().getSelectedItem());
+				youtubeVideoDownloadService.downloadVideoAsync(tmpYoutubeVideo, boxQuality.getSelectionModel().getSelectedItem());
 			}
 		}));
 	}
@@ -104,7 +113,7 @@ public class VideoPanelController {
 		try {
 			downloadExecutorService.awaitTermination(1, TimeUnit.SECONDS);
 		} catch (CancellationException | InterruptedException ignored) {}
-		youtubeVideoDownloadService.deleteUnfinishedDownload(tmpVideoInfo);
+		youtubeVideoDownloadService.deleteUnfinishedDownload(tmpYoutubeVideo);
 	}
 
 

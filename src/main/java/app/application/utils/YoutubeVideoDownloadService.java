@@ -1,8 +1,8 @@
 package app.application.utils;
 
+import app.application.data.entities.YoutubeVideo;
 import com.github.kiulian.downloader.downloader.request.RequestVideoFileDownload;
 import com.github.kiulian.downloader.downloader.request.RequestVideoInfo;
-import com.github.kiulian.downloader.model.videos.VideoInfo;
 import com.github.kiulian.downloader.model.videos.formats.Format;
 import com.github.kiulian.downloader.model.videos.formats.VideoWithAudioFormat;
 import lombok.SneakyThrows;
@@ -10,56 +10,46 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class YoutubeVideoDownloadService extends YoutubeDownloadService {
 
     @SneakyThrows
-    public void downloadVideoAsync(VideoInfo videoInfo, String quality) {
-        downloadAsync(videoInfo, selectAudioVideoFormat(videoInfo, quality));
+    public void downloadVideoAsync(YoutubeVideo youtubeVideo, String quality) {
+        downloadAsync(youtubeVideo, selectAudioVideoFormat(youtubeVideo, quality));
     }
 
-    public void downloadAudioOnlyAsync(VideoInfo videoInfo) {
-        downloadAsync(videoInfo, videoInfo.audioFormats().get(0));
+    public void downloadAudioOnlyAsync(YoutubeVideo youtubeVideo) {
+        downloadAsync(youtubeVideo, youtubeVideo.getAudioFormat());
     }
 
-    public VideoInfo getVideoInfo(String videoId){
+    public YoutubeVideo getVideoInfo(String videoId){
         RequestVideoInfo requestVideoInfo = new RequestVideoInfo(videoId);
-        return youtubeDownloader.getVideoInfo(requestVideoInfo).data();
+        return new YoutubeVideo(youtubeDownloader.getVideoInfo(requestVideoInfo).data());
     }
 
     @SneakyThrows
-    protected void downloadAsync(VideoInfo videoInfo, Format format) {
+    protected void downloadAsync(YoutubeVideo youtubeVideo, Format format) {
         RequestVideoFileDownload requestVideoFileDownload = new RequestVideoFileDownload(format);
         requestVideoFileDownload.callback(youtubeDownloadListener)
-                .renameTo(videoInfo.details().title())
+                .renameTo(youtubeVideo.getVideoTitle())
                 .overwriteIfExists(userConfigHandler.getUserConfig().getOverwriteExistingVideo().get())
                 .saveTo(Paths.get(userConfigHandler.getUserConfig().getDownloadDir().get()).toFile());
         youtubeDownloader.downloadVideoFile(requestVideoFileDownload).data();
     }
 
 
-    private VideoWithAudioFormat selectAudioVideoFormat(VideoInfo videoInfo, String quality) {
-        List<VideoWithAudioFormat> audioVideoFormats = videoInfo.videoWithAudioFormats();
+    private VideoWithAudioFormat selectAudioVideoFormat(YoutubeVideo youtubeVideo, String quality) {
+        List<VideoWithAudioFormat> audioVideoFormats = youtubeVideo.getVideoWithAudioFormat();
         audioVideoFormats.removeIf(audioVideoFormat -> !audioVideoFormat.qualityLabel().equals(quality));
         return audioVideoFormats.get(0);
     }
 
-    public List<String> getQualityLabels(VideoInfo videoInfo) {
-        List<VideoWithAudioFormat> audioVideoFormats = videoInfo.videoWithAudioFormats();
-        List<String> qualityLabels = new ArrayList<>();
-        for (VideoWithAudioFormat audioVideoFormat : audioVideoFormats) {
-            qualityLabels.add(audioVideoFormat.qualityLabel());
-        }
-        return qualityLabels;
-    }
-
-    public void deleteUnfinishedDownload(VideoInfo videoInfo){
+    public void deleteUnfinishedDownload(YoutubeVideo youtubeVideo){
         if(!youtubeDownloadListener.isDownloadFinished()){
             for (File file : getFilesToDelete(Paths.get(userConfigHandler.getUserConfig().getDownloadDir().get())
-                    .toFile(), videoInfo.details().title())) {
+                    .toFile(), youtubeVideo.getVideoTitle())) {
                 file.delete();
             }
         }
