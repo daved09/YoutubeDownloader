@@ -18,7 +18,7 @@ import java.nio.file.Paths;
 @Service
 public class YoutubePlaylistDownloadService extends YoutubeDownloadService {
 
-    private YoutubeVideoDataService youtubeVideoDataService;
+    private final YoutubeVideoDataService youtubeVideoDataService;
 
     public YoutubePlaylistDownloadService(YoutubeVideoDataService youtubeVideoDataService) {
         this.youtubeVideoDataService = youtubeVideoDataService;

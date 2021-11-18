@@ -103,7 +103,7 @@ public class PlaylistPanelController {
 	public void btnAbort_click(){
 		downloadExecutor.shutdownNow();
 		try{
-			downloadExecutor.awaitTermination(1, TimeUnit.SECONDS);
+			downloadExecutor.awaitTermination(1, TimeUnit.SECONDS);//TODO: siehe VideoPanelController
 		}
 		catch (CancellationException | InterruptedException ignored){}
 	}

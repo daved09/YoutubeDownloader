@@ -115,7 +115,7 @@ public class VideoPanelController {
 	public void btnAbort_click(){
 		downloadExecutorService.shutdownNow();
 		try {
-			downloadExecutorService.awaitTermination(1, TimeUnit.SECONDS);
+			downloadExecutorService.awaitTermination(1, TimeUnit.SECONDS);//TODO: Fehler werfen, wenn termination austimed
 		} catch (CancellationException | InterruptedException ignored) {}
 		youtubeVideoDownloadService.deleteUnfinishedDownload(tmpYoutubeVideo);
 	}

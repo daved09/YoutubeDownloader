@@ -10,7 +10,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class VideoElement extends AnchorPane {
