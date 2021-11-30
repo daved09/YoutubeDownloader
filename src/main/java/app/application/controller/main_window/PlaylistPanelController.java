@@ -80,7 +80,7 @@ public class PlaylistPanelController {
 		btnSearchPlaylist.disableProperty().bind(Bindings.isEmpty(txtPlaylistLink.textProperty()));
 	}
 
-	public void btnSearchPlaylist_click(){
+	public void btnSearchPlaylistClick(){
 		listPlaylist.getItems().clear();
 		if(youtubeUrlValidator.isYoutubeUrlInvalid(txtPlaylistLink.getText())){
 			dialogManager.openWarningDialog("Ungültige Url", "Bitte trage eine gültige Url ein.");
@@ -95,12 +95,12 @@ public class PlaylistPanelController {
 		playlistPanel.setVisible(true);
 	}
 
-	public void btnPlaylistDownload_click(){
+	public void btnPlaylistDownloadClick(){
 		downloadExecutor = Executors.newSingleThreadExecutor();
-		downloadExecutor.execute(new Thread(() -> youtubePlaylistDownloadService.downloadPlaylist(youtubePlaylist)));
+		downloadExecutor.execute(() -> youtubePlaylistDownloadService.downloadPlaylist(youtubePlaylist));
 	}
 
-	public void btnAbort_click(){
+	public void btnAbortClick(){
 		downloadExecutor.shutdownNow();
 		try{
 			downloadExecutor.awaitTermination(1, TimeUnit.SECONDS);//TODO: siehe VideoPanelController

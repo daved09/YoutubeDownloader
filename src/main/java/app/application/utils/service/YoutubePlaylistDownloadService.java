@@ -1,7 +1,6 @@
 package app.application.utils.service;
 
 import app.application.data.entities.YoutubePlaylist;
-import app.application.data.entities.YoutubePlaylistVideoDetail;
 import app.application.data.entities.YoutubeVideo;
 import app.application.listener.YoutubePlaylistDownloadListener;
 import app.application.utils.service.data.YoutubeVideoDataService;
@@ -14,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.nio.file.Paths;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 public class YoutubePlaylistDownloadService extends YoutubeDownloadService {
@@ -31,14 +31,14 @@ public class YoutubePlaylistDownloadService extends YoutubeDownloadService {
     public void downloadPlaylist(YoutubePlaylist youtubePlaylist){
         this.youtubeDownloadListener = new YoutubePlaylistDownloadListener(dialogManager, youtubePlaylist.getPlaylistSize());
         int size = youtubePlaylist.getPlaylistSize();
-        int progress = 0;
-        for (YoutubePlaylistVideoDetail video : youtubePlaylist.getPlaylistVideos()) {
-            progress++;
-            setLabelProgress(progress, size);
-            if(!video.getIgnore().get()){
-                downloadAsync(youtubePlaylist.getPlaylistTitle(), youtubeVideoDataService.getYoutubeVideo(video.getVideoId()));
-            }
-        }
+        AtomicInteger progress = new AtomicInteger(0);
+        youtubePlaylist.getPlaylistVideos().stream().
+                filter(video -> video.getIgnore().get())
+                .forEach(video -> {
+                    progress.getAndIncrement();
+                    setLabelProgress(progress.get(), size);
+                    downloadAsync(youtubePlaylist.getPlaylistTitle(), youtubeVideoDataService.getYoutubeVideo(video.getVideoId()));
+                });
     }
 
     protected void downloadAsync(String playlistTitle, YoutubeVideo youtubeVideo){

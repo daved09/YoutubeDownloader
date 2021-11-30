@@ -87,7 +87,7 @@ public class VideoPanelController {
 	}
 
 
-	public void btnSearch_click(){
+	public void btnSearchClick(){
 		if(youtubeUrlValidator.isYoutubeUrlInvalid(txtDownloadLink.getText())){
 			dialogManager.openWarningDialog("Ungültige Url", "Bitte trage eine gültige Url ein.");
 			return;
@@ -100,19 +100,19 @@ public class VideoPanelController {
 		videoPane.setVisible(true);
 	}
 
-	public void btnDownloadVideo_click(){
+	public void btnDownloadVideoClick(){
 		downloadExecutorService = Executors.newSingleThreadExecutor();
-		downloadExecutorService.execute(new Thread(() -> {
+		downloadExecutorService.execute(() -> {
 			if(chkAudioOnly.isSelected()){
 				youtubeVideoDownloadService.downloadAudioOnlyAsync(tmpYoutubeVideo);
 			}
 			else{
 				youtubeVideoDownloadService.downloadVideoAsync(tmpYoutubeVideo, boxQuality.getSelectionModel().getSelectedItem());
 			}
-		}));
+		});
 	}
 
-	public void btnAbort_click(){
+	public void btnAbortClick(){
 		downloadExecutorService.shutdownNow();
 		try {
 			downloadExecutorService.awaitTermination(1, TimeUnit.SECONDS);//TODO: Fehler werfen, wenn termination austimed
