@@ -1,4 +1,4 @@
-package app.application.utils.service;
+package app.application.utils.service.download;
 
 import app.application.data.entities.YoutubeVideo;
 import com.github.kiulian.downloader.downloader.request.RequestVideoFileDownload;

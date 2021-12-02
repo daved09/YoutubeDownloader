@@ -5,7 +5,7 @@ import app.application.data.entities.YoutubePlaylist;
 import app.application.factories.VideoElementFactory;
 import app.application.utils.DialogManager;
 import app.application.utils.YoutubeIdExtractor;
-import app.application.utils.service.YoutubePlaylistDownloadService;
+import app.application.utils.service.download.YoutubePlaylistDownloadService;
 import app.application.utils.YoutubeUrlValidator;
 import app.application.utils.service.data.YoutubePlaylistDataService;
 import javafx.beans.binding.Bindings;
