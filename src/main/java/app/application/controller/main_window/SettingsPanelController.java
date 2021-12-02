@@ -37,7 +37,7 @@ public class SettingsPanelController {
 		txtVerion.textProperty().bind(versionProperties.getVersion());
 	}
 
-	public void btnSave_click(){
+	public void btnSaveClick(){
 		userConfigHandler.writeConfig();
 		dialogManager.openInformationDialog("Speichern erfolgreich", "");
 	}

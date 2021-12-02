@@ -6,6 +6,7 @@ import com.google.gson.Gson;
 import lombok.Setter;
 import lombok.SneakyThrows;
 
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.nio.file.Files;
@@ -21,7 +22,7 @@ public class UserConfigHandler {
 	@Setter
 	private Gson gson;
 
-	private final String CONFIG_FILE = System.getProperty("user.home") + "/.ytdl.json";
+	private final String CONFIG_FILE = System.getProperty("user.home") + File.separator + ".ytdl.json";
 
 	public void initConfig(){
 		userConfig = configurationFactory.createDefaultConfiguration();

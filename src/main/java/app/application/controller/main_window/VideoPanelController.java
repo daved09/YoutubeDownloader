@@ -1,18 +1,16 @@
 package app.application.controller.main_window;
 
+import app.application.data.entities.YoutubeVideo;
 import app.application.listener.YoutubeVideoDownloadListener;
-import app.application.utils.DialogManager;
-import app.application.utils.YoutubeIdExtractor;
-import app.application.utils.YoutubeUrlValidator;
-import app.application.utils.YoutubeVideoDownloadService;
-import com.github.kiulian.downloader.model.videos.VideoInfo;
+import app.application.utils.*;
+import app.application.utils.service.download.YoutubeVideoDownloadService;
+import app.application.utils.service.data.YoutubeVideoDataService;
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -51,19 +49,34 @@ public class VideoPanelController {
 	@FXML
 	private Button btnSearch;
 
-	@Autowired
-	private YoutubeVideoDownloadService youtubeVideoDownloadService;
+	private final YoutubeVideoDataService youtubeVideoDataService;
 
-	@Autowired
-	private YoutubeIdExtractor youtubeIdExtractor;
+	private final YoutubeVideoDownloadService youtubeVideoDownloadService;
 
-	@Autowired
-	private YoutubeUrlValidator youtubeUrlValidator;
+	private final YoutubeIdExtractor youtubeIdExtractor;
 
-	@Autowired
-	private DialogManager dialogManager;
+	private final YoutubeUrlValidator youtubeUrlValidator;
 
-	private VideoInfo tmpVideoInfo;
+	private final DialogManager dialogManager;
+
+	private final QualityLabelExtractor qualityLabelExtractor;
+
+	public VideoPanelController(
+					YoutubeVideoDownloadService youtubeVideoDownloadService,
+					YoutubeVideoDataService youtubeVideoDataService,
+					YoutubeIdExtractor youtubeIdExtractor,
+					YoutubeUrlValidator youtubeUrlValidator,
+					DialogManager dialogManager,
+					QualityLabelExtractor qualityLabelExtractor) {
+		this.youtubeVideoDownloadService = youtubeVideoDownloadService;
+		this.youtubeVideoDataService = youtubeVideoDataService;
+		this.youtubeIdExtractor = youtubeIdExtractor;
+		this.youtubeUrlValidator = youtubeUrlValidator;
+		this.dialogManager = dialogManager;
+		this.qualityLabelExtractor = qualityLabelExtractor;
+	}
+
+	private YoutubeVideo tmpYoutubeVideo;
 
 	private ExecutorService downloadExecutorService;
 
@@ -74,37 +87,37 @@ public class VideoPanelController {
 	}
 
 
-	public void btnSearch_click(){
+	public void btnSearchClick(){
 		if(youtubeUrlValidator.isYoutubeUrlInvalid(txtDownloadLink.getText())){
 			dialogManager.openWarningDialog("Ungültige Url", "Bitte trage eine gültige Url ein.");
 			return;
 		}
-		tmpVideoInfo = youtubeVideoDownloadService.getVideoInfo(youtubeIdExtractor.getVideoIdFromLink(txtDownloadLink.getText()));
-		imgThumbnail.setImage(new Image(tmpVideoInfo.details().thumbnails().get(0).split("\\?sqp")[0]));
-		lblVideoTitle.setText(tmpVideoInfo.details().title());
-		refreshQualityBox(youtubeVideoDownloadService.getQualityLabels(tmpVideoInfo));
-		txtDescription.setText(tmpVideoInfo.details().description());
+		tmpYoutubeVideo = youtubeVideoDataService.getYoutubeVideo(youtubeIdExtractor.getVideoIdFromLink(txtDownloadLink.getText()));
+		imgThumbnail.setImage(new Image(tmpYoutubeVideo.getVideoThumbnailUrl()));
+		lblVideoTitle.setText(tmpYoutubeVideo.getVideoTitle());
+		refreshQualityBox(qualityLabelExtractor.getQualityLabels(tmpYoutubeVideo));
+		txtDescription.setText(tmpYoutubeVideo.getVideoDescription());
 		videoPane.setVisible(true);
 	}
 
-	public void btnDownloadVideo_click(){
+	public void btnDownloadVideoClick(){
 		downloadExecutorService = Executors.newSingleThreadExecutor();
-		downloadExecutorService.execute(new Thread(() -> {
+		downloadExecutorService.execute(() -> {
 			if(chkAudioOnly.isSelected()){
-				youtubeVideoDownloadService.downloadAudioOnlyAsync(tmpVideoInfo);
+				youtubeVideoDownloadService.downloadAudioOnlyAsync(tmpYoutubeVideo);
 			}
 			else{
-				youtubeVideoDownloadService.downloadVideoAsync(tmpVideoInfo, boxQuality.getSelectionModel().getSelectedItem());
+				youtubeVideoDownloadService.downloadVideoAsync(tmpYoutubeVideo, boxQuality.getSelectionModel().getSelectedItem());
 			}
-		}));
+		});
 	}
 
-	public void btnAbort_click(){
+	public void btnAbortClick(){
 		downloadExecutorService.shutdownNow();
 		try {
-			downloadExecutorService.awaitTermination(1, TimeUnit.SECONDS);
+			downloadExecutorService.awaitTermination(1, TimeUnit.SECONDS);//TODO: Fehler werfen, wenn termination austimed
 		} catch (CancellationException | InterruptedException ignored) {}
-		youtubeVideoDownloadService.deleteUnfinishedDownload(tmpVideoInfo);
+		youtubeVideoDownloadService.deleteUnfinishedDownload(tmpYoutubeVideo);
 	}
 
 

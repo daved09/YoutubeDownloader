@@ -1,8 +1,7 @@
 package app.application.controller;
 
-import app.application.utils.YoutubeVideoDownloadService;
-import com.github.kiulian.downloader.model.videos.VideoDetails;
-import com.github.kiulian.downloader.model.videos.VideoInfo;
+import app.application.data.entities.YoutubeVideo;
+import app.application.utils.service.data.YoutubeVideoDataService;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -13,7 +12,6 @@ import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import net.rgielen.fxweaver.core.FxWeaver;
 import net.rgielen.fxweaver.core.FxmlView;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 
@@ -30,17 +28,21 @@ public class VideoDetailsController {
 	@FXML
 	private Label lblVideoTitle;
 
-	@Autowired
-	private FxWeaver fxWeaver;
+	private final FxWeaver fxWeaver;
 
-	@Autowired
-	private YoutubeVideoDownloadService youtubeVideoDownloadService;
+	private final YoutubeVideoDataService youtubeVideoDataService;
+
+	public VideoDetailsController(
+					FxWeaver fxWeaver, YoutubeVideoDataService youtubeVideoDataService) {
+		this.fxWeaver = fxWeaver;
+		this.youtubeVideoDataService = youtubeVideoDataService;
+	}
 
 	public void setVideoInfos(String videoId) {
-		VideoDetails videoDetails = youtubeVideoDownloadService.getVideoInfo(videoId).details();
-		imgThumbnail.setImage(new Image(videoDetails.thumbnails().get(0).split("\\?sqp")[0]));
-		txtVideoDescription.setText(videoDetails.description());
-		lblVideoTitle.setText(videoDetails.title());
+		YoutubeVideo youtubeVideo = youtubeVideoDataService.getYoutubeVideo(videoId);
+		imgThumbnail.setImage(new Image(youtubeVideo.getVideoThumbnailUrl()));
+		txtVideoDescription.setText(youtubeVideo.getVideoDescription());
+		lblVideoTitle.setText(youtubeVideo.getVideoTitle());
 	}
 
 	public void open(){

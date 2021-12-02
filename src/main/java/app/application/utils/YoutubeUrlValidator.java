@@ -6,8 +6,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class YoutubeUrlValidator {
 
+    private final UrlValidator urlValidator = new UrlValidator();
+
     public boolean isYoutubeUrlInvalid(String url){
-        UrlValidator urlValidator = new UrlValidator();
         return !urlValidator.isValid(url) || !isYoutubeUrl(url) || !hasVideoOrPlaylistID(url);
     }
 

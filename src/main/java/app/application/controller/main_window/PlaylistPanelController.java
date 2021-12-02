@@ -1,14 +1,13 @@
 package app.application.controller.main_window;
 
 import app.application.components.VideoElement;
-import app.application.data.Video;
+import app.application.data.entities.YoutubePlaylist;
 import app.application.factories.VideoElementFactory;
-import app.application.factories.VideoListFactory;
 import app.application.utils.DialogManager;
 import app.application.utils.YoutubeIdExtractor;
-import app.application.utils.YoutubePlaylistDownloadService;
+import app.application.utils.service.download.YoutubePlaylistDownloadService;
 import app.application.utils.YoutubeUrlValidator;
-import com.github.kiulian.downloader.model.playlist.PlaylistInfo;
+import app.application.utils.service.data.YoutubePlaylistDataService;
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -16,10 +15,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -46,28 +43,34 @@ public class PlaylistPanelController {
 	@FXML
 	private Button btnSearchPlaylist;
 
+	private final YoutubePlaylistDataService youtubePlaylistDataService;
 
-	@Autowired
-	private YoutubePlaylistDownloadService youtubePlaylistDownloadService;
+	private final YoutubePlaylistDownloadService youtubePlaylistDownloadService;
 
-	@Autowired
-	private YoutubeIdExtractor youtubeIdExtractor;
+	private final YoutubeIdExtractor youtubeIdExtractor;
 
-	@Autowired
-	private YoutubeUrlValidator youtubeUrlValidator;
+	private final YoutubeUrlValidator youtubeUrlValidator;
 
-	@Autowired
-	private DialogManager dialogManager;
+	private final DialogManager dialogManager;
 
-	@Autowired
-	private VideoElementFactory videoElementFactory;
+	private final VideoElementFactory videoElementFactory;
 
-	@Autowired
-	private VideoListFactory videoListFactory;
+	public PlaylistPanelController(
+					YoutubePlaylistDownloadService youtubePlaylistDownloadService,
+					YoutubePlaylistDataService youtubePlaylistDataService,
+					YoutubeIdExtractor youtubeIdExtractor,
+					YoutubeUrlValidator youtubeUrlValidator,
+					DialogManager dialogManager,
+					VideoElementFactory videoElementFactory) {
+		this.youtubePlaylistDownloadService = youtubePlaylistDownloadService;
+		this.youtubePlaylistDataService = youtubePlaylistDataService;
+		this.youtubeIdExtractor = youtubeIdExtractor;
+		this.youtubeUrlValidator = youtubeUrlValidator;
+		this.dialogManager = dialogManager;
+		this.videoElementFactory = videoElementFactory;
+	}
 
-	private List<Video> videoList;
-
-	private PlaylistInfo playlistInfo;
+	private YoutubePlaylist youtubePlaylist;
 
 	private ExecutorService downloadExecutor;
 
@@ -77,32 +80,30 @@ public class PlaylistPanelController {
 		btnSearchPlaylist.disableProperty().bind(Bindings.isEmpty(txtPlaylistLink.textProperty()));
 	}
 
-	public void btnSearchPlaylist_click(){
+	public void btnSearchPlaylistClick(){
+		listPlaylist.getItems().clear();
 		if(youtubeUrlValidator.isYoutubeUrlInvalid(txtPlaylistLink.getText())){
 			dialogManager.openWarningDialog("Ungültige Url", "Bitte trage eine gültige Url ein.");
 			return;
 		}
-		playlistInfo = youtubePlaylistDownloadService.getPlaylistInfo(youtubeIdExtractor.getPlayListIdFromLink(txtPlaylistLink.getText()));
-		txtPlaylistTitle.setText(playlistInfo.details().title());
-		this.videoList = videoListFactory.createVideoList(playlistInfo.videos());
-		videoList.forEach(video ->
+		youtubePlaylist = youtubePlaylistDataService.getPlaylistInfo(youtubeIdExtractor.getPlayListIdFromLink(txtPlaylistLink.getText()));
+		lblDownloadProgress.setText("Videos: 0/" + youtubePlaylist.getPlaylistSize());
+		txtPlaylistTitle.setText(youtubePlaylist.getPlaylistTitle());
+		youtubePlaylist.getPlaylistVideos().forEach(video ->
 				listPlaylist.getItems().add(videoElementFactory.createVideoElement(video))
 		);
-//		playlistInfo.videos().forEach(playlistVideoDetails ->
-//						listPlaylist.getItems().add(videoElementFactory.createVideoElement(playlistVideoDetails))
-//		);
 		playlistPanel.setVisible(true);
 	}
 
-	public void btnPlaylistDownload_click(){
+	public void btnPlaylistDownloadClick(){
 		downloadExecutor = Executors.newSingleThreadExecutor();
-		downloadExecutor.execute(new Thread(() -> youtubePlaylistDownloadService.downloadPlaylist(playlistInfo.details().title(), videoList)));
+		downloadExecutor.execute(() -> youtubePlaylistDownloadService.downloadPlaylist(youtubePlaylist));
 	}
 
-	public void btnAbort_click(){
+	public void btnAbortClick(){
 		downloadExecutor.shutdownNow();
 		try{
-			downloadExecutor.awaitTermination(1, TimeUnit.SECONDS);
+			downloadExecutor.awaitTermination(1, TimeUnit.SECONDS);//TODO: siehe VideoPanelController
 		}
 		catch (CancellationException | InterruptedException ignored){}
 	}
