@@ -33,7 +33,7 @@ public class YoutubePlaylistDownloadService extends YoutubeDownloadService {
         int size = youtubePlaylist.getPlaylistSize();
         AtomicInteger progress = new AtomicInteger(0);
         youtubePlaylist.getPlaylistVideos().stream().
-                filter(video -> video.getIgnore().get())
+                filter(video -> !video.getIgnore().get())
                 .forEach(video -> {
                     progress.getAndIncrement();
                     setLabelProgress(progress.get(), size);
