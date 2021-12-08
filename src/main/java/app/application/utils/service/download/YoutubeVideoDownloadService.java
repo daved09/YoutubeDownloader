@@ -42,17 +42,4 @@ public class YoutubeVideoDownloadService extends YoutubeDownloadService {
         return audioVideoFormats.get(0);
     }
 
-    public void deleteUnfinishedDownload(YoutubeVideo youtubeVideo){
-        if(!youtubeDownloadListener.isDownloadFinished()){
-            for (File file : getFilesToDelete(Paths.get(userConfigHandler.getUserConfig().getDownloadDir().get())
-                    .toFile(), youtubeVideo.getVideoTitle())) {
-                file.delete();
-            }
-        }
-    }
-
-    private File[] getFilesToDelete(File dir, String fileName){
-        return dir.listFiles((file, name) -> name.matches(fileName + ".*"));
-    }
-
 }
