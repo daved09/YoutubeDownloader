@@ -10,6 +10,7 @@ import javafx.scene.control.Label;
 import lombok.Setter;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.io.File;
 import java.nio.file.Paths;
@@ -44,7 +45,8 @@ public class YoutubePlaylistDownloadService extends YoutubeDownloadService {
     protected void downloadAsync(String playlistTitle, YoutubeVideo youtubeVideo){
         RequestVideoFileDownload requestVideoFileDownload = new RequestVideoFileDownload(youtubeVideo.getBestVideoWithAudioFormat());
         requestVideoFileDownload.renameTo(youtubeVideo.getVideoTitle()).overwriteIfExists(true)
-                .saveTo(Paths.get(userConfigHandler.getUserConfig().getDownloadDir().get() + File.separator + playlistTitle).toFile())
+                .saveTo(Paths.get(userConfigHandler.getUserConfig().getDownloadDir().get() + File.separator +
+                        (userConfigHandler.getUserConfig().getSubFolderForPlaylists().get() ? playlistTitle : "")).toFile())
                 .callback(youtubeDownloadListener);
         youtubeDownloader.downloadVideoFile(requestVideoFileDownload);
     }

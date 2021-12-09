@@ -13,8 +13,11 @@ public class UserConfig {
 
 	private BooleanProperty overwriteExistingVideo;
 
+	private BooleanProperty subFolderForPlaylists;
+
 	public UserConfig() {
 		downloadDir = new SimpleStringProperty();
-		overwriteExistingVideo = new SimpleBooleanProperty();
+		overwriteExistingVideo = new SimpleBooleanProperty(false);
+		subFolderForPlaylists = new SimpleBooleanProperty(true);
 	}
 }

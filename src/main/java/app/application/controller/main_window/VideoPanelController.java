@@ -117,7 +117,6 @@ public class VideoPanelController {
 		try {
 			downloadExecutorService.awaitTermination(1, TimeUnit.SECONDS);//TODO: Fehler werfen, wenn termination austimed
 		} catch (CancellationException | InterruptedException ignored) {}
-		youtubeVideoDownloadService.deleteUnfinishedDownload(tmpYoutubeVideo);
 	}
 
 
