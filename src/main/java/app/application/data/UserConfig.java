@@ -6,6 +6,8 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import lombok.Data;
 
+import java.io.File;
+
 @Data
 public class UserConfig {
 
@@ -16,7 +18,7 @@ public class UserConfig {
 	private BooleanProperty subFolderForPlaylists;
 
 	public UserConfig() {
-		downloadDir = new SimpleStringProperty();
+		downloadDir = new SimpleStringProperty(System.getProperty("user.home") + File.separator + "Videos");
 		overwriteExistingVideo = new SimpleBooleanProperty(false);
 		subFolderForPlaylists = new SimpleBooleanProperty(true);
 	}
