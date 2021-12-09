@@ -11,11 +11,12 @@ import java.io.File;
 public class ConfigurationFactory {
 
 
-
+	//TODO Pruefen ob das noch benoetigt wird
 	public UserConfig createDefaultConfiguration() {
 		UserConfig userConfig = new UserConfig();
 		userConfig.setDownloadDir(new SimpleStringProperty(System.getProperty("user.home") + File.separator + "Videos"));
 		userConfig.setOverwriteExistingVideo(new SimpleBooleanProperty(false));
+		userConfig.setSubFolderForPlaylists(new SimpleBooleanProperty(true));
 		return userConfig;
 	}
 
