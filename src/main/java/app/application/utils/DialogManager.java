@@ -21,6 +21,10 @@ public class DialogManager {
         openDialog(ERROR, "Error", title, message);
     }
 
+    public void openExceptionDialog(Throwable e){
+        openDialog(ERROR, "Error", "Es ist ein Fehler aufgetreten.", e.getMessage());
+    }
+
     private void openDialog(AlertType alertType, String title, String headerText, String contentText){
         Alert alert = new Alert(alertType);
         alert.setTitle(title);
