@@ -88,7 +88,7 @@ public class VideoPanelController {
 
 
 	public void btnSearchClick(){
-		if(youtubeUrlValidator.isYoutubeUrlInvalid(txtDownloadLink.getText())){
+		if(!youtubeUrlValidator.isYoutubeUrlValid(txtDownloadLink.getText())){
 			dialogManager.openWarningDialog("Ungültige Url", "Bitte trage eine gültige Url ein.");
 			return;
 		}

@@ -82,7 +82,7 @@ public class PlaylistPanelController {
 
 	public void btnSearchPlaylistClick(){
 		listPlaylist.getItems().clear();
-		if(youtubeUrlValidator.isYoutubeUrlInvalid(txtPlaylistLink.getText())){
+		if(!youtubeUrlValidator.isYoutubeUrlValid(txtPlaylistLink.getText())){
 			dialogManager.openWarningDialog("Ungültige Url", "Bitte trage eine gültige Url ein.");
 			return;
 		}
