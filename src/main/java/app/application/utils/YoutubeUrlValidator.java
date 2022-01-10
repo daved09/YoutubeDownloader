@@ -13,11 +13,11 @@ public class YoutubeUrlValidator {
     }
 
     public boolean isShortUrl(String url){
-        return url.contains("youtu.be");
+        return url.contains(GlobalValues.YOUTUBE_SHORT_URL);
     }
 
     private boolean isYoutubeUrl(String url){
-        return url.contains("youtube.com") || isShortUrl(url);
+        return url.contains(GlobalValues.YOUTUBE_URL) || isShortUrl(url);
     }
 
     private boolean hasVideoOrPlaylistID(String url){

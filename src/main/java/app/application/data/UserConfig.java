@@ -1,5 +1,6 @@
 package app.application.data;
 
+import app.application.utils.GlobalValues;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -18,7 +19,7 @@ public class UserConfig {
 	private BooleanProperty subFolderForPlaylists;
 
 	public UserConfig() {
-		downloadDir = new SimpleStringProperty(System.getProperty("user.home") + File.separator + "Videos");
+		downloadDir = new SimpleStringProperty(System.getProperty("user.home") + File.separator + GlobalValues.VIDEO_DIRECTORY);
 		overwriteExistingVideo = new SimpleBooleanProperty(false);
 		subFolderForPlaylists = new SimpleBooleanProperty(true);
 	}

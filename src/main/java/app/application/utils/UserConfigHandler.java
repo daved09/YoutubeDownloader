@@ -20,7 +20,7 @@ public class UserConfigHandler {
 	@Setter
 	private Gson gson;
 
-	private final String CONFIG_FILE = System.getProperty("user.home") + File.separator + ".ytdl.json";
+	private final String CONFIG_FILE = System.getProperty(GlobalValues.USER_HOME) + File.separator + GlobalValues.DOWNLOADER_CONFIG_FILENAME;
 
 	public void initConfig(){
 		userConfig = configurationFactory.createDefaultConfiguration();
