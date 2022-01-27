@@ -21,6 +21,9 @@ public class SettingsPanelController {
 	@FXML
 	private CheckBox chkOverwriteVideos;
 
+	@FXML
+	private CheckBox chkSubfolderForPlaylists;
+
 	@Autowired
 	private UserConfigHandler userConfigHandler;
 
@@ -34,10 +37,11 @@ public class SettingsPanelController {
 	public void initialize(){
 		txtDownloadPath.textProperty().bindBidirectional(userConfigHandler.getUserConfig().getDownloadDir());
 		chkOverwriteVideos.selectedProperty().bindBidirectional(userConfigHandler.getUserConfig().getOverwriteExistingVideo());
+		chkSubfolderForPlaylists.selectedProperty().bindBidirectional(userConfigHandler.getUserConfig().getSubFolderForPlaylists());
 		txtVerion.textProperty().bind(versionProperties.getVersion());
 	}
 
-	public void btnSave_click(){
+	public void btnSaveClick(){
 		userConfigHandler.writeConfig();
 		dialogManager.openInformationDialog("Speichern erfolgreich", "");
 	}

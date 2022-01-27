@@ -2,6 +2,7 @@ package app.application;
 
 import app.MyApp;
 import app.application.controller.main_window.MainWindowController;
+import app.application.utils.GlobalObjectHandler;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Parent;
@@ -23,6 +24,7 @@ public class YoutubeDownloader extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
+        setupHostServices();
         FxWeaver fxWeaver = applicationContext.getBean(FxWeaver.class);
         Parent root = fxWeaver.loadView(MainWindowController.class);
         Scene scene = new Scene(root);
@@ -37,4 +39,10 @@ public class YoutubeDownloader extends Application {
         Platform.exit();
         System.exit(0);
     }
+
+    private void setupHostServices(){
+        GlobalObjectHandler globalObjectHandler = applicationContext.getBean(GlobalObjectHandler.class);
+        globalObjectHandler.setHostServices(getHostServices());
+    }
+
 }

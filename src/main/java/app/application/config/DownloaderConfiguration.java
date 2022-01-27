@@ -1,12 +1,10 @@
 package app.application.config;
 
-
 import app.application.factories.ConfigurationFactory;
 import app.application.utils.UserConfigHandler;
 import com.github.kiulian.downloader.Config;
 import com.github.kiulian.downloader.YoutubeDownloader;
 import com.google.gson.Gson;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,7 +20,6 @@ public class DownloaderConfiguration {
 
     private final Gson gson;
 
-    @Autowired
     public DownloaderConfiguration(ConfigurationFactory configurationFactory, Gson gson) {
         this.configurationFactory = configurationFactory;
         this.gson = gson;

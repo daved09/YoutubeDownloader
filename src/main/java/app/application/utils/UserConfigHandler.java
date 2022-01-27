@@ -1,15 +1,14 @@
 package app.application.utils;
 
-import app.application.factories.ConfigurationFactory;
 import app.application.data.UserConfig;
+import app.application.factories.ConfigurationFactory;
 import com.google.gson.Gson;
 import lombok.Setter;
 import lombok.SneakyThrows;
 
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 public class UserConfigHandler {
 
@@ -21,19 +20,21 @@ public class UserConfigHandler {
 	@Setter
 	private Gson gson;
 
-	private final String CONFIG_FILE = System.getProperty("user.home") + "/.ytdl.json";
+	private final String CONFIG_FILE = System.getProperty("user.home") + File.separator + ".ytdl.json";
 
 	public void initConfig(){
 		userConfig = configurationFactory.createDefaultConfiguration();
+		writeConfig();
 	}
 
 	@SneakyThrows
 	public void loadConfig() {
-		if(!Files.exists(Paths.get(CONFIG_FILE))){
-			initConfig();
-			writeConfig();
+		try{
+			userConfig = gson.fromJson(new FileReader(CONFIG_FILE), UserConfig.class);
 		}
-		userConfig = gson.fromJson(new FileReader(CONFIG_FILE), UserConfig.class);
+		catch (Exception e){
+			initConfig();
+		}
 	}
 
 	@SneakyThrows

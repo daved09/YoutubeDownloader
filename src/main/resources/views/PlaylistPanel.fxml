@@ -1,22 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ListView?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
-
-<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="445.0" prefWidth="819.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.application.controller.main_window.PlaylistPanelController">
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="445.0" prefWidth="819.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.application.controller.main_window.PlaylistPanelController">
 <children>
     <TextField fx:id="txtPlaylistLink" layoutX="14.0" layoutY="14.0" prefHeight="25.0" prefWidth="708.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="83.0" />
-    <Button fx:id="btnSearchPlaylist" layoutX="718.0" layoutY="14.0" mnemonicParsing="false" onAction="#btnSearchPlaylist_click" text="Suchen" AnchorPane.rightAnchor="14.0" />
+    <Button fx:id="btnSearchPlaylist" layoutX="718.0" layoutY="14.0" mnemonicParsing="false" onAction="#btnSearchPlaylistClick" text="Suchen" AnchorPane.rightAnchor="14.0" />
     <AnchorPane fx:id="playlistPanel" layoutX="-1.0" layoutY="54.0" prefHeight="378.0" prefWidth="806.0" visible="false" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="53.0">
         <children>
             <ListView fx:id="listPlaylist" layoutX="14.0" layoutY="44.0" prefHeight="280.0" prefWidth="749.0" AnchorPane.bottomAnchor="54.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="44.0" />
             <Label fx:id="txtPlaylistTitle" layoutX="14.0" layoutY="14.0" text="Playlist Titel" />
-            <Button layoutX="680.0" layoutY="340.0" mnemonicParsing="false" onAction="#btnPlaylistDownload_click" text="Download" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="28.0" />
+            <Button layoutX="680.0" layoutY="340.0" mnemonicParsing="false" onAction="#btnPlaylistDownloadClick" text="Download" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="28.0" />
             <Label fx:id="lblDownloadProgress" layoutX="14.0" layoutY="344.0" text="Videos: 0/0" AnchorPane.bottomAnchor="18.0" />
-            <Button layoutX="576.0" layoutY="340.0" mnemonicParsing="false" onAction="#btnAbort_click" text="Abbrechen" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="126.0" />
+            <Button layoutX="576.0" layoutY="340.0" mnemonicParsing="false" onAction="#btnAbortClick" text="Abbrechen" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="126.0" />
+            <CheckBox fx:id="chkAudioOnly" layoutX="373.0" layoutY="343.0" mnemonicParsing="false" text="Nur Audio" />
         </children>
     </AnchorPane>
 </children>

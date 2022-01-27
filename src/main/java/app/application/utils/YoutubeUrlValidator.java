@@ -6,17 +6,22 @@ import org.springframework.stereotype.Service;
 @Service
 public class YoutubeUrlValidator {
 
-    public boolean isYoutubeUrlInvalid(String url){
-        UrlValidator urlValidator = new UrlValidator();
-        return !urlValidator.isValid(url) || !isYoutubeUrl(url) || !hasVideoOrPlaylistID(url);
+    private final UrlValidator urlValidator = new UrlValidator();
+
+    public boolean isYoutubeUrlValid(String url){
+        return urlValidator.isValid(url) || isYoutubeUrl(url) || hasVideoOrPlaylistID(url);
+    }
+
+    public boolean isShortUrl(String url){
+        return url.contains("youtu.be");
     }
 
     private boolean isYoutubeUrl(String url){
-        return url.contains("youtube.com");
+        return url.contains("youtube.com") || isShortUrl(url);
     }
 
     private boolean hasVideoOrPlaylistID(String url){
-        return url.contains("v=") || url.contains("list=");
+        return url.contains("v=") || url.contains("list=") || isShortUrl(url);
     }
 
 }
