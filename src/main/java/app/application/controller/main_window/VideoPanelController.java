@@ -1,6 +1,7 @@
 package app.application.controller.main_window;
 
 import app.application.data.entities.YoutubeVideo;
+import app.application.exception.CantAbortVideoDownloadException;
 import app.application.listener.YoutubeVideoDownloadListener;
 import app.application.utils.*;
 import app.application.utils.service.download.YoutubeVideoDownloadService;
@@ -15,8 +16,10 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.concurrent.CancellationException;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
 @Component
@@ -112,11 +115,15 @@ public class VideoPanelController {
 		});
 	}
 
-	public void btnAbortClick(){
+	public void btnAbortClick() throws CantAbortVideoDownloadException {
 		downloadExecutorService.shutdownNow();
 		try {
-			downloadExecutorService.awaitTermination(1, TimeUnit.SECONDS);//TODO: Fehler werfen, wenn termination austimed
-		} catch (CancellationException | InterruptedException ignored) {}
+			downloadExecutorService.awaitTermination(
+							10,
+							TimeUnit.SECONDS);//TODO: Fehler werfen, wenn termination austimed
+		} catch (CancellationException | InterruptedException e) {
+			throw new CantAbortVideoDownloadException(e);
+		}
 	}
 
 
