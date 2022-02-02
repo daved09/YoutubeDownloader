@@ -5,15 +5,12 @@ import app.application.data.entities.YoutubePlaylist;
 import app.application.factories.VideoElementFactory;
 import app.application.utils.DialogManager;
 import app.application.utils.YoutubeIdExtractor;
-import app.application.utils.service.download.YoutubePlaylistDownloadService;
 import app.application.utils.YoutubeUrlValidator;
 import app.application.utils.service.data.YoutubePlaylistDataService;
+import app.application.utils.service.download.YoutubePlaylistDownloadService;
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import org.springframework.stereotype.Component;
 
@@ -42,6 +39,9 @@ public class PlaylistPanelController {
 
 	@FXML
 	private Button btnSearchPlaylist;
+
+	@FXML
+	private CheckBox chkAudioOnly;
 
 	private final YoutubePlaylistDataService youtubePlaylistDataService;
 
@@ -92,6 +92,7 @@ public class PlaylistPanelController {
 		youtubePlaylist.getPlaylistVideos().forEach(video ->
 				listPlaylist.getItems().add(videoElementFactory.createVideoElement(video))
 		);
+		chkAudioOnly.selectedProperty().bindBidirectional(youtubePlaylist.getAudioOnly());
 		playlistPanel.setVisible(true);
 	}
 
