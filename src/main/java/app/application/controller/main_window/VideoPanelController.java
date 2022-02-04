@@ -5,6 +5,7 @@ import app.application.exception.CantAbortDownloadException;
 import app.application.exception.ExecutorTerminationException;
 import app.application.listener.YoutubeVideoDownloadListener;
 import app.application.utils.DialogManager;
+import app.application.utils.GlobalValues;
 import app.application.utils.QualityLabelExtractor;
 import app.application.utils.YoutubeIdExtractor;
 import app.application.utils.YoutubeUrlValidator;
@@ -128,7 +129,7 @@ public class VideoPanelController {
 			boolean terminationSuccess = downloadExecutorService.awaitTermination(10,
 							TimeUnit.SECONDS);
 			if(!terminationSuccess){
-				throw new ExecutorTerminationException("Could not Successful");
+				throw new ExecutorTerminationException(GlobalValues.DOWNLOAD_EXECUTOR_TERMINATION_ERROR);
 			}
 		} catch (InterruptedException e) {
 			Thread.currentThread().interrupt();

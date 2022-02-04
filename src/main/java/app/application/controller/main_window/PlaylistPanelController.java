@@ -6,6 +6,7 @@ import app.application.exception.CantAbortDownloadException;
 import app.application.exception.ExecutorTerminationException;
 import app.application.factories.VideoElementFactory;
 import app.application.utils.DialogManager;
+import app.application.utils.GlobalValues;
 import app.application.utils.YoutubeIdExtractor;
 import app.application.utils.YoutubeUrlValidator;
 import app.application.utils.service.data.YoutubePlaylistDataService;
@@ -111,7 +112,7 @@ public class PlaylistPanelController {
 		try{
 			boolean terminationSuccess = downloadExecutor.awaitTermination(10, TimeUnit.SECONDS);
 			if(!terminationSuccess){
-				throw new ExecutorTerminationException("Could not Successful");
+				throw new ExecutorTerminationException(GlobalValues.DOWNLOAD_EXECUTOR_TERMINATION_ERROR);
 			}
 		}
 		catch (InterruptedException e){
