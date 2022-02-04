@@ -3,32 +3,32 @@ package app.application.utils;
 
 import org.springframework.stereotype.Service;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Map;
+
 @Service
 public class YoutubeIdExtractor {
 
-    private YoutubeUrlValidator youtubeUrlValidator;
+    private final YoutubeUrlValidator youtubeUrlValidator;
+    private final LinkParameterBuilder linkParameterBuilder;
+    private final DialogManager dialogManager;
 
-    public YoutubeIdExtractor(YoutubeUrlValidator youtubeUrlValidator) {
+    public YoutubeIdExtractor(YoutubeUrlValidator youtubeUrlValidator, LinkParameterBuilder linkParameterBuilder, DialogManager dialogManager) {
         this.youtubeUrlValidator = youtubeUrlValidator;
+        this.linkParameterBuilder = linkParameterBuilder;
+        this.dialogManager = dialogManager;
     }
 
     public String getVideoIdFromLink(String videoLink){
-        videoLink = removeTimeStamp(videoLink);
-        if(youtubeUrlValidator.isShortUrl(videoLink)){
-            return videoLink.substring(videoLink.lastIndexOf("/") + 1);
+        try {
+            URL url = new URL(videoLink);
+            Map<String, String> parameterMap = linkParameterBuilder.buildParameterMap(url);
+            return youtubeUrlValidator.isShortUrl(videoLink) ? url.getPath().replaceAll("/", "") : parameterMap.get("v");
+        } catch (MalformedURLException e) {
+            dialogManager.openErrorDialog("Ungültige Url", "Die eingegebene Url ist ungültig.");
         }
-        return videoLink.contains("v=") ? videoLink.split("v=")[1] : "";
-    }
-
-    private String removeTimeStamp(String videoLink) {
-        videoLink = videoLink.split("t=")[0];
-        if(videoLink.endsWith("&")){
-            videoLink = videoLink.substring(0, videoLink.lastIndexOf("&"));
-        }
-        if(videoLink.endsWith("?")){
-            videoLink = videoLink.substring(0, videoLink.lastIndexOf("?"));
-        }
-        return videoLink;
+        return null;
     }
 
     public String getPlayListIdFromLink(String playlistLink){
