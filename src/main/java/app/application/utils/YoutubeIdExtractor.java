@@ -10,9 +10,9 @@ import java.util.Map;
 @Service
 public class YoutubeIdExtractor {
 
-    private YoutubeUrlValidator youtubeUrlValidator;
-    private LinkParameterBuilder linkParameterBuilder;
-    private DialogManager dialogManager;
+    private final YoutubeUrlValidator youtubeUrlValidator;
+    private final LinkParameterBuilder linkParameterBuilder;
+    private final DialogManager dialogManager;
 
     public YoutubeIdExtractor(YoutubeUrlValidator youtubeUrlValidator, LinkParameterBuilder linkParameterBuilder, DialogManager dialogManager) {
         this.youtubeUrlValidator = youtubeUrlValidator;
@@ -29,18 +29,6 @@ public class YoutubeIdExtractor {
             dialogManager.openErrorDialog("Ungültige Url", "Die eingegebene Url ist ungültig.");
         }
         return null;
-    }
-
-
-    private String removeTimeStamp(String videoLink) {
-        videoLink = videoLink.split("t=")[0];
-        if(videoLink.endsWith("&")){
-            videoLink = videoLink.substring(0, videoLink.lastIndexOf("&"));
-        }
-        if(videoLink.endsWith("?")){
-            videoLink = videoLink.substring(0, videoLink.lastIndexOf("?"));
-        }
-        return videoLink;
     }
 
     public String getPlayListIdFromLink(String playlistLink){
