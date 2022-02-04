@@ -3,22 +3,34 @@ package app.application.utils;
 
 import org.springframework.stereotype.Service;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Map;
+
 @Service
 public class YoutubeIdExtractor {
 
     private YoutubeUrlValidator youtubeUrlValidator;
+    private LinkParameterBuilder linkParameterBuilder;
+    private DialogManager dialogManager;
 
-    public YoutubeIdExtractor(YoutubeUrlValidator youtubeUrlValidator) {
+    public YoutubeIdExtractor(YoutubeUrlValidator youtubeUrlValidator, LinkParameterBuilder linkParameterBuilder, DialogManager dialogManager) {
         this.youtubeUrlValidator = youtubeUrlValidator;
+        this.linkParameterBuilder = linkParameterBuilder;
+        this.dialogManager = dialogManager;
     }
 
     public String getVideoIdFromLink(String videoLink){
-        videoLink = removeTimeStamp(videoLink);
-        if(youtubeUrlValidator.isShortUrl(videoLink)){
-            return videoLink.substring(videoLink.lastIndexOf("/") + 1);
+        try {
+            URL url = new URL(videoLink);
+            Map<String, String> parameterMap = linkParameterBuilder.buildParameterMap(url);
+            return youtubeUrlValidator.isShortUrl(videoLink) ? url.getPath().replaceAll("/", "") : parameterMap.get("v");
+        } catch (MalformedURLException e) {
+            dialogManager.openErrorDialog("Ungültige Url", "Die eingegebene Url ist ungültig.");
         }
-        return videoLink.contains("v=") ? videoLink.split("v=")[1] : "";
+        return null;
     }
+
 
     private String removeTimeStamp(String videoLink) {
         videoLink = videoLink.split("t=")[0];
