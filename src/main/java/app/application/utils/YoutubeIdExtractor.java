@@ -24,7 +24,7 @@ public class YoutubeIdExtractor {
         try {
             URL url = new URL(videoLink);
             Map<String, String> parameterMap = linkParameterBuilder.buildParameterMap(url.getQuery());
-            return youtubeUrlValidator.isShortUrl(videoLink) ? url.getPath().replace("/", "") : parameterMap.get("v");
+            return youtubeUrlValidator.isShortUrl(url.getHost()) ? url.getPath().substring(1) : parameterMap.get("v");
         } catch (MalformedURLException e) {
             throw new InvalidVideoUrlException(e, videoLink);
         }
