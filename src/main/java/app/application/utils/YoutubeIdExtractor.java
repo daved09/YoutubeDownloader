@@ -14,12 +14,10 @@ public class YoutubeIdExtractor {
 
     private final YoutubeUrlValidator youtubeUrlValidator;
     private final LinkParameterBuilder linkParameterBuilder;
-    private final DialogManager dialogManager;
 
-    public YoutubeIdExtractor(YoutubeUrlValidator youtubeUrlValidator, LinkParameterBuilder linkParameterBuilder, DialogManager dialogManager) {
+    public YoutubeIdExtractor(YoutubeUrlValidator youtubeUrlValidator, LinkParameterBuilder linkParameterBuilder) {
         this.youtubeUrlValidator = youtubeUrlValidator;
         this.linkParameterBuilder = linkParameterBuilder;
-        this.dialogManager = dialogManager;
     }
 
     public String getVideoIdFromLink(String videoLink) throws InvalidVideoUrlException {
