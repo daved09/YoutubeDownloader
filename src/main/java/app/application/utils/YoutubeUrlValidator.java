@@ -11,13 +11,13 @@ public class YoutubeUrlValidator {
     private final UrlValidator urlValidator = new UrlValidator();
 
     public void checkVideoUrl(String url) throws InvalidVideoUrlException {
-        if(!urlValidator.isValid(url) && !isYoutubeUrl(url) && !hasVideoID(url)){
+        if(!urlValidator.isValid(url) || !isYoutubeUrl(url) || !hasVideoID(url)){
             throw new InvalidVideoUrlException(url);
         }
     }
 
     public void checkPlaylistUrl(String url) throws InvalidPlaylistUrlException {
-        if(!urlValidator.isValid(url) && !hasPlaylistID(url)){
+        if(!urlValidator.isValid(url) || !hasPlaylistID(url)){
             throw new InvalidPlaylistUrlException(url);
         }
     }

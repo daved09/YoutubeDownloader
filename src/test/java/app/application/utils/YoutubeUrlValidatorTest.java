@@ -50,7 +50,7 @@ public class YoutubeUrlValidatorTest {
 		YoutubeUrlValidator youtubeUrlValidator = new YoutubeUrlValidator();
 		youtubeUrlValidator.checkVideoUrl(url);
 
-		//Should not fail
+		//Should fail
 	}
 
 	@Test
@@ -62,13 +62,22 @@ public class YoutubeUrlValidatorTest {
 		//Should not fail
 	}
 
-	@Test
+	@Test(expected = InvalidPlaylistUrlException.class)
 	public void testUrlValidatorThrowsExceptionOnInvalidPlaylistUrl() throws InvalidPlaylistUrlException {
-		String url = "https://www.youtube.com/playlistlist=PL-_dGWmdQ0CJMcmQ5ximmrusq-0wjPbh8";
+		String url = "https://www.youtube.com/playlist?liPL-_dGWmdQ0CJMcmQ5ximmrusq-0wjPbh8";
 		YoutubeUrlValidator youtubeUrlValidator = new YoutubeUrlValidator();
 		youtubeUrlValidator.checkPlaylistUrl(url);
 
-		//Should not fail
+		//Should fail
+	}
+
+	@Test(expected = InvalidPlaylistUrlException.class)
+	public void testUrlValidatorThrowsExceptionOnVideoUrl() throws InvalidPlaylistUrlException {
+		String url = "https://www.youtube.com/watch?v=j151FYZT4ZE";
+		YoutubeUrlValidator youtubeUrlValidator = new YoutubeUrlValidator();
+		youtubeUrlValidator.checkPlaylistUrl(url);
+
+		//Should fail
 	}
 
 
