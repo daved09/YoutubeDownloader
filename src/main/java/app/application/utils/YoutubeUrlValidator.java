@@ -1,5 +1,7 @@
 package app.application.utils;
 
+import app.application.exception.InvalidPlaylistUrlException;
+import app.application.exception.InvalidVideoUrlException;
 import org.apache.commons.validator.routines.UrlValidator;
 import org.springframework.stereotype.Service;
 
@@ -8,8 +10,16 @@ public class YoutubeUrlValidator {
 
     private final UrlValidator urlValidator = new UrlValidator();
 
-    public boolean isYoutubeUrlValid(String url){
-        return urlValidator.isValid(url) || isYoutubeUrl(url) || hasVideoOrPlaylistID(url);
+    public void checkVideoUrl(String url) throws InvalidVideoUrlException {
+        if(!urlValidator.isValid(url) && !isYoutubeUrl(url) && !hasVideoID(url)){
+            throw new InvalidVideoUrlException(url);
+        }
+    }
+
+    public void checkPlaylistUrl(String url) throws InvalidPlaylistUrlException {
+        if(!urlValidator.isValid(url) && !hasPlaylistID(url)){
+            throw new InvalidPlaylistUrlException(url);
+        }
     }
 
     public boolean isShortUrl(String url){
@@ -20,8 +30,12 @@ public class YoutubeUrlValidator {
         return url.contains(GlobalValues.YOUTUBE_URL) || isShortUrl(url);
     }
 
-    private boolean hasVideoOrPlaylistID(String url){
-        return url.contains("v=") || url.contains("list=") || isShortUrl(url);
+    private boolean hasVideoID(String url){
+        return url.contains("v=") || isShortUrl(url);
+    }
+
+    private boolean hasPlaylistID(String url){
+        return url.contains("list=");
     }
 
 }

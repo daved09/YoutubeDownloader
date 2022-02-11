@@ -1,4 +1,4 @@
-package app.application.exception;
+package app.application.exception.controller;
 
 import app.application.utils.DialogManager;
 import org.springframework.stereotype.Service;

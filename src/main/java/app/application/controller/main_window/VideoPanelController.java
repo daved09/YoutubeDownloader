@@ -100,10 +100,7 @@ public class VideoPanelController {
 
 
 	public void btnSearchClick() throws InvalidVideoUrlException {
-//		if(!youtubeUrlValidator.isYoutubeUrlValid(txtDownloadLink.getText())){
-//			dialogManager.openWarningDialog("Ungültige Url", "Bitte trage eine gültige Url ein.");
-//			return;
-//		}
+		youtubeUrlValidator.checkVideoUrl(txtDownloadLink.getText());
 		tmpYoutubeVideo = youtubeVideoDataService.getYoutubeVideo(youtubeIdExtractor.getVideoIdFromLink(txtDownloadLink.getText()));
 		imgThumbnail.setImage(new Image(tmpYoutubeVideo.getVideoThumbnailUrl()));
 		lblVideoTitle.setText(tmpYoutubeVideo.getVideoTitle());

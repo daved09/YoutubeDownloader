@@ -4,6 +4,8 @@ import app.application.components.VideoElement;
 import app.application.data.entities.YoutubePlaylist;
 import app.application.exception.CantAbortDownloadException;
 import app.application.exception.ExecutorTerminationException;
+import app.application.exception.InvalidPlaylistUrlException;
+import app.application.exception.InvalidVideoUrlException;
 import app.application.factories.VideoElementFactory;
 import app.application.utils.DialogManager;
 import app.application.utils.GlobalValues;
@@ -86,12 +88,9 @@ public class PlaylistPanelController {
 		btnSearchPlaylist.disableProperty().bind(Bindings.isEmpty(txtPlaylistLink.textProperty()));
 	}
 
-	public void btnSearchPlaylistClick(){
+	public void btnSearchPlaylistClick() throws InvalidPlaylistUrlException {
 		listPlaylist.getItems().clear();
-		if(!youtubeUrlValidator.isYoutubeUrlValid(txtPlaylistLink.getText())){
-			dialogManager.openWarningDialog("Ungültige Url", "Bitte trage eine gültige Url ein.");
-			return;
-		}
+		youtubeUrlValidator.checkPlaylistUrl(txtPlaylistLink.getText());
 		youtubePlaylist = youtubePlaylistDataService.getPlaylistInfo(youtubeIdExtractor.getPlayListIdFromLink(txtPlaylistLink.getText()));
 		lblDownloadProgress.setText("Videos: 0/" + youtubePlaylist.getPlaylistSize());
 		txtPlaylistTitle.setText(youtubePlaylist.getPlaylistTitle());
