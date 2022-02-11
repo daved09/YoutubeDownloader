@@ -9,6 +9,12 @@ import static javafx.scene.control.Alert.AlertType.*;
 @Service
 public class DialogManager {
 
+    private ExceptionExtractor exceptionExtractor;
+
+    public DialogManager(ExceptionExtractor exceptionExtractor) {
+        this.exceptionExtractor = exceptionExtractor;
+    }
+
     public void openWarningDialog(String title, String message){
         openDialog(WARNING, "Warnung", title, message);
     }
@@ -19,6 +25,10 @@ public class DialogManager {
 
     public void openErrorDialog(String title, String message){
         openDialog(ERROR, "Error", title, message);
+    }
+
+    public void openExceptionDialog(Exception e){
+        openDialog(ERROR, "Error", "Es ist ein Fehler aufgetreten.", exceptionExtractor.getTargetOfException(e).getMessage());
     }
 
     private void openDialog(AlertType alertType, String title, String headerText, String contentText){

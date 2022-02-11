@@ -1,20 +1,32 @@
 package app.application.controller.main_window;
 
 import app.application.data.entities.YoutubeVideo;
+import app.application.exception.CantAbortDownloadException;
+import app.application.exception.ExecutorTerminationException;
+import app.application.exception.InvalidVideoUrlException;
 import app.application.listener.YoutubeVideoDownloadListener;
-import app.application.utils.*;
-import app.application.utils.service.download.YoutubeVideoDownloadService;
+import app.application.utils.DialogManager;
+import app.application.utils.GlobalValues;
+import app.application.utils.QualityLabelExtractor;
+import app.application.utils.YoutubeIdExtractor;
+import app.application.utils.YoutubeUrlValidator;
 import app.application.utils.service.data.YoutubeVideoDataService;
+import app.application.utils.service.download.YoutubeVideoDownloadService;
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -87,11 +99,8 @@ public class VideoPanelController {
 	}
 
 
-	public void btnSearchClick(){
-		if(!youtubeUrlValidator.isYoutubeUrlValid(txtDownloadLink.getText())){
-			dialogManager.openWarningDialog("Ungültige Url", "Bitte trage eine gültige Url ein.");
-			return;
-		}
+	public void btnSearchClick() throws InvalidVideoUrlException {
+		youtubeUrlValidator.checkVideoUrl(txtDownloadLink.getText());
 		tmpYoutubeVideo = youtubeVideoDataService.getYoutubeVideo(youtubeIdExtractor.getVideoIdFromLink(txtDownloadLink.getText()));
 		imgThumbnail.setImage(new Image(tmpYoutubeVideo.getVideoThumbnailUrl()));
 		lblVideoTitle.setText(tmpYoutubeVideo.getVideoTitle());
@@ -112,11 +121,18 @@ public class VideoPanelController {
 		});
 	}
 
-	public void btnAbortClick(){
+	public void btnAbortClick() throws CantAbortDownloadException {
 		downloadExecutorService.shutdownNow();
 		try {
-			downloadExecutorService.awaitTermination(1, TimeUnit.SECONDS);//TODO: Fehler werfen, wenn termination austimed
-		} catch (CancellationException | InterruptedException ignored) {}
+			boolean terminationSuccess = downloadExecutorService.awaitTermination(10,
+							TimeUnit.SECONDS);
+			if(!terminationSuccess){
+				throw new ExecutorTerminationException(GlobalValues.DOWNLOAD_EXECUTOR_TERMINATION_ERROR);
+			}
+		} catch (InterruptedException e) {
+			Thread.currentThread().interrupt();
+			throw new CantAbortDownloadException(e);
+		}
 	}
 
 

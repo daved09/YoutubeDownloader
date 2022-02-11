@@ -2,19 +2,27 @@ package app.application.controller.main_window;
 
 import app.application.components.VideoElement;
 import app.application.data.entities.YoutubePlaylist;
+import app.application.exception.CantAbortDownloadException;
+import app.application.exception.ExecutorTerminationException;
+import app.application.exception.InvalidPlaylistUrlException;
+import app.application.exception.InvalidVideoUrlException;
 import app.application.factories.VideoElementFactory;
 import app.application.utils.DialogManager;
+import app.application.utils.GlobalValues;
 import app.application.utils.YoutubeIdExtractor;
 import app.application.utils.YoutubeUrlValidator;
 import app.application.utils.service.data.YoutubePlaylistDataService;
 import app.application.utils.service.download.YoutubePlaylistDownloadService;
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import org.springframework.stereotype.Component;
 
-import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -80,12 +88,9 @@ public class PlaylistPanelController {
 		btnSearchPlaylist.disableProperty().bind(Bindings.isEmpty(txtPlaylistLink.textProperty()));
 	}
 
-	public void btnSearchPlaylistClick(){
+	public void btnSearchPlaylistClick() throws InvalidPlaylistUrlException {
 		listPlaylist.getItems().clear();
-		if(!youtubeUrlValidator.isYoutubeUrlValid(txtPlaylistLink.getText())){
-			dialogManager.openWarningDialog("Ungültige Url", "Bitte trage eine gültige Url ein.");
-			return;
-		}
+		youtubeUrlValidator.checkPlaylistUrl(txtPlaylistLink.getText());
 		youtubePlaylist = youtubePlaylistDataService.getPlaylistInfo(youtubeIdExtractor.getPlayListIdFromLink(txtPlaylistLink.getText()));
 		lblDownloadProgress.setText("Videos: 0/" + youtubePlaylist.getPlaylistSize());
 		txtPlaylistTitle.setText(youtubePlaylist.getPlaylistTitle());
@@ -101,12 +106,18 @@ public class PlaylistPanelController {
 		downloadExecutor.execute(() -> youtubePlaylistDownloadService.downloadPlaylist(youtubePlaylist));
 	}
 
-	public void btnAbortClick(){
+	public void btnAbortClick() throws CantAbortDownloadException {
 		downloadExecutor.shutdownNow();
 		try{
-			downloadExecutor.awaitTermination(1, TimeUnit.SECONDS);//TODO: siehe VideoPanelController
+			boolean terminationSuccess = downloadExecutor.awaitTermination(10, TimeUnit.SECONDS);
+			if(!terminationSuccess){
+				throw new ExecutorTerminationException(GlobalValues.DOWNLOAD_EXECUTOR_TERMINATION_ERROR);
+			}
 		}
-		catch (CancellationException | InterruptedException ignored){}
+		catch (InterruptedException e){
+			Thread.currentThread().interrupt();
+			throw new CantAbortDownloadException(e);
+		}
 	}
 
 }
