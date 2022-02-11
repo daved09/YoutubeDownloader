@@ -1,6 +1,7 @@
 package app.application.utils;
 
 
+import app.application.exception.InvalidVideoUrlException;
 import org.springframework.stereotype.Service;
 
 import java.net.MalformedURLException;
@@ -20,15 +21,14 @@ public class YoutubeIdExtractor {
         this.dialogManager = dialogManager;
     }
 
-    public String getVideoIdFromLink(String videoLink){
+    public String getVideoIdFromLink(String videoLink) throws InvalidVideoUrlException {
         try {
             URL url = new URL(videoLink);
             Map<String, String> parameterMap = linkParameterBuilder.buildParameterMap(url);
             return youtubeUrlValidator.isShortUrl(videoLink) ? url.getPath().replaceAll("/", "") : parameterMap.get("v");
         } catch (MalformedURLException e) {
-            dialogManager.openErrorDialog("Ungültige Url", "Die eingegebene Url ist ungültig.");
+            throw new InvalidVideoUrlException(e, videoLink);
         }
-        return null;
     }
 
     public String getPlayListIdFromLink(String playlistLink){

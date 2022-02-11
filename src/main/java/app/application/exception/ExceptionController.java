@@ -16,7 +16,7 @@ public class ExceptionController {
 
 	@PostConstruct
 	public void error(){
-		Thread.setDefaultUncaughtExceptionHandler((thread, throwable) -> dialogManager.openExceptionDialog(throwable));
+		Thread.setDefaultUncaughtExceptionHandler((thread, throwable) -> dialogManager.openExceptionDialog((Exception) throwable));
 	}
 
 }

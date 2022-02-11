@@ -1,10 +1,12 @@
 package app.application.utils.service.download;
 
 import app.application.data.entities.YoutubePlaylist;
+import app.application.data.entities.YoutubePlaylistVideoDetail;
 import app.application.data.entities.YoutubeVideo;
 import app.application.listener.YoutubePlaylistDownloadListener;
 import app.application.utils.service.data.YoutubeVideoDataService;
 import com.github.kiulian.downloader.downloader.request.RequestVideoFileDownload;
+import com.github.kiulian.downloader.model.playlist.PlaylistVideoDetails;
 import com.github.kiulian.downloader.model.videos.formats.Format;
 import javafx.application.Platform;
 import javafx.scene.control.Label;
@@ -35,12 +37,19 @@ public class YoutubePlaylistDownloadService extends YoutubeDownloadService {
         AtomicInteger progress = new AtomicInteger(0);
         youtubePlaylist.getPlaylistVideos().stream().
                 filter(video -> !video.getIgnore().get())
-                .forEach(video -> {
-                    progress.getAndIncrement();
-                    setLabelProgress(progress.get(), size);
-                    downloadAsync(youtubePlaylist, youtubeVideoDataService.getYoutubeVideo(video.getVideoId()));
-                });
+                .forEach(video -> downloadVideo(youtubePlaylist, size, progress, video));
     }
+
+    private void downloadVideo(
+            YoutubePlaylist youtubePlaylist,
+            int size,
+            AtomicInteger progress,
+            YoutubePlaylistVideoDetail video) {
+        progress.getAndIncrement();
+        setLabelProgress(progress.get(), size);
+        downloadAsync(youtubePlaylist, youtubeVideoDataService.getYoutubeVideo(video.getVideoId()));
+    }
+
 
     protected void downloadAsync(YoutubePlaylist youtubePlaylist, YoutubeVideo youtubeVideo){
         RequestVideoFileDownload requestVideoFileDownload = new RequestVideoFileDownload(getAudioOrVideoFormat(youtubePlaylist, youtubeVideo));

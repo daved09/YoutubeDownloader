@@ -3,6 +3,7 @@ package app.application.controller.main_window;
 import app.application.data.entities.YoutubeVideo;
 import app.application.exception.CantAbortDownloadException;
 import app.application.exception.ExecutorTerminationException;
+import app.application.exception.InvalidVideoUrlException;
 import app.application.listener.YoutubeVideoDownloadListener;
 import app.application.utils.DialogManager;
 import app.application.utils.GlobalValues;
@@ -98,11 +99,11 @@ public class VideoPanelController {
 	}
 
 
-	public void btnSearchClick(){
-		if(!youtubeUrlValidator.isYoutubeUrlValid(txtDownloadLink.getText())){
-			dialogManager.openWarningDialog("Ungültige Url", "Bitte trage eine gültige Url ein.");
-			return;
-		}
+	public void btnSearchClick() throws InvalidVideoUrlException {
+//		if(!youtubeUrlValidator.isYoutubeUrlValid(txtDownloadLink.getText())){
+//			dialogManager.openWarningDialog("Ungültige Url", "Bitte trage eine gültige Url ein.");
+//			return;
+//		}
 		tmpYoutubeVideo = youtubeVideoDataService.getYoutubeVideo(youtubeIdExtractor.getVideoIdFromLink(txtDownloadLink.getText()));
 		imgThumbnail.setImage(new Image(tmpYoutubeVideo.getVideoThumbnailUrl()));
 		lblVideoTitle.setText(tmpYoutubeVideo.getVideoTitle());
