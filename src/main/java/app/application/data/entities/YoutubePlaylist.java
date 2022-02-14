@@ -8,6 +8,7 @@ import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class YoutubePlaylist extends YoutubeEntity<PlaylistInfo> {
 
@@ -17,17 +18,17 @@ public class YoutubePlaylist extends YoutubeEntity<PlaylistInfo> {
 	private final BooleanProperty audioOnly;
 
 	public YoutubePlaylist(PlaylistInfo playlistInfo){
-		this.reference = playlistInfo;
+		this.reference = Optional.ofNullable(playlistInfo);
 		this.audioOnly = new SimpleBooleanProperty(false);
 	}
 
 	public int getPlaylistSize(){
-		return reference.details().videoCount();
+		return getReference().details().videoCount();
 	}
 
 	public List<YoutubePlaylistVideoDetail> getPlaylistVideos(){
 		if(youtubePlaylistVideoDetailsCache.isEmpty()){
-			for (PlaylistVideoDetails video : reference.videos()) {
+			for (PlaylistVideoDetails video : getReference().videos()) {
 				youtubePlaylistVideoDetailsCache.add(new YoutubePlaylistVideoDetail(video));
 			}
 		}
@@ -35,7 +36,7 @@ public class YoutubePlaylist extends YoutubeEntity<PlaylistInfo> {
 	}
 
 	public String getPlaylistTitle() {
-		return reference.details().title();
+		return getReference().details().title();
 	}
 
 

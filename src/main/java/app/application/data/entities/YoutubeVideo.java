@@ -7,11 +7,12 @@ import com.github.kiulian.downloader.model.videos.formats.Format;
 import com.github.kiulian.downloader.model.videos.formats.VideoWithAudioFormat;
 
 import java.util.List;
+import java.util.Optional;
 
 public class YoutubeVideo extends YoutubeEntity<VideoInfo>{
 
 	public YoutubeVideo(VideoInfo videoInfo){
-		this.reference = videoInfo;
+		this.reference = Optional.ofNullable(videoInfo);
 	}
 
 	public String getVideoId(){
@@ -31,18 +32,18 @@ public class YoutubeVideo extends YoutubeEntity<VideoInfo>{
 	}
 
 	public VideoDetails getVideoDetails(){
-		return reference.details();
+		return getReference().details();
 	}
 
 	public List<VideoWithAudioFormat> getVideoWithAudioFormat(){
-		return reference.videoWithAudioFormats();
+		return getReference().videoWithAudioFormats();
 	}
 
 	public AudioFormat getAudioFormat(){
-		return reference.audioFormats().get(0);
+		return getReference().audioFormats().get(0);
 	}
 
 	public Format getBestVideoWithAudioFormat() {
-		return reference.bestVideoWithAudioFormat();
+		return getReference().bestVideoWithAudioFormat();
 	}
 }
