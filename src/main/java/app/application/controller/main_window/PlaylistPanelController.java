@@ -8,6 +8,7 @@ import app.application.exception.InvalidPlaylistUrlException;
 import app.application.exception.InvalidVideoUrlException;
 import app.application.factories.VideoElementFactory;
 import app.application.utils.DialogManager;
+import app.application.utils.DownloadExecutorHandler;
 import app.application.utils.GlobalValues;
 import app.application.utils.YoutubeIdExtractor;
 import app.application.utils.YoutubeUrlValidator;
@@ -59,33 +60,30 @@ public class PlaylistPanelController {
 
 	private final YoutubeUrlValidator youtubeUrlValidator;
 
-	private final DialogManager dialogManager;
-
 	private final VideoElementFactory videoElementFactory;
+
+	private DownloadExecutorHandler downloadExecutorHandler;
 
 	public PlaylistPanelController(
 					YoutubePlaylistDownloadService youtubePlaylistDownloadService,
 					YoutubePlaylistDataService youtubePlaylistDataService,
 					YoutubeIdExtractor youtubeIdExtractor,
 					YoutubeUrlValidator youtubeUrlValidator,
-					DialogManager dialogManager,
 					VideoElementFactory videoElementFactory) {
 		this.youtubePlaylistDownloadService = youtubePlaylistDownloadService;
 		this.youtubePlaylistDataService = youtubePlaylistDataService;
 		this.youtubeIdExtractor = youtubeIdExtractor;
 		this.youtubeUrlValidator = youtubeUrlValidator;
-		this.dialogManager = dialogManager;
 		this.videoElementFactory = videoElementFactory;
 	}
 
 	private YoutubePlaylist youtubePlaylist;
 
-	private ExecutorService downloadExecutor;
-
 	@FXML
 	public void initialize(){
 		youtubePlaylistDownloadService.setLabel(lblDownloadProgress);
 		btnSearchPlaylist.disableProperty().bind(Bindings.isEmpty(txtPlaylistLink.textProperty()));
+		downloadExecutorHandler = new DownloadExecutorHandler();
 	}
 
 	public void btnSearchPlaylistClick() throws InvalidPlaylistUrlException {
@@ -102,22 +100,11 @@ public class PlaylistPanelController {
 	}
 
 	public void btnPlaylistDownloadClick(){
-		downloadExecutor = Executors.newSingleThreadExecutor();
-		downloadExecutor.execute(() -> youtubePlaylistDownloadService.downloadPlaylist(youtubePlaylist));
+		downloadExecutorHandler.executeTask(() -> youtubePlaylistDownloadService.downloadPlaylist(youtubePlaylist));
 	}
 
 	public void btnAbortClick() throws CantAbortDownloadException {
-		downloadExecutor.shutdownNow();
-		try{
-			boolean terminationSuccess = downloadExecutor.awaitTermination(10, TimeUnit.SECONDS);
-			if(!terminationSuccess){
-				throw new ExecutorTerminationException(GlobalValues.DOWNLOAD_EXECUTOR_TERMINATION_ERROR);
-			}
-		}
-		catch (InterruptedException e){
-			Thread.currentThread().interrupt();
-			throw new CantAbortDownloadException(e);
-		}
+		downloadExecutorHandler.killTask();
 	}
 
 }
