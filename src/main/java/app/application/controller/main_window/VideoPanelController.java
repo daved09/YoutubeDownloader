@@ -6,6 +6,7 @@ import app.application.exception.ExecutorTerminationException;
 import app.application.exception.InvalidVideoUrlException;
 import app.application.listener.YoutubeVideoDownloadListener;
 import app.application.utils.DialogManager;
+import app.application.utils.DownloadExecutorHandler;
 import app.application.utils.GlobalValues;
 import app.application.utils.QualityLabelExtractor;
 import app.application.utils.YoutubeIdExtractor;
@@ -73,6 +74,8 @@ public class VideoPanelController {
 
 	private final QualityLabelExtractor qualityLabelExtractor;
 
+	private DownloadExecutorHandler downloadExecutorHandler;
+
 	public VideoPanelController(
 					YoutubeVideoDownloadService youtubeVideoDownloadService,
 					YoutubeVideoDataService youtubeVideoDataService,
@@ -90,12 +93,11 @@ public class VideoPanelController {
 
 	private YoutubeVideo tmpYoutubeVideo;
 
-	private ExecutorService downloadExecutorService;
-
 	@FXML
 	private void initialize(){
 		youtubeVideoDownloadService.setYoutubeDownloadListener(new YoutubeVideoDownloadListener(downloadProgress, dialogManager));
 		btnSearch.disableProperty().bind(Bindings.isEmpty(txtDownloadLink.textProperty()));
+		downloadExecutorHandler = new DownloadExecutorHandler();
 	}
 
 
@@ -110,8 +112,7 @@ public class VideoPanelController {
 	}
 
 	public void btnDownloadVideoClick(){
-		downloadExecutorService = Executors.newSingleThreadExecutor();
-		downloadExecutorService.execute(() -> {
+		downloadExecutorHandler.executeTask(() -> {
 			if(chkAudioOnly.isSelected()){
 				youtubeVideoDownloadService.downloadAudioOnlyAsync(tmpYoutubeVideo);
 			}
@@ -122,17 +123,7 @@ public class VideoPanelController {
 	}
 
 	public void btnAbortClick() throws CantAbortDownloadException {
-		downloadExecutorService.shutdownNow();
-		try {
-			boolean terminationSuccess = downloadExecutorService.awaitTermination(10,
-							TimeUnit.SECONDS);
-			if(!terminationSuccess){
-				throw new ExecutorTerminationException(GlobalValues.DOWNLOAD_EXECUTOR_TERMINATION_ERROR);
-			}
-		} catch (InterruptedException e) {
-			Thread.currentThread().interrupt();
-			throw new CantAbortDownloadException(e);
-		}
+		downloadExecutorHandler.killTask();
 	}
 
 
