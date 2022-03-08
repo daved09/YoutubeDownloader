@@ -20,7 +20,7 @@ pipeline {
         }
     }
     post {
-        always {
+        if(!env.CHANGE_ID){
             archiveArtifacts artifacts: 'target/YoutubeDownloader.jar'
         }
     }
