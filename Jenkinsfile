@@ -22,11 +22,8 @@ pipeline {
             steps {
                 script {
                     withCredentials([string(credentialsId: 'youtube_downloader_sonar', variable: 'sonarcloud_token')]){
-                        if(env.CHANGE_ID){
-                            sh "mvn clean verify sonar:sonar -Dsonar.projectKey=YoutubeDownloader -Dsonar.pullrequest.key=${env.CHANGE_ID} -Dsonar.pullrequest.base=${env.CHANGE_TARGET} -Dsonar.pullrequest.branch=$BRANCH_NAME -Dsonar.host.url=http://daluba.de:9001 -Dsonar.login=$sonarcloud_token"
-                        }
-                        else{
-                            sh 'mvn clean verify sonar:sonar -Dsonar.projectKey=YoutubeDownloader -Dsonar.branch.name=$BRANCH_NAME -Dsonar.host.url=http://daluba.de:9001 -Dsonar.login=$sonarcloud_token'
+                        if(!env.CHANGE_ID){
+                            sh 'mvn clean verify sonar:sonar -Dsonar.projectKey=YoutubeDownloader -Dsonar.host.url=http://daluba.de:9001 -Dsonar.login=$sonarcloud_token'
                         }
                     }
                 }
