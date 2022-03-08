@@ -17,11 +17,15 @@ pipeline {
             steps {
                 sh 'mvn clean install'
             }
-        }
-        stage('archive'){
+        }}
+    }
+    post {
+        success{
             steps {
-                if(env.CHANGE_ID != null){
-                    archiveArtifacts artifacts: 'target/YoutubeDownloader.jar'
+                script {
+                    if(!env.CHANGE_ID){
+                        archiveArtifacts artifacts: 'target/YoutubeDownloader.jar'
+                    }
                 }
             }
         }
