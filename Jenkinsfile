@@ -19,4 +19,9 @@ pipeline {
             }
         }
     }
+    post {
+        always {
+            archiveArtifacts artifacts: 'target/YoutubeDownloader.jar'
+        }
+    }
 }
