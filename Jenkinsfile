@@ -20,9 +20,11 @@ pipeline {
             }
         }
         stage('sonar'){
-            withCredentials([credentialsId: 'youtube_downloader_sonar', variable: 'sonarcloud_token']){
-                if(!env.CHANGE_ID){
-                    sh 'mvn clean verify -Dsonar.projectKey=YoutubeDownloader -Dsonar.host.url=http://daluba.de:9001 -Dsonar.login=$sonarcloud_token'
+            steps{
+                withCredentials([credentialsId: 'youtube_downloader_sonar', variable: 'sonarcloud_token']){
+                    if(!env.CHANGE_ID){
+                        sh 'mvn clean verify -Dsonar.projectKey=YoutubeDownloader -Dsonar.host.url=http://daluba.de:9001 -Dsonar.login=$sonarcloud_token'
+                    }
                 }
             }
         }
