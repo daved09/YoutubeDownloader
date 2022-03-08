@@ -17,7 +17,7 @@ pipeline {
             steps {
                 sh 'mvn clean install'
             }
-        }}
+        }
     }
     post {
         success{
