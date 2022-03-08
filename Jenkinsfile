@@ -15,6 +15,7 @@ pipeline {
         }
         stage('Build'){
             steps {
+                sh 'mvn clean verify -Dsonar.projectKey=YoutubeDownloader -Dsonar.host.url=http://daluba.de:9001 -Dsonar.login=$youtube_downloader_sonar'
                 sh 'mvn clean install'
             }
         }
