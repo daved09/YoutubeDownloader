@@ -18,9 +18,7 @@ pipeline {
                 sh 'mvn clean install'
             }
         }
-    }
-    post {
-        success{
+        stage('archive'){
             steps {
                 if(!env.CHANGE_ID){
                     archiveArtifacts artifacts: 'target/YoutubeDownloader.jar'
