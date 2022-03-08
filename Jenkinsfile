@@ -21,8 +21,10 @@ pipeline {
     }
     post {
         success{
-            if(!env.CHANGE_ID){
-                archiveArtifacts artifacts: 'target/YoutubeDownloader.jar'
+            steps {
+                if(!env.CHANGE_ID){
+                    archiveArtifacts artifacts: 'target/YoutubeDownloader.jar'
+                }
             }
         }
     }
