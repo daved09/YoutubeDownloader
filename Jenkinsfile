@@ -20,7 +20,7 @@ pipeline {
         }
         stage('archive'){
             steps {
-                if(!env.CHANGE_ID){
+                if(env.CHANGE_ID != null){
                     archiveArtifacts artifacts: 'target/YoutubeDownloader.jar'
                 }
             }
