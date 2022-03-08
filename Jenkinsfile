@@ -22,7 +22,7 @@ pipeline {
     post {
         success{
             script {
-                if(!env.CHANGE_ID){
+                if(env.BRANCH_NAME == 'release' || env.BRANCH_NAME == 'master'){
                     archiveArtifacts artifacts: 'target/YoutubeDownloader.jar'
                 }
             }
