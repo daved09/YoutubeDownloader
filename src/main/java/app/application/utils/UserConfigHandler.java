@@ -20,7 +20,7 @@ public class UserConfigHandler {
 	@Setter
 	private Gson gson;
 
-	private final String USER_CONFIG_FILE = System.getProperty(GlobalValues.USER_HOME) + File.separator + GlobalValues.DOWNLOADER_CONFIG_FILENAME;
+	private static final String USER_CONFIG_FILE = System.getProperty(GlobalValues.USER_HOME) + File.separator + GlobalValues.DOWNLOADER_CONFIG_FILENAME;
 
 	public void initConfig(){
 		userConfig = configurationFactory.createDefaultConfiguration();
