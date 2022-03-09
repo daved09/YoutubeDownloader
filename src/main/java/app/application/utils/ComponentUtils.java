@@ -6,6 +6,10 @@ import lombok.SneakyThrows;
 
 public class ComponentUtils {
 
+	private ComponentUtils(){
+		throw new IllegalStateException("Utility Class");
+	}
+
 	@SneakyThrows
 	public static <T extends Parent> void loadComponent(T component){
 		FXMLLoader loader = new FXMLLoader();

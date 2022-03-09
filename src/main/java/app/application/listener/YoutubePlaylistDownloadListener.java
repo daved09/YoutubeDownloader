@@ -18,6 +18,7 @@ public class YoutubePlaylistDownloadListener extends YoutubeDownloadListener{
 
     @Override
     public void onDownloading(int progress) {
+        // Wird nicht verwendet
     }
 
     @Override

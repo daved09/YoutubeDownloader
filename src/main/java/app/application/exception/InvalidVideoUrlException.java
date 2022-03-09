@@ -1,9 +1,6 @@
 package app.application.exception;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-
-public class InvalidVideoUrlException extends Throwable {
+public class InvalidVideoUrlException extends Exception {
 
 	public InvalidVideoUrlException(String url) {
 		super("Invalid url: " + url);
