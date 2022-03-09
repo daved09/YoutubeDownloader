@@ -2,6 +2,10 @@ package app.application.utils;
 
 public class GlobalValues {
 
+	private GlobalValues(){
+		throw new IllegalStateException("Value Class");
+	}
+
 	//Downloader Spezifisch
 	public static final String VIDEO_DIRECTORY = "Videos";
 	public static final String YOUTUBE_URL = "youtube.com";

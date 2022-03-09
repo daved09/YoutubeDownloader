@@ -22,7 +22,7 @@ pipeline {
             steps {
                 script {
                     withCredentials([string(credentialsId: 'youtube_downloader_sonar', variable: 'sonarcloud_token')]){
-                        if(!env.CHANGE_ID){
+                        if(BRANCH_NAME == "master"){
                             sh 'mvn clean verify sonar:sonar -Dsonar.projectKey=YoutubeDownloader -Dsonar.host.url=http://daluba.de:9001 -Dsonar.login=$sonarcloud_token'
                         }
                     }

@@ -2,16 +2,14 @@ package app.application.utils;
 
 import org.springframework.stereotype.Service;
 
-import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
 @Service
 public class LinkParameterBuilder {
 
-	public Map<String, String> buildParameterMap(URL url){
+	public Map<String, String> buildParameterMap(String query){
 		Map<String, String> parameterMap = new HashMap<>();
-		String query = url.getQuery();
 		if(query != null){
 			String[] params = query.split("&");
 			for (String param : params){

@@ -23,8 +23,8 @@ public class YoutubeIdExtractor {
     public String getVideoIdFromLink(String videoLink) throws InvalidVideoUrlException {
         try {
             URL url = new URL(videoLink);
-            Map<String, String> parameterMap = linkParameterBuilder.buildParameterMap(url);
-            return youtubeUrlValidator.isShortUrl(videoLink) ? url.getPath().replace("/", "") : parameterMap.get("v");
+            Map<String, String> parameterMap = linkParameterBuilder.buildParameterMap(url.getQuery());
+            return youtubeUrlValidator.isShortUrl(url.getHost()) ? url.getPath().substring(1) : parameterMap.get("v");
         } catch (MalformedURLException e) {
             throw new InvalidVideoUrlException(e, videoLink);
         }
@@ -33,7 +33,7 @@ public class YoutubeIdExtractor {
     public String getPlayListIdFromLink(String playlistLink) throws InvalidPlaylistUrlException {
         try {
             URL url = new URL(playlistLink);
-            Map<String, String> parameterMap = linkParameterBuilder.buildParameterMap(url);
+            Map<String, String> parameterMap = linkParameterBuilder.buildParameterMap(url.getQuery());
             return parameterMap.getOrDefault("list", "");
         } catch (MalformedURLException e) {
             throw new InvalidPlaylistUrlException(e, playlistLink);

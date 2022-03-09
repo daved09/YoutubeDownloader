@@ -7,7 +7,6 @@ import com.github.kiulian.downloader.model.videos.formats.VideoWithAudioFormat;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
 import java.nio.file.Paths;
 import java.util.List;
 

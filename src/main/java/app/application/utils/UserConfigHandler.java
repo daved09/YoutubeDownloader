@@ -20,7 +20,7 @@ public class UserConfigHandler {
 	@Setter
 	private Gson gson;
 
-	private final String CONFIG_FILE = System.getProperty(GlobalValues.USER_HOME) + File.separator + GlobalValues.DOWNLOADER_CONFIG_FILENAME;
+	private final String USER_CONFIG_FILE = System.getProperty(GlobalValues.USER_HOME) + File.separator + GlobalValues.DOWNLOADER_CONFIG_FILENAME;
 
 	public void initConfig(){
 		userConfig = configurationFactory.createDefaultConfiguration();
@@ -30,7 +30,7 @@ public class UserConfigHandler {
 	@SneakyThrows
 	public void loadConfig() {
 		try{
-			userConfig = gson.fromJson(new FileReader(CONFIG_FILE), UserConfig.class);
+			userConfig = gson.fromJson(new FileReader(USER_CONFIG_FILE), UserConfig.class);
 		}
 		catch (Exception e){
 			initConfig();
@@ -39,7 +39,7 @@ public class UserConfigHandler {
 
 	@SneakyThrows
 	public void writeConfig() {
-		FileWriter fileWriter = new FileWriter(CONFIG_FILE);
+		FileWriter fileWriter = new FileWriter(USER_CONFIG_FILE);
 		gson.toJson(userConfig, fileWriter);
 		fileWriter.flush();
 		fileWriter.close();

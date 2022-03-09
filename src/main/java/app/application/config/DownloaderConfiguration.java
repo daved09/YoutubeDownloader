@@ -32,7 +32,7 @@ public class DownloaderConfiguration {
     }
 
     @Bean
-    public UserConfigHandler userConfigHandler() throws IOException {
+    public UserConfigHandler userConfigHandler() {
         UserConfigHandler userConfigHandler = new UserConfigHandler();
         userConfigHandler.setConfigurationFactory(configurationFactory);
         userConfigHandler.setGson(gson);
