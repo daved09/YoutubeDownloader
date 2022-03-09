@@ -3,7 +3,6 @@ package app.application.utils.service.data;
 import app.application.data.entities.YoutubePlaylist;
 import com.github.kiulian.downloader.downloader.request.RequestPlaylistInfo;
 import com.github.kiulian.downloader.model.playlist.PlaylistInfo;
-import javafx.application.Platform;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 

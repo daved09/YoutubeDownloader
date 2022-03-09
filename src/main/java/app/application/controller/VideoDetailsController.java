@@ -3,7 +3,6 @@ package app.application.controller;
 import app.application.data.entities.YoutubeVideo;
 import app.application.utils.GlobalObjectHandler;
 import app.application.utils.service.data.YoutubeVideoDataService;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;

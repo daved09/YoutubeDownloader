@@ -2,7 +2,6 @@ package app.application.utils;
 
 import org.springframework.stereotype.Service;
 
-import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 

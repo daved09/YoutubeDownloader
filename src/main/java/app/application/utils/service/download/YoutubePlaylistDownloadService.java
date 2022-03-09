@@ -6,7 +6,6 @@ import app.application.data.entities.YoutubeVideo;
 import app.application.listener.YoutubePlaylistDownloadListener;
 import app.application.utils.service.data.YoutubeVideoDataService;
 import com.github.kiulian.downloader.downloader.request.RequestVideoFileDownload;
-import com.github.kiulian.downloader.model.playlist.PlaylistVideoDetails;
 import com.github.kiulian.downloader.model.videos.formats.Format;
 import javafx.application.Platform;
 import javafx.scene.control.Label;

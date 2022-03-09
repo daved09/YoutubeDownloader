@@ -3,13 +3,9 @@ package app.application.controller.main_window;
 import app.application.components.VideoElement;
 import app.application.data.entities.YoutubePlaylist;
 import app.application.exception.CantAbortDownloadException;
-import app.application.exception.ExecutorTerminationException;
 import app.application.exception.InvalidPlaylistUrlException;
-import app.application.exception.InvalidVideoUrlException;
 import app.application.factories.VideoElementFactory;
-import app.application.utils.DialogManager;
 import app.application.utils.DownloadExecutorHandler;
-import app.application.utils.GlobalValues;
 import app.application.utils.YoutubeIdExtractor;
 import app.application.utils.YoutubeUrlValidator;
 import app.application.utils.service.data.YoutubePlaylistDataService;
@@ -23,10 +19,6 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import org.springframework.stereotype.Component;
-
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 @Component
 public class PlaylistPanelController {

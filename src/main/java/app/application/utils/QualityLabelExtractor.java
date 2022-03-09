@@ -1,7 +1,6 @@
 package app.application.utils;
 
 import app.application.data.entities.YoutubeVideo;
-import com.github.kiulian.downloader.model.videos.VideoInfo;
 import com.github.kiulian.downloader.model.videos.formats.VideoWithAudioFormat;
 import org.springframework.stereotype.Service;
 
