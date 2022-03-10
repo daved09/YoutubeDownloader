@@ -16,9 +16,6 @@ public abstract class YoutubeDownloadListener implements YoutubeProgressCallback
 
     }
 
-    @Override
-    public abstract void onDownloading(int progress);
-
     public abstract boolean isDownloadFinished();
 
 }

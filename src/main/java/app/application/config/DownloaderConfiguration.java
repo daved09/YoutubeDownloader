@@ -9,7 +9,6 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.io.IOException;
 import java.util.concurrent.Executors;
 
 @Configuration
@@ -32,7 +31,7 @@ public class DownloaderConfiguration {
     }
 
     @Bean
-    public UserConfigHandler userConfigHandler() throws IOException {
+    public UserConfigHandler userConfigHandler() {
         UserConfigHandler userConfigHandler = new UserConfigHandler();
         userConfigHandler.setConfigurationFactory(configurationFactory);
         userConfigHandler.setGson(gson);

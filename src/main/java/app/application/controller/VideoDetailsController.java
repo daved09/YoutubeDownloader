@@ -3,15 +3,17 @@ package app.application.controller;
 import app.application.data.entities.YoutubeVideo;
 import app.application.utils.GlobalObjectHandler;
 import app.application.utils.service.data.YoutubeVideoDataService;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.Clipboard;
+import javafx.scene.input.ClipboardContent;
 import javafx.stage.Stage;
 import net.rgielen.fxweaver.core.FxWeaver;
 import net.rgielen.fxweaver.core.FxmlView;
@@ -63,8 +65,18 @@ public class VideoDetailsController {
 		stage.show();
 	}
 
-	public void showInBrowser(ActionEvent event) {
+	public void showInBrowser() {
 		globalObjectHandler.getHostServices().showDocument(videoLink.getText());
+	}
+//https://www.youtube.com/playlist?list=PL-_dGWmdQ0CJMcmQ5ximmrusq-0wjPbh7
+	public void copyToClipboard(){
+		Clipboard clipboard = Clipboard.getSystemClipboard();
+		ClipboardContent content = new ClipboardContent();
+		content.putString(videoLink.getText());
+		clipboard.setContent(content);
+		Tooltip tooltip = new Tooltip();
+		tooltip.setText("Copied");
+		tooltip.show(videoLink.getScene().getWindow());
 	}
 
 }
