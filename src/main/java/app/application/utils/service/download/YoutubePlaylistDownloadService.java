@@ -4,6 +4,7 @@ import app.application.data.entities.YoutubePlaylist;
 import app.application.data.entities.YoutubePlaylistVideoDetail;
 import app.application.data.entities.YoutubeVideo;
 import app.application.listener.YoutubePlaylistDownloadListener;
+import app.application.utils.GlobalObjectHandler;
 import app.application.utils.service.data.YoutubeVideoDataService;
 import com.github.kiulian.downloader.downloader.request.RequestVideoFileDownload;
 import com.github.kiulian.downloader.model.videos.formats.Format;
@@ -22,8 +23,11 @@ public class YoutubePlaylistDownloadService extends YoutubeDownloadService {
 
     private final YoutubeVideoDataService youtubeVideoDataService;
 
-    public YoutubePlaylistDownloadService(YoutubeVideoDataService youtubeVideoDataService) {
+    private final GlobalObjectHandler globalObjectHandler;
+
+    public YoutubePlaylistDownloadService(YoutubeVideoDataService youtubeVideoDataService, GlobalObjectHandler globalObjectHandler) {
         this.youtubeVideoDataService = youtubeVideoDataService;
+        this.globalObjectHandler = globalObjectHandler;
     }
 
     @Setter
@@ -31,7 +35,7 @@ public class YoutubePlaylistDownloadService extends YoutubeDownloadService {
 
     @SneakyThrows
     public void downloadPlaylist(YoutubePlaylist youtubePlaylist){
-        this.youtubeDownloadListener = new YoutubePlaylistDownloadListener(dialogManager, youtubePlaylist.getPlaylistSize());
+        this.youtubeDownloadListener = new YoutubePlaylistDownloadListener(dialogManager, youtubePlaylist.getPlaylistSize(), globalObjectHandler);
         int size = youtubePlaylist.getPlaylistSize();
         AtomicInteger progress = new AtomicInteger(0);
         youtubePlaylist.getPlaylistVideos().stream().
