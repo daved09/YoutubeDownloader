@@ -4,22 +4,12 @@ import app.application.data.entities.YoutubeVideo;
 import app.application.exception.CantAbortDownloadException;
 import app.application.exception.InvalidVideoUrlException;
 import app.application.listener.YoutubeVideoDownloadListener;
-import app.application.utils.DialogManager;
-import app.application.utils.DownloadExecutorHandler;
-import app.application.utils.QualityLabelExtractor;
-import app.application.utils.YoutubeIdExtractor;
-import app.application.utils.YoutubeUrlValidator;
+import app.application.utils.*;
 import app.application.utils.service.data.YoutubeVideoDataService;
 import app.application.utils.service.download.YoutubeVideoDownloadService;
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.ProgressBar;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -71,26 +61,30 @@ public class VideoPanelController {
 
 	private DownloadExecutorHandler downloadExecutorHandler;
 
+	private final GlobalObjectHandler globalObjectHandler;
+
 	public VideoPanelController(
 					YoutubeVideoDownloadService youtubeVideoDownloadService,
 					YoutubeVideoDataService youtubeVideoDataService,
 					YoutubeIdExtractor youtubeIdExtractor,
 					YoutubeUrlValidator youtubeUrlValidator,
 					DialogManager dialogManager,
-					QualityLabelExtractor qualityLabelExtractor) {
+					QualityLabelExtractor qualityLabelExtractor,
+					GlobalObjectHandler globalObjectHandler) {
 		this.youtubeVideoDownloadService = youtubeVideoDownloadService;
 		this.youtubeVideoDataService = youtubeVideoDataService;
 		this.youtubeIdExtractor = youtubeIdExtractor;
 		this.youtubeUrlValidator = youtubeUrlValidator;
 		this.dialogManager = dialogManager;
 		this.qualityLabelExtractor = qualityLabelExtractor;
+		this.globalObjectHandler = globalObjectHandler;
 	}
 
 	private YoutubeVideo tmpYoutubeVideo;
 
 	@FXML
 	private void initialize(){
-		youtubeVideoDownloadService.setYoutubeDownloadListener(new YoutubeVideoDownloadListener(downloadProgress, dialogManager));
+		youtubeVideoDownloadService.setYoutubeDownloadListener(new YoutubeVideoDownloadListener(downloadProgress, dialogManager, globalObjectHandler));
 		btnSearch.disableProperty().bind(Bindings.isEmpty(txtDownloadLink.textProperty()));
 		downloadExecutorHandler = new DownloadExecutorHandler();
 	}

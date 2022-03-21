@@ -68,7 +68,7 @@ public class VideoDetailsController {
 	public void showInBrowser() {
 		globalObjectHandler.getHostServices().showDocument(videoLink.getText());
 	}
-//https://www.youtube.com/playlist?list=PL-_dGWmdQ0CJMcmQ5ximmrusq-0wjPbh7
+
 	public void copyToClipboard(){
 		Clipboard clipboard = Clipboard.getSystemClipboard();
 		ClipboardContent content = new ClipboardContent();
