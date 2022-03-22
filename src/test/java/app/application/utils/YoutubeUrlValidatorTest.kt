@@ -1,84 +1,87 @@
-package app.application.utils;
+package app.application.utils
 
-import app.application.exception.InvalidPlaylistUrlException;
-import app.application.exception.InvalidVideoUrlException;
-import org.junit.Test;
+import app.application.exception.InvalidPlaylistUrlException
+import app.application.exception.InvalidVideoUrlException
+import org.junit.Test
 
-import static org.junit.Assert.*;
+class YoutubeUrlValidatorTest {
+    @Test
+    @Throws(InvalidVideoUrlException::class)
+    fun testUrlValidatorReturnsValidOnYoutubeUrl() {
+        val url = "https://www.youtube.com/watch?v=j151FYZT4ZE"
+        val youtubeUrlValidator = YoutubeUrlValidator()
+        youtubeUrlValidator.checkVideoUrl(url)
 
-public class YoutubeUrlValidatorTest {
+        //Should not fail
+    }
 
-	@Test
-	public void testUrlValidatorReturnsValidOnYoutubeUrl() throws InvalidVideoUrlException {
-		String url = "https://www.youtube.com/watch?v=j151FYZT4ZE";
-		YoutubeUrlValidator youtubeUrlValidator = new YoutubeUrlValidator();
-		youtubeUrlValidator.checkVideoUrl(url);
+    @Test
+    @Throws(InvalidVideoUrlException::class)
+    fun testUrlValidatorReturnsValidOnSortYoutubeUrl() {
+        val url = "https://youtu.be/j151FYZT4ZE"
+        val youtubeUrlValidator = YoutubeUrlValidator()
+        youtubeUrlValidator.checkVideoUrl(url)
 
-		//Should not fail
-	}
+        //Should not fail
+    }
 
-	@Test
-	public void testUrlValidatorReturnsValidOnSortYoutubeUrl() throws InvalidVideoUrlException {
-		String url = "https://youtu.be/j151FYZT4ZE";
-		YoutubeUrlValidator youtubeUrlValidator = new YoutubeUrlValidator();
-		youtubeUrlValidator.checkVideoUrl(url);
+    @Test
+    @Throws(InvalidVideoUrlException::class)
+    fun testUrlValidatorReturnsValidOnSortYoutubeUrlAndTimestamp() {
+        val url = "https://youtu.be/j151FYZT4ZE?t=20"
+        val youtubeUrlValidator = YoutubeUrlValidator()
+        youtubeUrlValidator.checkVideoUrl(url)
 
-		//Should not fail
-	}
+        //Should not fail
+    }
 
-	@Test
-	public void testUrlValidatorReturnsValidOnSortYoutubeUrlAndTimestamp() throws InvalidVideoUrlException {
-		String url = "https://youtu.be/j151FYZT4ZE?t=20";
-		YoutubeUrlValidator youtubeUrlValidator = new YoutubeUrlValidator();
-		youtubeUrlValidator.checkVideoUrl(url);
+    @Test
+    @Throws(InvalidVideoUrlException::class)
+    fun testUrlValidatorReturnsValidOnYoutubeUrlAndTimestamp() {
+        val url = "https://www.youtube.com/watch?v=j151FYZT4ZE&t=20"
+        val youtubeUrlValidator = YoutubeUrlValidator()
+        youtubeUrlValidator.checkVideoUrl(url)
 
-		//Should not fail
-	}
+        //Should not fail
+    }
 
-	@Test
-	public void testUrlValidatorReturnsValidOnYoutubeUrlAndTimestamp() throws InvalidVideoUrlException {
-		String url = "https://www.youtube.com/watch?v=j151FYZT4ZE&t=20";
-		YoutubeUrlValidator youtubeUrlValidator = new YoutubeUrlValidator();
-		youtubeUrlValidator.checkVideoUrl(url);
+    @Test(expected = InvalidVideoUrlException::class)
+    @Throws(InvalidVideoUrlException::class)
+    fun testUrlValidatorThrowsExceptionOnInvalidUrl() {
+        val url = "NoUrl"
+        val youtubeUrlValidator = YoutubeUrlValidator()
+        youtubeUrlValidator.checkVideoUrl(url)
 
-		//Should not fail
-	}
+        //Should fail
+    }
 
-	@Test(expected = InvalidVideoUrlException.class)
-	public void testUrlValidatorThrowsExceptionOnInvalidUrl() throws InvalidVideoUrlException {
-		String url = "NoUrl";
-		YoutubeUrlValidator youtubeUrlValidator = new YoutubeUrlValidator();
-		youtubeUrlValidator.checkVideoUrl(url);
+    @Test
+    @Throws(InvalidPlaylistUrlException::class)
+    fun testUrlValidatorReturnsValidOnPlaylistUrl() {
+        val url = "https://www.youtube.com/playlist?list=PL-_dGWmdQ0CJMcmQ5ximmrusq-0wjPbh8"
+        val youtubeUrlValidator = YoutubeUrlValidator()
+        youtubeUrlValidator.checkPlaylistUrl(url)
 
-		//Should fail
-	}
+        //Should not fail
+    }
 
-	@Test
-	public void testUrlValidatorReturnsValidOnPlaylistUrl() throws InvalidPlaylistUrlException {
-		String url = "https://www.youtube.com/playlist?list=PL-_dGWmdQ0CJMcmQ5ximmrusq-0wjPbh8";
-		YoutubeUrlValidator youtubeUrlValidator = new YoutubeUrlValidator();
-		youtubeUrlValidator.checkPlaylistUrl(url);
+    @Test(expected = InvalidPlaylistUrlException::class)
+    @Throws(InvalidPlaylistUrlException::class)
+    fun testUrlValidatorThrowsExceptionOnInvalidPlaylistUrl() {
+        val url = "https://www.youtube.com/playlist?liPL-_dGWmdQ0CJMcmQ5ximmrusq-0wjPbh8"
+        val youtubeUrlValidator = YoutubeUrlValidator()
+        youtubeUrlValidator.checkPlaylistUrl(url)
 
-		//Should not fail
-	}
+        //Should fail
+    }
 
-	@Test(expected = InvalidPlaylistUrlException.class)
-	public void testUrlValidatorThrowsExceptionOnInvalidPlaylistUrl() throws InvalidPlaylistUrlException {
-		String url = "https://www.youtube.com/playlist?liPL-_dGWmdQ0CJMcmQ5ximmrusq-0wjPbh8";
-		YoutubeUrlValidator youtubeUrlValidator = new YoutubeUrlValidator();
-		youtubeUrlValidator.checkPlaylistUrl(url);
+    @Test(expected = InvalidPlaylistUrlException::class)
+    @Throws(InvalidPlaylistUrlException::class)
+    fun testUrlValidatorThrowsExceptionOnVideoUrl() {
+        val url = "https://www.youtube.com/watch?v=j151FYZT4ZE"
+        val youtubeUrlValidator = YoutubeUrlValidator()
+        youtubeUrlValidator.checkPlaylistUrl(url)
 
-		//Should fail
-	}
-
-	@Test(expected = InvalidPlaylistUrlException.class)
-	public void testUrlValidatorThrowsExceptionOnVideoUrl() throws InvalidPlaylistUrlException {
-		String url = "https://www.youtube.com/watch?v=j151FYZT4ZE";
-		YoutubeUrlValidator youtubeUrlValidator = new YoutubeUrlValidator();
-		youtubeUrlValidator.checkPlaylistUrl(url);
-
-		//Should fail
-	}
-
-
+        //Should fail
+    }
 }

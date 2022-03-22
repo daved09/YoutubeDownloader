@@ -1,86 +1,76 @@
-package app.application.utils;
+package app.application.utils
 
-import app.application.exception.InvalidPlaylistUrlException;
-import app.application.exception.InvalidVideoUrlException;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import app.application.exception.InvalidPlaylistUrlException
+import app.application.exception.InvalidVideoUrlException
+import org.junit.Assert
+import org.junit.Test
+import org.junit.runner.RunWith
+import org.mockito.Mock
+import org.mockito.Mockito
+import org.mockito.junit.MockitoJUnitRunner
+import java.net.MalformedURLException
+import java.net.URL
+import java.util.Map
 
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.Map;
+@RunWith(MockitoJUnitRunner::class)
+class YoutubeIdExtractorTest {
+    @Mock
+    private val youtubeUrlValidator: YoutubeUrlValidator? = null
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.when;
+    @Mock
+    private val linkParameterBuilder: LinkParameterBuilder? = null
 
-@RunWith(MockitoJUnitRunner.class)
-public class YoutubeIdExtractorTest {
+    private val playlistMap = Map.of("list", "Test123")
+    private val videoMap = Map.of("v", "video")
 
-	@Mock
-	private YoutubeUrlValidator youtubeUrlValidator;
-	@Mock
-	private LinkParameterBuilder linkParameterBuilder;
+    @Test
+    @Throws(MalformedURLException::class, InvalidVideoUrlException::class)
+    fun testValidUrlGivesValidVideoId() {
+        val videoLink = "https://www.youtube.com/watch?v=video"
+        val videoUrl = URL(videoLink)
+        Mockito.`when`(youtubeUrlValidator!!.isShortUrl(videoUrl.host)).thenReturn(false)
+        Mockito.`when`(linkParameterBuilder!!.buildParameterMap(videoUrl.query)).thenReturn(videoMap)
+        val youtubeIdExtractor = YoutubeIdExtractor(youtubeUrlValidator, linkParameterBuilder)
+        val videoId = youtubeIdExtractor.getVideoIdFromLink(videoLink)
+        Assert.assertEquals(videoMap["v"], videoId)
+    }
 
-	private final Map<String, String> playlistMap = Map.of("list", "Test123");
-	private final Map<String, String> videoMap = Map.of("v", "video");
+    @Test
+    @Throws(MalformedURLException::class, InvalidVideoUrlException::class)
+    fun testValidShortUrlGivesValidVideoId() {
+        val videoLink = "https://youtu.be/video"
+        val videoUrl = URL(videoLink)
+        Mockito.`when`(youtubeUrlValidator!!.isShortUrl(videoUrl.host)).thenReturn(true)
+        Mockito.`when`(linkParameterBuilder!!.buildParameterMap(videoUrl.query)).thenReturn(videoMap)
+        val youtubeIdExtractor = YoutubeIdExtractor(youtubeUrlValidator, linkParameterBuilder)
+        val videoId = youtubeIdExtractor.getVideoIdFromLink(videoLink)
+        Assert.assertEquals(videoMap["v"], videoId)
+    }
 
-	@Test
-	public void testValidUrlGivesValidVideoId() throws MalformedURLException, InvalidVideoUrlException {
-		String videoLink = "https://www.youtube.com/watch?v=video";
-		URL videoUrl = new URL(videoLink);
-		when(youtubeUrlValidator.isShortUrl(videoUrl.getHost())).thenReturn(false);
-		when(linkParameterBuilder.buildParameterMap(videoUrl.getQuery())).thenReturn(videoMap);
+    @Test(expected = InvalidVideoUrlException::class)
+    @Throws(InvalidVideoUrlException::class)
+    fun testInvalidUrlThrowsException() {
+        val videoLink = "InvalidUrl"
+        val youtubeIdExtractor = YoutubeIdExtractor(youtubeUrlValidator!!, linkParameterBuilder!!)
+        youtubeIdExtractor.getVideoIdFromLink(videoLink)
+    }
 
-		YoutubeIdExtractor youtubeIdExtractor = new YoutubeIdExtractor(youtubeUrlValidator, linkParameterBuilder);
-		String videoId = youtubeIdExtractor.getVideoIdFromLink(videoLink);
+    @Test
+    @Throws(MalformedURLException::class, InvalidPlaylistUrlException::class)
+    fun testValidPlaylistUrlGivesValidPlaylistId() {
+        val playlistLink = "https://www.youtube.com/playlist?list=myPlaylist"
+        val playlistUrl = URL(playlistLink)
+        Mockito.`when`(linkParameterBuilder!!.buildParameterMap(playlistUrl.query)).thenReturn(playlistMap)
+        val youtubeIdExtractor = YoutubeIdExtractor(youtubeUrlValidator!!, linkParameterBuilder)
+        val playlistId = youtubeIdExtractor.getPlayListIdFromLink(playlistLink)
+        Assert.assertEquals(playlistMap["list"], playlistId)
+    }
 
-		assertEquals(videoMap.get("v"), videoId);
-
-	}
-
-
-	@Test
-	public void testValidShortUrlGivesValidVideoId() throws MalformedURLException, InvalidVideoUrlException {
-		String videoLink = "https://youtu.be/video";
-		URL videoUrl = new URL(videoLink);
-		when(youtubeUrlValidator.isShortUrl(videoUrl.getHost())).thenReturn(true);
-		when(linkParameterBuilder.buildParameterMap(videoUrl.getQuery())).thenReturn(videoMap);
-
-		YoutubeIdExtractor youtubeIdExtractor = new YoutubeIdExtractor(youtubeUrlValidator, linkParameterBuilder);
-		String videoId = youtubeIdExtractor.getVideoIdFromLink(videoLink);
-
-		assertEquals(videoMap.get("v"), videoId);
-
-	}
-
-	@Test(expected = InvalidVideoUrlException.class)
-	public void testInvalidUrlThrowsException() throws InvalidVideoUrlException {
-		String videoLink = "InvalidUrl";
-
-		YoutubeIdExtractor youtubeIdExtractor = new YoutubeIdExtractor(youtubeUrlValidator, linkParameterBuilder);
-		youtubeIdExtractor.getVideoIdFromLink(videoLink);
-
-	}
-
-	@Test
-	public void testValidPlaylistUrlGivesValidPlaylistId() throws MalformedURLException, InvalidPlaylistUrlException {
-		String playlistLink = "https://www.youtube.com/playlist?list=myPlaylist";
-		URL playlistUrl = new URL(playlistLink);
-		when(linkParameterBuilder.buildParameterMap(playlistUrl.getQuery())).thenReturn(playlistMap);
-
-		YoutubeIdExtractor youtubeIdExtractor = new YoutubeIdExtractor(youtubeUrlValidator, linkParameterBuilder);
-		String playlistId = youtubeIdExtractor.getPlayListIdFromLink(playlistLink);
-
-		assertEquals(playlistMap.get("list"), playlistId);
-	}
-
-	@Test(expected = InvalidPlaylistUrlException.class)
-	public void testInvalidPlaylistUrlThrowsException() throws InvalidPlaylistUrlException {
-		String playlistLink = "InvalidUrl";
-
-		YoutubeIdExtractor youtubeIdExtractor = new YoutubeIdExtractor(youtubeUrlValidator, linkParameterBuilder);
-		youtubeIdExtractor.getPlayListIdFromLink(playlistLink);
-	}
-
+    @Test(expected = InvalidPlaylistUrlException::class)
+    @Throws(InvalidPlaylistUrlException::class)
+    fun testInvalidPlaylistUrlThrowsException() {
+        val playlistLink = "InvalidUrl"
+        val youtubeIdExtractor = YoutubeIdExtractor(youtubeUrlValidator!!, linkParameterBuilder!!)
+        youtubeIdExtractor.getPlayListIdFromLink(playlistLink)
+    }
 }
