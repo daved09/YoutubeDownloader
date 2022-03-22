@@ -1,51 +1,47 @@
-package app.application.components;
+package app.application.components
 
-import app.application.controller.VideoDetailsController;
-import app.application.data.entities.YoutubePlaylistVideoDetail;
-import app.application.utils.ComponentUtils;
-import javafx.fxml.FXML;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
-import org.springframework.beans.factory.annotation.Autowired;
+import app.application.controller.VideoDetailsController
+import app.application.data.entities.YoutubePlaylistVideoDetail
+import app.application.utils.ComponentUtils.Companion.loadComponent
+import javafx.fxml.FXML
+import javafx.scene.control.CheckBox
+import javafx.scene.control.Label
+import javafx.scene.image.Image
+import javafx.scene.image.ImageView
+import javafx.scene.input.MouseEvent
+import javafx.scene.layout.AnchorPane
+import org.springframework.beans.factory.annotation.Autowired
 
-public class VideoElement extends AnchorPane {
+class VideoElement : AnchorPane() {
+    @FXML
+    private val imgThumbnail: ImageView? = null
 
-	@FXML
-	private ImageView imgThumbnail;
+    @FXML
+    private val lblVideoTitle: Label? = null
 
-	@FXML
-	private Label lblVideoTitle;
+    @FXML
+    private val chkIgnore: CheckBox? = null
 
-	@FXML
-	private CheckBox chkIgnore;
+    @Autowired
+    private val videoDetailsController: VideoDetailsController? = null
+    private var youtubePlaylistVideoDetail: YoutubePlaylistVideoDetail? = null
 
-	@Autowired
-	private VideoDetailsController videoDetailsController;
+    init {
+        loadComponent(this)
+    }
 
-	private YoutubePlaylistVideoDetail youtubePlaylistVideoDetail;
+    fun loadVideoDetails(youtubePlaylistVideoDetail: YoutubePlaylistVideoDetail) {
+        this.youtubePlaylistVideoDetail = youtubePlaylistVideoDetail
+        imgThumbnail!!.image = Image(youtubePlaylistVideoDetail.videoThumbnailUrl)
+        lblVideoTitle!!.text = youtubePlaylistVideoDetail.videoTitle
+        chkIgnore!!.selectedProperty().bindBidirectional(youtubePlaylistVideoDetail.ignore)
+    }
 
-	public VideoElement() {
-		ComponentUtils.loadComponent(this);
-	}
-
-	public void loadVideoDetails(YoutubePlaylistVideoDetail youtubePlaylistVideoDetail){
-		this.youtubePlaylistVideoDetail = youtubePlaylistVideoDetail;
-		imgThumbnail.setImage(new Image(youtubePlaylistVideoDetail.getVideoThumbnailUrl()));
-		lblVideoTitle.setText(youtubePlaylistVideoDetail.getVideoTitle());
-		chkIgnore.selectedProperty().bindBidirectional(youtubePlaylistVideoDetail.getIgnore());
-	}
-
-	public void mouseClicked(MouseEvent event){
-		if(event.getClickCount() != 2){
-			return;
-		}
-		videoDetailsController.open();
-		videoDetailsController.setVideoInfos(youtubePlaylistVideoDetail.getVideoId());
-	}
-
-
+    fun mouseClicked(event: MouseEvent) {
+        if (event.clickCount != 2) {
+            return
+        }
+        videoDetailsController!!.open()
+        videoDetailsController.setVideoInfos(youtubePlaylistVideoDetail!!.videoId)
+    }
 }

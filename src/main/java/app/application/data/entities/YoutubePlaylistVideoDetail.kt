@@ -1,32 +1,23 @@
-package app.application.data.entities;
+package app.application.data.entities
 
-import com.github.kiulian.downloader.model.playlist.PlaylistVideoDetails;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
-import lombok.Getter;
+import com.github.kiulian.downloader.model.playlist.PlaylistVideoDetails
+import javafx.beans.property.BooleanProperty
+import javafx.beans.property.SimpleBooleanProperty
 
-import java.util.Optional;
+class YoutubePlaylistVideoDetail(playlistVideoDetails: PlaylistVideoDetails?) : YoutubeEntity<PlaylistVideoDetails?>() {
+    val ignore: BooleanProperty
 
-public class YoutubePlaylistVideoDetail extends YoutubeEntity<PlaylistVideoDetails>{
+    init {
+        reference = playlistVideoDetails
+        ignore = SimpleBooleanProperty(false)
+    }
 
-	@Getter
-	private final BooleanProperty ignore;
+    val videoThumbnailUrl: String
+        get() = reference!!.thumbnails()[0].split("\\?sqp").toTypedArray()[0]
 
-	public YoutubePlaylistVideoDetail(PlaylistVideoDetails playlistVideoDetails) {
-		this.reference = Optional.ofNullable(playlistVideoDetails);
-		this.ignore = new SimpleBooleanProperty(false);
-	}
+    val videoTitle: String
+        get() = reference!!.title()
 
-	public String getVideoThumbnailUrl(){
-		return getReference().thumbnails().get(0).split("\\?sqp")[0];
-	}
-
-	public String getVideoTitle(){
-		return getReference().title();
-	}
-
-	public String getVideoId(){
-		return getReference().videoId();
-	}
-
+    val videoId: String
+        get() = reference!!.videoId()
 }

@@ -1,47 +1,50 @@
-package app.application.utils;
+package app.application.utils
 
-import app.application.exception.CantAbortDownloadException;
-import app.application.exception.ExecutorTerminationException;
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
+import app.application.utils.DownloadExecutorHandler.DownloaderTask
+import java.lang.Runnable
+import kotlin.Throws
+import app.application.exception.CantAbortDownloadException
+import java.util.concurrent.TimeUnit
+import app.application.exception.ExecutorTerminationException
+import app.application.utils.GlobalValues
+import java.lang.InterruptedException
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
+class DownloadExecutorHandler {
+    private var downloadExecutorService: ExecutorService
 
-public class DownloadExecutorHandler {
+    init {
+        downloadExecutorService = Executors.newSingleThreadExecutor()
+    }
 
-	private ExecutorService downloadExecutorService;
+    fun executeTask(downloaderTask: DownloaderTask) {
+        createExecutor()
+        downloadExecutorService.execute { downloaderTask.execute() }
+    }
 
-	public DownloadExecutorHandler() {
-		this.downloadExecutorService = Executors.newSingleThreadExecutor();
-	}
+    private fun createExecutor() {
+        if (downloadExecutorService.isShutdown || downloadExecutorService.isTerminated) {
+            downloadExecutorService = Executors.newSingleThreadExecutor()
+        }
+    }
 
-	public void executeTask(DownloaderTask downloaderTask){
-		createExecutor();
-		downloadExecutorService.execute(downloaderTask::execute);
-	}
+    @Throws(CantAbortDownloadException::class)
+    fun killTask() {
+        downloadExecutorService.shutdownNow()
+        try {
+            val terminationSuccess = downloadExecutorService.awaitTermination(10,
+                    TimeUnit.SECONDS)
+            if (!terminationSuccess) {
+                throw ExecutorTerminationException(GlobalValues.DOWNLOAD_EXECUTOR_TERMINATION_ERROR)
+            }
+        } catch (e: InterruptedException) {
+            Thread.currentThread().interrupt()
+            throw CantAbortDownloadException(e)
+        }
+    }
 
-	private void createExecutor() {
-		if(downloadExecutorService.isShutdown() || downloadExecutorService.isTerminated()){
-			downloadExecutorService = Executors.newSingleThreadExecutor();
-		}
-	}
-
-	public void killTask() throws CantAbortDownloadException {
-		downloadExecutorService.shutdownNow();
-		try {
-			boolean terminationSuccess = downloadExecutorService.awaitTermination(10,
-							TimeUnit.SECONDS);
-			if(!terminationSuccess){
-				throw new ExecutorTerminationException(GlobalValues.DOWNLOAD_EXECUTOR_TERMINATION_ERROR);
-			}
-		} catch (InterruptedException e) {
-			Thread.currentThread().interrupt();
-			throw new CantAbortDownloadException(e);
-		}
-	}
-
-	public interface DownloaderTask {
-		void execute();
-	}
-
+    interface DownloaderTask {
+        fun execute()
+    }
 }

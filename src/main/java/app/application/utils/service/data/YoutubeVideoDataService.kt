@@ -1,15 +1,14 @@
-package app.application.utils.service.data;
+package app.application.utils.service.data
 
-import app.application.data.entities.YoutubeVideo;
-import com.github.kiulian.downloader.downloader.request.RequestVideoInfo;
-import org.springframework.stereotype.Service;
+import app.application.data.entities.YoutubeVideo
+import com.github.kiulian.downloader.YoutubeDownloader
+import com.github.kiulian.downloader.downloader.request.RequestVideoInfo
+import org.springframework.stereotype.Service
 
 @Service
-public class YoutubeVideoDataService extends YoutubeDataService{
-
-	public YoutubeVideo getYoutubeVideo(String videoId){
-		RequestVideoInfo requestVideoInfo = new RequestVideoInfo(videoId);
-		return new YoutubeVideo(youtubeDownloader.getVideoInfo(requestVideoInfo).data());
-	}
-
+class YoutubeVideoDataService(youtubeDownloader: YoutubeDownloader) : YoutubeDataService(youtubeDownloader) {
+    fun getYoutubeVideo(videoId: String?): YoutubeVideo {
+        val requestVideoInfo = RequestVideoInfo(videoId)
+        return YoutubeVideo(youtubeDownloader!!.getVideoInfo(requestVideoInfo).data())
+    }
 }

@@ -1,23 +1,21 @@
-package app.application.utils;
+package app.application.utils
 
-import org.springframework.stereotype.Service;
-
-import java.util.HashMap;
-import java.util.Map;
+import org.springframework.stereotype.Service
+import java.util.HashMap
 
 @Service
-public class LinkParameterBuilder {
+class LinkParameterBuilder {
 
-	public Map<String, String> buildParameterMap(String query){
-		Map<String, String> parameterMap = new HashMap<>();
-		if(query != null){
-			String[] params = query.split("&");
-			for (String param : params){
-				String[] split = param.split("=");
-				parameterMap.put(split[0], split[1]);
-			}
-		}
-		return parameterMap;
-	}
+    fun buildParameterMap(query: String?): Map<String, String> {
+        val parameterMap: MutableMap<String, String> = HashMap()
+        if (query != null) {
+            val params = query.split("&")
+            for (param in params) {
+                val split = param.split("=")
+                parameterMap[split[0]] = split[1]
+            }
+        }
+        return parameterMap
+    }
 
 }

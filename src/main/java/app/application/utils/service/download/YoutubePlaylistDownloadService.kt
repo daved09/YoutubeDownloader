@@ -1,77 +1,60 @@
-package app.application.utils.service.download;
+package app.application.utils.service.download
 
-import app.application.data.entities.YoutubePlaylist;
-import app.application.data.entities.YoutubePlaylistVideoDetail;
-import app.application.data.entities.YoutubeVideo;
-import app.application.listener.YoutubePlaylistDownloadListener;
-import app.application.utils.GlobalObjectHandler;
-import app.application.utils.service.data.YoutubeVideoDataService;
-import com.github.kiulian.downloader.downloader.request.RequestVideoFileDownload;
-import com.github.kiulian.downloader.model.videos.formats.Format;
-import javafx.application.Platform;
-import javafx.scene.control.Label;
-import lombok.Setter;
-import lombok.SneakyThrows;
-import org.springframework.stereotype.Service;
-
-import java.io.File;
-import java.nio.file.Paths;
-import java.util.concurrent.atomic.AtomicInteger;
+import app.application.data.entities.YoutubePlaylist
+import app.application.data.entities.YoutubePlaylistVideoDetail
+import app.application.data.entities.YoutubeVideo
+import app.application.listener.YoutubePlaylistDownloadListener
+import app.application.utils.GlobalObjectHandler
+import app.application.utils.service.data.YoutubeVideoDataService
+import com.github.kiulian.downloader.downloader.request.RequestVideoFileDownload
+import com.github.kiulian.downloader.model.videos.formats.Format
+import javafx.application.Platform
+import javafx.scene.control.Label
+import lombok.SneakyThrows
+import org.springframework.stereotype.Service
+import java.io.File
+import java.nio.file.Paths
+import java.util.concurrent.atomic.AtomicInteger
 
 @Service
-public class YoutubePlaylistDownloadService extends YoutubeDownloadService {
-
-    private final YoutubeVideoDataService youtubeVideoDataService;
-
-    private final GlobalObjectHandler globalObjectHandler;
-
-    public YoutubePlaylistDownloadService(YoutubeVideoDataService youtubeVideoDataService, GlobalObjectHandler globalObjectHandler) {
-        this.youtubeVideoDataService = youtubeVideoDataService;
-        this.globalObjectHandler = globalObjectHandler;
-    }
-
-    @Setter
-    private Label label;
+class YoutubePlaylistDownloadService(private val youtubeVideoDataService: YoutubeVideoDataService, private val globalObjectHandler: GlobalObjectHandler) : YoutubeDownloadService() {
+    var label: Label? = null
 
     @SneakyThrows
-    public void downloadPlaylist(YoutubePlaylist youtubePlaylist){
-        this.youtubeDownloadListener = new YoutubePlaylistDownloadListener(dialogManager, youtubePlaylist.getPlaylistSize(), globalObjectHandler);
-        int size = youtubePlaylist.getPlaylistSize();
-        AtomicInteger progress = new AtomicInteger(0);
-        youtubePlaylist.getPlaylistVideos().stream().
-                filter(video -> !video.getIgnore().get())
-                .forEach(video -> downloadVideo(youtubePlaylist, size, progress, video));
+    fun downloadPlaylist(youtubePlaylist: YoutubePlaylist) {
+        youtubeDownloadListener = YoutubePlaylistDownloadListener(dialogManager, youtubePlaylist.playlistSize, globalObjectHandler)
+        val size = youtubePlaylist.playlistSize
+        val progress = AtomicInteger(0)
+        youtubePlaylist.playlistVideos.stream().filter { video: YoutubePlaylistVideoDetail -> !video.ignore.get() }
+                .forEach { video: YoutubePlaylistVideoDetail -> downloadVideo(youtubePlaylist, size, progress, video) }
     }
 
-    private void downloadVideo(
-            YoutubePlaylist youtubePlaylist,
-            int size,
-            AtomicInteger progress,
-            YoutubePlaylistVideoDetail video) {
-        progress.getAndIncrement();
-        setLabelProgress(progress.get(), size);
-        downloadAsync(youtubePlaylist, youtubeVideoDataService.getYoutubeVideo(video.getVideoId()));
+    private fun downloadVideo(
+            youtubePlaylist: YoutubePlaylist,
+            size: Int,
+            progress: AtomicInteger,
+            video: YoutubePlaylistVideoDetail) {
+        progress.getAndIncrement()
+        setLabelProgress(progress.get(), size)
+        downloadAsync(youtubePlaylist, youtubeVideoDataService.getYoutubeVideo(video.videoId))
     }
 
-
-    protected void downloadAsync(YoutubePlaylist youtubePlaylist, YoutubeVideo youtubeVideo){
-        RequestVideoFileDownload requestVideoFileDownload = new RequestVideoFileDownload(getAudioOrVideoFormat(youtubePlaylist, youtubeVideo));
-        requestVideoFileDownload.renameTo(youtubeVideo.getVideoTitle()).overwriteIfExists(true)
-                .saveTo(Paths.get(userConfigHandler.getUserConfig().getDownloadDir().get() + File.separator +
-                        (userConfigHandler.getUserConfig().getSubFolderForPlaylists().get() ? youtubePlaylist.getPlaylistTitle() : "")).toFile())
-                .callback(youtubeDownloadListener);
-        youtubeDownloader.downloadVideoFile(requestVideoFileDownload);
+    protected fun downloadAsync(youtubePlaylist: YoutubePlaylist, youtubeVideo: YoutubeVideo) {
+        val requestVideoFileDownload = RequestVideoFileDownload(getAudioOrVideoFormat(youtubePlaylist, youtubeVideo))
+        requestVideoFileDownload.renameTo(youtubeVideo.videoTitle).overwriteIfExists(true)
+                .saveTo(Paths.get(userConfigHandler!!.userConfig!!.downloadDir.get() + File.separator +
+                        if (userConfigHandler!!.userConfig!!.subFolderForPlaylists.get()) youtubePlaylist.playlistTitle else "").toFile())
+                .callback(youtubeDownloadListener)
+        youtubeDownloader!!.downloadVideoFile(requestVideoFileDownload)
     }
 
-    private Format getAudioOrVideoFormat(YoutubePlaylist youtubePlaylist, YoutubeVideo youtubeVideo){
-        if(youtubePlaylist.getAudioOnly().get()){
-            return youtubeVideo.getAudioFormat();
-        }
-        return youtubeVideo.getBestVideoWithAudioFormat();
+    private fun getAudioOrVideoFormat(youtubePlaylist: YoutubePlaylist, youtubeVideo: YoutubeVideo): Format {
+        return if (youtubePlaylist.audioOnly.get()) {
+            youtubeVideo.audioFormat
+        } else youtubeVideo.bestVideoWithAudioFormat
     }
 
-    private void setLabelProgress(int current, int max){
-        Platform.runLater(() -> label.setText("Videos: " + current + "/" + max));
+    private fun setLabelProgress(current: Int, max: Int) {
+        Platform.runLater { label!!.text = "Videos: $current/$max" }
     }
-
 }

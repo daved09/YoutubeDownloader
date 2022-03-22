@@ -1,15 +1,6 @@
-package app.application.data.entities;
+package app.application.data.entities
 
-import app.application.exception.VideoInformationNotAvailable;
-
-import java.util.Optional;
-
-public abstract class YoutubeEntity <T> {
-
-	protected Optional<T> reference;
-
-	public T getReference(){
-		return reference.orElseThrow(VideoInformationNotAvailable::new);
-	}
-
+abstract class YoutubeEntity<T> {
+    var reference: T? = null
+        protected set
 }

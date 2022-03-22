@@ -1,52 +1,44 @@
-package app.application.utils;
+package app.application.utils
 
-import app.application.data.UserConfig;
-import app.application.factories.ConfigurationFactory;
-import com.google.gson.Gson;
-import lombok.Setter;
-import lombok.SneakyThrows;
+import app.application.data.UserConfig
+import app.application.factories.ConfigurationFactory
+import com.google.gson.Gson
+import lombok.SneakyThrows
+import java.io.File
+import java.io.FileReader
+import java.io.FileWriter
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
+class UserConfigHandler {
+    var userConfig: UserConfig? = null
+        private set
 
-public class UserConfigHandler {
+    var configurationFactory: ConfigurationFactory? = null
 
-	private UserConfig userConfig;
+    var gson: Gson? = null
 
-	@Setter
-	private ConfigurationFactory configurationFactory;
+    private fun initConfig() {
+        userConfig = configurationFactory!!.createDefaultConfiguration()
+        writeConfig()
+    }
 
-	@Setter
-	private Gson gson;
+    @SneakyThrows
+    fun loadConfig() {
+        try {
+            userConfig = gson!!.fromJson(FileReader(USER_CONFIG_FILE), UserConfig::class.java)
+        } catch (e: Exception) {
+            initConfig()
+        }
+    }
 
-	private static final String USER_CONFIG_FILE = System.getProperty(GlobalValues.USER_HOME) + File.separator + GlobalValues.DOWNLOADER_CONFIG_FILENAME;
+    @SneakyThrows
+    fun writeConfig() {
+        val fileWriter = FileWriter(USER_CONFIG_FILE)
+        gson!!.toJson(userConfig, fileWriter)
+        fileWriter.flush()
+        fileWriter.close()
+    }
 
-	public void initConfig(){
-		userConfig = configurationFactory.createDefaultConfiguration();
-		writeConfig();
-	}
-
-	@SneakyThrows
-	public void loadConfig() {
-		try{
-			userConfig = gson.fromJson(new FileReader(USER_CONFIG_FILE), UserConfig.class);
-		}
-		catch (Exception e){
-			initConfig();
-		}
-	}
-
-	@SneakyThrows
-	public void writeConfig() {
-		FileWriter fileWriter = new FileWriter(USER_CONFIG_FILE);
-		gson.toJson(userConfig, fileWriter);
-		fileWriter.flush();
-		fileWriter.close();
-	}
-
-	public UserConfig getUserConfig() {
-		return userConfig;
-	}
-
+    companion object {
+        private val USER_CONFIG_FILE = System.getProperty(GlobalValues.USER_HOME) + File.separator + GlobalValues.DOWNLOADER_CONFIG_FILENAME
+    }
 }

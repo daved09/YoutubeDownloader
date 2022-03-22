@@ -1,26 +1,23 @@
-package app.application.data;
+package app.application.data
 
-import app.application.utils.GlobalValues;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
-import lombok.Data;
-
-import java.io.File;
+import app.application.utils.GlobalValues
+import javafx.beans.property.BooleanProperty
+import javafx.beans.property.SimpleBooleanProperty
+import javafx.beans.property.SimpleStringProperty
+import javafx.beans.property.StringProperty
+import lombok.Data
+import java.io.File
 
 @Data
-public class UserConfig {
+class UserConfig {
 
-	private StringProperty downloadDir;
+    val downloadDir: StringProperty
+    val overwriteExistingVideo: BooleanProperty
+    val subFolderForPlaylists: BooleanProperty
 
-	private BooleanProperty overwriteExistingVideo;
-
-	private BooleanProperty subFolderForPlaylists;
-
-	public UserConfig() {
-		downloadDir = new SimpleStringProperty(System.getProperty("user.home") + File.separator + GlobalValues.VIDEO_DIRECTORY);
-		overwriteExistingVideo = new SimpleBooleanProperty(false);
-		subFolderForPlaylists = new SimpleBooleanProperty(true);
-	}
+    init {
+        downloadDir = SimpleStringProperty(System.getProperty("user.home") + File.separator + GlobalValues.VIDEO_DIRECTORY)
+        overwriteExistingVideo = SimpleBooleanProperty(false)
+        subFolderForPlaylists = SimpleBooleanProperty(true)
+    }
 }

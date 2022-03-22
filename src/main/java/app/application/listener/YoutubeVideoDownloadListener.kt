@@ -1,41 +1,27 @@
-package app.application.listener;
+package app.application.listener
 
-import app.application.utils.DialogManager;
-import app.application.utils.GlobalObjectHandler;
-import javafx.application.Platform;
-import javafx.scene.control.ProgressBar;
+import app.application.utils.DialogManager
+import app.application.utils.GlobalObjectHandler
+import javafx.application.Platform
+import javafx.scene.control.ProgressBar
+import java.io.File
 
-import java.io.File;
-
-public class YoutubeVideoDownloadListener extends YoutubeDownloadListener {
-
-    public static final int FINISHED_PROGRESS = 100;
-    private final ProgressBar progressBar;
-    private final GlobalObjectHandler globalObjectHandler;
-
-    private int currentProgress;
-
-    public YoutubeVideoDownloadListener(ProgressBar progressBar, DialogManager dialogManager, GlobalObjectHandler globalObjectHandler) {
-        super(dialogManager);
-        this.progressBar = progressBar;
-        this.globalObjectHandler = globalObjectHandler;
+class YoutubeVideoDownloadListener(private val progressBar: ProgressBar, dialogManager: DialogManager, private val globalObjectHandler: GlobalObjectHandler) : YoutubeDownloadListener(dialogManager) {
+    private var currentProgress = 0
+    override fun onFinished(data: File) {
+        globalObjectHandler.hostServices!!.showDocument(data.parent)
+        Platform.runLater { dialogManager!!.openInformationDialog("Download fertig.", "") }
     }
 
-    @Override
-    public void onFinished(File data) {
-        globalObjectHandler.getHostServices().showDocument(data.getParent());
-        Platform.runLater(() -> dialogManager.openInformationDialog("Download fertig.", ""));
+    override fun onDownloading(progress: Int) {
+        currentProgress = progress
+        Platform.runLater { progressBar.progress = Integer.toString(progress).toDouble() / 100 }
     }
 
-    @Override
-    public void onDownloading(int progress) {
-        this.currentProgress = progress;
-        Platform.runLater(() -> progressBar.setProgress(Double.parseDouble(Integer.toString(progress)) / 100));
-    }
+    override val isDownloadFinished: Boolean
+        get() = currentProgress >= FINISHED_PROGRESS
 
-    @Override
-    public boolean isDownloadFinished() {
-        return currentProgress >= FINISHED_PROGRESS;
+    companion object {
+        const val FINISHED_PROGRESS = 100
     }
-
 }

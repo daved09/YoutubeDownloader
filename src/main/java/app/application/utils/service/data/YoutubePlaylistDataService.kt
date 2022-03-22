@@ -1,20 +1,17 @@
-package app.application.utils.service.data;
+package app.application.utils.service.data
 
-import app.application.data.entities.YoutubePlaylist;
-import com.github.kiulian.downloader.downloader.request.RequestPlaylistInfo;
-import com.github.kiulian.downloader.model.playlist.PlaylistInfo;
-import lombok.SneakyThrows;
-import org.springframework.stereotype.Service;
+import app.application.data.entities.YoutubePlaylist
+import com.github.kiulian.downloader.YoutubeDownloader
+import com.github.kiulian.downloader.downloader.request.RequestPlaylistInfo
+import lombok.SneakyThrows
+import org.springframework.stereotype.Service
 
 @Service
-public class YoutubePlaylistDataService extends YoutubeDataService {
-
-	@SneakyThrows
-	public YoutubePlaylist getPlaylistInfo(String playListId) {
-		RequestPlaylistInfo requestPlaylistInfo = new RequestPlaylistInfo(playListId);
-		PlaylistInfo playlistInfo = youtubeDownloader.getPlaylistInfo(requestPlaylistInfo).data();
-		return new YoutubePlaylist(playlistInfo);
-	}
-
-
+class YoutubePlaylistDataService(youtubeDownloader: YoutubeDownloader) : YoutubeDataService(youtubeDownloader) {
+    @SneakyThrows
+    fun getPlaylistInfo(playListId: String?): YoutubePlaylist {
+        val requestPlaylistInfo = RequestPlaylistInfo(playListId)
+        val playlistInfo = youtubeDownloader!!.getPlaylistInfo(requestPlaylistInfo).data()
+        return YoutubePlaylist(playlistInfo)
+    }
 }

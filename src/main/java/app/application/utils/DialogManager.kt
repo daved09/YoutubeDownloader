@@ -1,42 +1,32 @@
-package app.application.utils;
+package app.application.utils
 
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
-import org.springframework.stereotype.Service;
-
-import static javafx.scene.control.Alert.AlertType.*;
+import javafx.scene.control.Alert
+import org.springframework.stereotype.Service
+import java.lang.Exception
 
 @Service
-public class DialogManager {
-
-    private ExceptionExtractor exceptionExtractor;
-
-    public DialogManager(ExceptionExtractor exceptionExtractor) {
-        this.exceptionExtractor = exceptionExtractor;
+class DialogManager(private val exceptionExtractor: ExceptionExtractor) {
+    fun openWarningDialog(title: String, message: String?) {
+        openDialog(Alert.AlertType.WARNING, "Warnung", title, message)
     }
 
-    public void openWarningDialog(String title, String message){
-        openDialog(WARNING, "Warnung", title, message);
+    fun openInformationDialog(title: String, message: String?) {
+        openDialog(Alert.AlertType.INFORMATION, "Information", title, message)
     }
 
-    public void openInformationDialog(String title, String message){
-        openDialog(INFORMATION, "Information", title, message);
+    fun openErrorDialog(title: String, message: String?) {
+        openDialog(Alert.AlertType.ERROR, "Error", title, message)
     }
 
-    public void openErrorDialog(String title, String message){
-        openDialog(ERROR, "Error", title, message);
+    fun openExceptionDialog(e: Exception?) {
+        openDialog(Alert.AlertType.ERROR, "Error", "Es ist ein Fehler aufgetreten.", exceptionExtractor.getTargetOfException(e)!!.message)
     }
 
-    public void openExceptionDialog(Exception e){
-        openDialog(ERROR, "Error", "Es ist ein Fehler aufgetreten.", exceptionExtractor.getTargetOfException(e).getMessage());
+    private fun openDialog(alertType: Alert.AlertType, title: String, headerText: String, contentText: String?) {
+        val alert = Alert(alertType)
+        alert.title = title
+        alert.headerText = headerText
+        alert.contentText = contentText
+        alert.showAndWait()
     }
-
-    private void openDialog(AlertType alertType, String title, String headerText, String contentText){
-        Alert alert = new Alert(alertType);
-        alert.setTitle(title);
-        alert.setHeaderText(headerText);
-        alert.setContentText(contentText);
-        alert.showAndWait();
-    }
-
 }

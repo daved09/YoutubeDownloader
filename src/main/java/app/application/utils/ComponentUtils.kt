@@ -1,22 +1,25 @@
-package app.application.utils;
+package app.application.utils
 
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import lombok.SneakyThrows;
+import javafx.fxml.FXMLLoader
+import javafx.scene.Parent
+import javafx.util.Callback
+import java.lang.IllegalStateException
+import lombok.SneakyThrows
 
-public class ComponentUtils {
+class ComponentUtils private constructor() {
+    init {
+        throw IllegalStateException("Utility Class")
+    }
 
-	private ComponentUtils(){
-		throw new IllegalStateException("Utility Class");
-	}
-
-	@SneakyThrows
-	public static <T extends Parent> void loadComponent(T component){
-		FXMLLoader loader = new FXMLLoader();
-		loader.setRoot(component);
-		loader.setControllerFactory(aClass -> component);
-		String fileName = "/components/" + component.getClass().getSimpleName() + ".fxml";
-		loader.load(component.getClass().getResourceAsStream(fileName));
-	}
-
+    companion object {
+        @JvmStatic
+				@SneakyThrows
+        fun <T : Parent?> loadComponent(component: T?) {
+            val loader = FXMLLoader()
+            loader.setRoot(component)
+            loader.controllerFactory = Callback { aClass: Class<*>? -> component }
+            val fileName = "/components/" + component!!::class.simpleName + ".fxml"
+            loader.load<Any>(component.javaClass.getResourceAsStream(fileName))
+        }
+    }
 }

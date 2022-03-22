@@ -1,22 +1,20 @@
-package app.application.utils;
+package app.application.utils
 
-import app.application.data.entities.YoutubeVideo;
-import com.github.kiulian.downloader.model.videos.formats.VideoWithAudioFormat;
-import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.List;
+import app.application.data.entities.YoutubeVideo
+import com.github.kiulian.downloader.model.videos.formats.VideoWithAudioFormat
+import org.springframework.stereotype.Service
+import java.util.ArrayList
 
 @Service
-public class QualityLabelExtractor {
+class QualityLabelExtractor {
 
-	public List<String> getQualityLabels(YoutubeVideo youtubeVideo) {
-		List<VideoWithAudioFormat> audioVideoFormats = youtubeVideo.getVideoWithAudioFormat();
-		List<String> qualityLabels = new ArrayList<>();
-		for (VideoWithAudioFormat audioVideoFormat : audioVideoFormats) {
-			qualityLabels.add(audioVideoFormat.qualityLabel());
-		}
-		return qualityLabels;
-	}
+    fun getQualityLabels(youtubeVideo: YoutubeVideo): List<String> {
+        val audioVideoFormats = youtubeVideo.videoWithAudioFormat
+        val qualityLabels: MutableList<String> = ArrayList()
+        for (audioVideoFormat in audioVideoFormats) {
+            qualityLabels.add(audioVideoFormat.qualityLabel())
+        }
+        return qualityLabels
+    }
 
 }

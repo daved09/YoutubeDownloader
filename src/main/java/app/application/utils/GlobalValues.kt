@@ -1,21 +1,24 @@
-package app.application.utils;
+package app.application.utils
 
-public class GlobalValues {
+import java.lang.IllegalStateException
 
-	private GlobalValues(){
-		throw new IllegalStateException("Value Class");
-	}
+class GlobalValues private constructor() {
 
-	//Downloader Spezifisch
-	public static final String VIDEO_DIRECTORY = "Videos";
-	public static final String YOUTUBE_URL = "youtube.com";
-	public static final String YOUTUBE_SHORT_URL = "youtu.be";
-	public static final String DOWNLOADER_CONFIG_FILENAME = ".ytdl.json";
+    init {
+        throw IllegalStateException("Value Class")
+    }
 
-	//Exceptions
-	public static final String DOWNLOAD_EXECUTOR_TERMINATION_ERROR = "Termination of download executor was not Successful";
+    companion object {
+        //Downloader Spezifisch
+        const val VIDEO_DIRECTORY = "Videos"
+        const val YOUTUBE_URL = "youtube.com"
+        const val YOUTUBE_SHORT_URL = "youtu.be"
+        const val DOWNLOADER_CONFIG_FILENAME = ".ytdl.json"
 
-	//Java Generell
-	public static final String USER_HOME = "user.home";
+        //Exceptions
+        const val DOWNLOAD_EXECUTOR_TERMINATION_ERROR = "Termination of download executor was not Successful"
 
+        //Java Generell
+        const val USER_HOME = "user.home"
+    }
 }

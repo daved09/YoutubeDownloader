@@ -1,22 +1,20 @@
-package app.application.utils;
+package app.application.utils
 
-import org.springframework.stereotype.Service;
-
-import java.lang.reflect.InvocationTargetException;
+import org.springframework.stereotype.Service
+import java.lang.Exception
+import java.lang.reflect.InvocationTargetException
 
 @Service
-public class ExceptionExtractor {
+class ExceptionExtractor {
 
-	public Throwable getTargetOfException(Exception exception){
-		exception = (Exception) exception.getCause();
-		if(!isTargetException(exception)){
-			return exception.getCause();
-		}
-		return ((InvocationTargetException) exception).getTargetException();
-	}
+    fun getTargetOfException(exception: Exception?): Throwable? {
+        val innerException: Exception? = exception!!.cause as Exception?
+        return if (!isTargetException(innerException)) {
+            innerException!!.cause
+        } else (innerException as InvocationTargetException?)!!.targetException
+    }
 
-	private boolean isTargetException(Exception exception){
-		return exception instanceof InvocationTargetException;
-	}
-
+    private fun isTargetException(exception: Exception?): Boolean {
+        return exception is InvocationTargetException
+    }
 }

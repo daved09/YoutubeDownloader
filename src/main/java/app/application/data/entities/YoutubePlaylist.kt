@@ -1,43 +1,32 @@
-package app.application.data.entities;
+package app.application.data.entities
 
-import com.github.kiulian.downloader.model.playlist.PlaylistInfo;
-import com.github.kiulian.downloader.model.playlist.PlaylistVideoDetails;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
-import lombok.Getter;
+import com.github.kiulian.downloader.model.playlist.PlaylistInfo
+import javafx.beans.property.BooleanProperty
+import javafx.beans.property.SimpleBooleanProperty
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+class YoutubePlaylist(playlistInfo: PlaylistInfo?) : YoutubeEntity<PlaylistInfo?>() {
+    private val youtubePlaylistVideoDetailsCache: MutableList<YoutubePlaylistVideoDetail> = ArrayList()
 
-public class YoutubePlaylist extends YoutubeEntity<PlaylistInfo> {
+    var audioOnly: BooleanProperty
 
-	private final List<YoutubePlaylistVideoDetail> youtubePlaylistVideoDetailsCache = new ArrayList<>();
+    init {
+        reference = playlistInfo
+        audioOnly = SimpleBooleanProperty(false)
+    }
 
-	@Getter
-	private final BooleanProperty audioOnly;
+    val playlistSize: Int
+        get() = reference!!.details().videoCount()
 
-	public YoutubePlaylist(PlaylistInfo playlistInfo){
-		this.reference = Optional.ofNullable(playlistInfo);
-		this.audioOnly = new SimpleBooleanProperty(false);
-	}
+    val playlistVideos: List<YoutubePlaylistVideoDetail>
+        get() {
+            if (youtubePlaylistVideoDetailsCache.isEmpty()) {
+                for (video in reference!!.videos()) {
+                    youtubePlaylistVideoDetailsCache.add(YoutubePlaylistVideoDetail(video))
+                }
+            }
+            return youtubePlaylistVideoDetailsCache
+        }
 
-	public int getPlaylistSize(){
-		return getReference().details().videoCount();
-	}
-
-	public List<YoutubePlaylistVideoDetail> getPlaylistVideos(){
-		if(youtubePlaylistVideoDetailsCache.isEmpty()){
-			for (PlaylistVideoDetails video : getReference().videos()) {
-				youtubePlaylistVideoDetailsCache.add(new YoutubePlaylistVideoDetail(video));
-			}
-		}
-		return youtubePlaylistVideoDetailsCache;
-	}
-
-	public String getPlaylistTitle() {
-		return getReference().details().title();
-	}
-
-
+    val playlistTitle: String
+        get() = reference!!.details().title()
 }

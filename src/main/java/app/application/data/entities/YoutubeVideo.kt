@@ -1,49 +1,30 @@
-package app.application.data.entities;
+package app.application.data.entities
 
-import com.github.kiulian.downloader.model.videos.VideoDetails;
-import com.github.kiulian.downloader.model.videos.VideoInfo;
-import com.github.kiulian.downloader.model.videos.formats.AudioFormat;
-import com.github.kiulian.downloader.model.videos.formats.Format;
-import com.github.kiulian.downloader.model.videos.formats.VideoWithAudioFormat;
+import com.github.kiulian.downloader.model.videos.VideoDetails
+import com.github.kiulian.downloader.model.videos.VideoInfo
+import com.github.kiulian.downloader.model.videos.formats.AudioFormat
+import com.github.kiulian.downloader.model.videos.formats.Format
+import com.github.kiulian.downloader.model.videos.formats.VideoWithAudioFormat
 
-import java.util.List;
-import java.util.Optional;
+class YoutubeVideo(videoInfo: VideoInfo?) : YoutubeEntity<VideoInfo?>() {
+    init {
+        reference = videoInfo
+    }
 
-public class YoutubeVideo extends YoutubeEntity<VideoInfo>{
-
-	public YoutubeVideo(VideoInfo videoInfo){
-		this.reference = Optional.ofNullable(videoInfo);
-	}
-
-	public String getVideoId(){
-		return getVideoDetails().videoId();
-	}
-
-	public String getVideoDescription(){
-		return getVideoDetails().description();
-	}
-
-	public String getVideoTitle(){
-		return getVideoDetails().title();
-	}
-
-	public String getVideoThumbnailUrl(){
-		return getVideoDetails().thumbnails().get(0).split("\\?sqp")[0];
-	}
-
-	public VideoDetails getVideoDetails(){
-		return getReference().details();
-	}
-
-	public List<VideoWithAudioFormat> getVideoWithAudioFormat(){
-		return getReference().videoWithAudioFormats();
-	}
-
-	public AudioFormat getAudioFormat(){
-		return getReference().audioFormats().get(0);
-	}
-
-	public Format getBestVideoWithAudioFormat() {
-		return getReference().bestVideoWithAudioFormat();
-	}
+    val videoId: String
+        get() = videoDetails.videoId()
+    val videoDescription: String
+        get() = videoDetails.description()
+    val videoTitle: String
+        get() = videoDetails.title()
+    val videoThumbnailUrl: String
+        get() = videoDetails.thumbnails()[0].split("\\?sqp").toTypedArray()[0]
+    val videoDetails: VideoDetails
+        get() = reference!!.details()
+    val videoWithAudioFormat: List<VideoWithAudioFormat>
+        get() = reference!!.videoWithAudioFormats()
+    val audioFormat: AudioFormat
+        get() = reference!!.audioFormats()[0]
+    val bestVideoWithAudioFormat: Format
+        get() = reference!!.bestVideoWithAudioFormat()
 }

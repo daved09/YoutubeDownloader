@@ -1,11 +1,5 @@
-package app.application.utils.service.data;
+package app.application.utils.service.data
 
-import com.github.kiulian.downloader.YoutubeDownloader;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.github.kiulian.downloader.YoutubeDownloader
 
-public abstract class YoutubeDataService {
-
-	@Autowired
-	protected YoutubeDownloader youtubeDownloader;
-
-}
+abstract class YoutubeDataService(val youtubeDownloader: YoutubeDownloader)
