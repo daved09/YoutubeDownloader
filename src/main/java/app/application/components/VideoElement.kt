@@ -14,16 +14,17 @@ import org.springframework.beans.factory.annotation.Autowired
 
 class VideoElement : AnchorPane() {
     @FXML
-    private val imgThumbnail: ImageView? = null
+    private lateinit var imgThumbnail: ImageView
 
     @FXML
-    private val lblVideoTitle: Label? = null
+    private lateinit var lblVideoTitle: Label
 
     @FXML
-    private val chkIgnore: CheckBox? = null
+    private lateinit var chkIgnore: CheckBox
 
     @Autowired
-    private val videoDetailsController: VideoDetailsController? = null
+    private lateinit var videoDetailsController: VideoDetailsController
+
     private var youtubePlaylistVideoDetail: YoutubePlaylistVideoDetail? = null
 
     init {
@@ -32,16 +33,16 @@ class VideoElement : AnchorPane() {
 
     fun loadVideoDetails(youtubePlaylistVideoDetail: YoutubePlaylistVideoDetail) {
         this.youtubePlaylistVideoDetail = youtubePlaylistVideoDetail
-        imgThumbnail!!.image = Image(youtubePlaylistVideoDetail.videoThumbnailUrl)
-        lblVideoTitle!!.text = youtubePlaylistVideoDetail.videoTitle
-        chkIgnore!!.selectedProperty().bindBidirectional(youtubePlaylistVideoDetail.ignore)
+        imgThumbnail.image = Image(youtubePlaylistVideoDetail.videoThumbnailUrl)
+        lblVideoTitle.text = youtubePlaylistVideoDetail.videoTitle
+        chkIgnore.selectedProperty().bindBidirectional(youtubePlaylistVideoDetail.ignore)
     }
 
     fun mouseClicked(event: MouseEvent) {
         if (event.clickCount != 2) {
             return
         }
-        videoDetailsController!!.open()
+        videoDetailsController.open()
         videoDetailsController.setVideoInfos(youtubePlaylistVideoDetail!!.videoId)
     }
 }
