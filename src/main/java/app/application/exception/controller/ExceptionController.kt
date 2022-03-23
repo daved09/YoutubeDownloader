@@ -1,22 +1,15 @@
-package app.application.exception.controller;
+package app.application.exception.controller
 
-import app.application.utils.DialogManager;
-import org.springframework.stereotype.Service;
-
-import javax.annotation.PostConstruct;
+import app.application.utils.DialogManager
+import org.springframework.stereotype.Service
+import javax.annotation.PostConstruct
 
 @Service
-public class ExceptionController {
+class ExceptionController(private val dialogManager: DialogManager) {
 
-	private DialogManager dialogManager;
-
-	public ExceptionController(DialogManager dialogManager) {
-		this.dialogManager = dialogManager;
-	}
-
-	@PostConstruct
-	public void error(){
-		Thread.setDefaultUncaughtExceptionHandler((thread, throwable) -> dialogManager.openExceptionDialog((Exception) throwable));
-	}
+    @PostConstruct
+    fun error() {
+        Thread.setDefaultUncaughtExceptionHandler { thread: Thread?, throwable: Throwable? -> dialogManager.openExceptionDialog(throwable as Exception?) }
+    }
 
 }

@@ -1,22 +1,18 @@
-package app.application.config.adapter;
+package app.application.config.adapter
 
-import com.google.gson.*;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import com.google.gson.*
+import javafx.beans.property.SimpleStringProperty
+import kotlin.Throws
+import javafx.beans.property.StringProperty
+import java.lang.reflect.Type
 
-import java.lang.reflect.Type;
+class StringPropertyAdapter : JsonSerializer<StringProperty>, JsonDeserializer<StringProperty> {
+    @Throws(JsonParseException::class)
+    override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): StringProperty {
+        return SimpleStringProperty(json.asJsonPrimitive.asString)
+    }
 
-public class StringPropertyAdapter implements JsonSerializer<StringProperty>, JsonDeserializer<StringProperty> {
-
-	@Override
-	public StringProperty deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
-					throws JsonParseException {
-		return new SimpleStringProperty(json.getAsJsonPrimitive().getAsString());
-	}
-
-	@Override
-	public JsonElement serialize(StringProperty src, Type typeOfSrc, JsonSerializationContext context) {
-		return new JsonPrimitive(src.getValue());
-	}
-
+    override fun serialize(src: StringProperty, typeOfSrc: Type, context: JsonSerializationContext): JsonElement {
+        return JsonPrimitive(src.value)
+    }
 }

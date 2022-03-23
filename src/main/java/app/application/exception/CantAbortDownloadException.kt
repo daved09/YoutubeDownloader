@@ -1,8 +1,6 @@
-package app.application.exception;
+package app.application.exception
 
-public class CantAbortDownloadException extends Exception {
+import java.lang.Exception
+import java.lang.RuntimeException
 
-	public CantAbortDownloadException(Exception e) {
-		super(e);
-	}
-}
+class CantAbortDownloadException(e: Exception?) : Exception(e)

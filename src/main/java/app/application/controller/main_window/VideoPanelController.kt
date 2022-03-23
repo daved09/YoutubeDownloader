@@ -1,129 +1,103 @@
-package app.application.controller.main_window;
+package app.application.controller.main_window
 
-import app.application.data.entities.YoutubeVideo;
-import app.application.exception.CantAbortDownloadException;
-import app.application.exception.InvalidVideoUrlException;
-import app.application.listener.YoutubeVideoDownloadListener;
-import app.application.utils.*;
-import app.application.utils.service.data.YoutubeVideoDataService;
-import app.application.utils.service.download.YoutubeVideoDownloadService;
-import javafx.beans.binding.Bindings;
-import javafx.fxml.FXML;
-import javafx.scene.control.*;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
-import org.springframework.stereotype.Component;
-
-import java.util.List;
+import app.application.data.entities.YoutubeVideo
+import app.application.exception.CantAbortDownloadException
+import app.application.exception.InvalidVideoUrlException
+import app.application.listener.YoutubeVideoDownloadListener
+import app.application.utils.*
+import app.application.utils.DownloadExecutorHandler.DownloaderTask
+import app.application.utils.service.data.YoutubeVideoDataService
+import app.application.utils.service.download.YoutubeVideoDownloadService
+import javafx.beans.binding.Bindings
+import javafx.fxml.FXML
+import javafx.scene.control.*
+import javafx.scene.image.Image
+import javafx.scene.image.ImageView
+import javafx.scene.layout.AnchorPane
+import org.springframework.stereotype.Component
 
 @Component
-public class VideoPanelController {
+class VideoPanelController(
+        private val youtubeVideoDownloadService: YoutubeVideoDownloadService,
+        private val youtubeVideoDataService: YoutubeVideoDataService,
+        private val youtubeIdExtractor: YoutubeIdExtractor,
+        private val youtubeUrlValidator: YoutubeUrlValidator,
+        private val dialogManager: DialogManager,
+        private val qualityLabelExtractor: QualityLabelExtractor,
+        private val globalObjectHandler: GlobalObjectHandler) {
 
-	@FXML
-	private TextField txtDownloadLink;
+    @FXML
+    private lateinit var txtDownloadLink: TextField
 
-	@FXML
-	private ImageView imgThumbnail;
+    @FXML
+    private lateinit var imgThumbnail: ImageView
 
-	@FXML
-	private AnchorPane videoPane;
+    @FXML
+    private lateinit var videoPane: AnchorPane
 
-	@FXML
-	private Label lblVideoTitle;
+    @FXML
+    private lateinit var lblVideoTitle: Label
 
-	@FXML
-	private ComboBox<String> boxQuality;
+    @FXML
+    private lateinit var boxQuality: ComboBox<String>
 
-	@FXML
-	private TextArea txtDescription;
+    @FXML
+    private lateinit var txtDescription: TextArea
 
-	@FXML
-	private ProgressBar downloadProgress;
+    @FXML
+    private lateinit var downloadProgress: ProgressBar
 
-	@FXML
-	private CheckBox chkAudioOnly;
+    @FXML
+    private lateinit var chkAudioOnly: CheckBox
 
-	@FXML
-	private Button btnSearch;
+    @FXML
+    private lateinit var btnSearch: Button
 
-	private final YoutubeVideoDataService youtubeVideoDataService;
+    private val downloadExecutorHandler: DownloadExecutorHandler = DownloadExecutorHandler()
 
-	private final YoutubeVideoDownloadService youtubeVideoDownloadService;
+    private var tmpYoutubeVideo: YoutubeVideo? = null
 
-	private final YoutubeIdExtractor youtubeIdExtractor;
+    @FXML
+    private fun initialize() {
+        youtubeVideoDownloadService.youtubeDownloadListener = YoutubeVideoDownloadListener(downloadProgress, dialogManager, globalObjectHandler)
+        btnSearch.disableProperty().bind(Bindings.isEmpty(txtDownloadLink.textProperty()))
+    }
 
-	private final YoutubeUrlValidator youtubeUrlValidator;
+    @Throws(InvalidVideoUrlException::class)
+    fun btnSearchClick() {
+        youtubeUrlValidator.checkVideoUrl(txtDownloadLink.text)
+        tmpYoutubeVideo = youtubeVideoDataService.getYoutubeVideo(youtubeIdExtractor.getVideoIdFromLink(txtDownloadLink.text))
+        updateGui(tmpYoutubeVideo!!)
+        videoPane.isVisible = true
+    }
 
-	private final DialogManager dialogManager;
+    fun btnDownloadVideoClick() {
+        downloadExecutorHandler.executeTask(object : DownloaderTask {
+            override fun execute() {
+                if (chkAudioOnly.isSelected) {
+                    youtubeVideoDownloadService.downloadAudioOnlyAsync(tmpYoutubeVideo!!)
+                } else {
+                    youtubeVideoDownloadService.downloadVideoAsync(tmpYoutubeVideo!!, boxQuality.selectionModel.selectedItem)
+                }
+            }
+        })
+    }
 
-	private final QualityLabelExtractor qualityLabelExtractor;
+    @Throws(CantAbortDownloadException::class)
+    fun btnAbortClick() {
+        downloadExecutorHandler.killTask()
+    }
 
-	private DownloadExecutorHandler downloadExecutorHandler;
+    private fun updateGui(youtubeVideo: YoutubeVideo) {
+        imgThumbnail.image = Image(youtubeVideo.videoThumbnailUrl)
+        lblVideoTitle.text = youtubeVideo.videoTitle
+        refreshQualityBox(qualityLabelExtractor.getQualityLabels(youtubeVideo))
+        txtDescription.text = youtubeVideo.videoDescription
+    }
 
-	private final GlobalObjectHandler globalObjectHandler;
-
-	public VideoPanelController(
-					YoutubeVideoDownloadService youtubeVideoDownloadService,
-					YoutubeVideoDataService youtubeVideoDataService,
-					YoutubeIdExtractor youtubeIdExtractor,
-					YoutubeUrlValidator youtubeUrlValidator,
-					DialogManager dialogManager,
-					QualityLabelExtractor qualityLabelExtractor,
-					GlobalObjectHandler globalObjectHandler) {
-		this.youtubeVideoDownloadService = youtubeVideoDownloadService;
-		this.youtubeVideoDataService = youtubeVideoDataService;
-		this.youtubeIdExtractor = youtubeIdExtractor;
-		this.youtubeUrlValidator = youtubeUrlValidator;
-		this.dialogManager = dialogManager;
-		this.qualityLabelExtractor = qualityLabelExtractor;
-		this.globalObjectHandler = globalObjectHandler;
-	}
-
-	private YoutubeVideo tmpYoutubeVideo;
-
-	@FXML
-	private void initialize(){
-		youtubeVideoDownloadService.setYoutubeDownloadListener(new YoutubeVideoDownloadListener(downloadProgress, dialogManager, globalObjectHandler));
-		btnSearch.disableProperty().bind(Bindings.isEmpty(txtDownloadLink.textProperty()));
-		downloadExecutorHandler = new DownloadExecutorHandler();
-	}
-
-
-	public void btnSearchClick() throws InvalidVideoUrlException {
-		youtubeUrlValidator.checkVideoUrl(txtDownloadLink.getText());
-		tmpYoutubeVideo = youtubeVideoDataService.getYoutubeVideo(youtubeIdExtractor.getVideoIdFromLink(txtDownloadLink.getText()));
-		updateGui(tmpYoutubeVideo);
-		videoPane.setVisible(true);
-	}
-
-	public void btnDownloadVideoClick(){
-		downloadExecutorHandler.executeTask(() -> {
-			if(chkAudioOnly.isSelected()){
-				youtubeVideoDownloadService.downloadAudioOnlyAsync(tmpYoutubeVideo);
-			}
-			else{
-				youtubeVideoDownloadService.downloadVideoAsync(tmpYoutubeVideo, boxQuality.getSelectionModel().getSelectedItem());
-			}
-		});
-	}
-
-	public void btnAbortClick() throws CantAbortDownloadException {
-		downloadExecutorHandler.killTask();
-	}
-
-	private void updateGui(YoutubeVideo youtubeVideo){
-		imgThumbnail.setImage(new Image(youtubeVideo.getVideoThumbnailUrl()));
-		lblVideoTitle.setText(youtubeVideo.getVideoTitle());
-		refreshQualityBox(qualityLabelExtractor.getQualityLabels(youtubeVideo));
-		txtDescription.setText(youtubeVideo.getVideoDescription());
-	}
-
-	private void refreshQualityBox(List<String> listWithOptions){
-		boxQuality.getItems().clear();
-		boxQuality.getItems().addAll(listWithOptions);
-		boxQuality.getSelectionModel().select(0);
-	}
-
-
+    private fun refreshQualityBox(listWithOptions: List<String>) {
+        boxQuality.items.clear()
+        boxQuality.items.addAll(listWithOptions)
+        boxQuality.selectionModel.select(0)
+    }
 }

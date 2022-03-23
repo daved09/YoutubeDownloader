@@ -1,20 +1,18 @@
-package app.application.config.adapter;
+package app.application.config.adapter
 
-import com.google.gson.*;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
+import com.google.gson.*
+import kotlin.Throws
+import javafx.beans.property.BooleanProperty
+import javafx.beans.property.SimpleBooleanProperty
+import java.lang.reflect.Type
 
-import java.lang.reflect.Type;
-
-public class BooleanPropertyAdapter implements JsonSerializer<BooleanProperty>, JsonDeserializer<BooleanProperty> {
-
-    @Override
-    public BooleanProperty deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-        return new SimpleBooleanProperty(json.getAsJsonPrimitive().getAsBoolean());
+class BooleanPropertyAdapter : JsonSerializer<BooleanProperty>, JsonDeserializer<BooleanProperty> {
+    @Throws(JsonParseException::class)
+    override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): BooleanProperty {
+        return SimpleBooleanProperty(json.asJsonPrimitive.asBoolean)
     }
 
-    @Override
-    public JsonElement serialize(BooleanProperty src, Type typeOfSrc, JsonSerializationContext context) {
-        return new JsonPrimitive(src.getValue());
+    override fun serialize(src: BooleanProperty, typeOfSrc: Type, context: JsonSerializationContext): JsonElement {
+        return JsonPrimitive(src.value)
     }
 }

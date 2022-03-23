@@ -1,8 +1,5 @@
-package app.application.exception;
+package app.application.exception
 
-public class ExecutorTerminationException extends RuntimeException {
+import java.lang.RuntimeException
 
-	public ExecutorTerminationException(String message) {
-		super(message);
-	}
-}
+class ExecutorTerminationException(message: String?) : RuntimeException(message)

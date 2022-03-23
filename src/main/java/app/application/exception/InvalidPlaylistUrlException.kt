@@ -1,12 +1,9 @@
-package app.application.exception;
+package app.application.exception
 
-public class InvalidPlaylistUrlException extends Exception{
+import java.lang.Exception
+import java.lang.RuntimeException
 
-	public InvalidPlaylistUrlException(String url) {
-		super("Invalid playlist url: " + url);
-	}
-
-	public InvalidPlaylistUrlException(Exception cause, String url) {
-		super("Invalid playlist url: " + url, cause);
-	}
+class InvalidPlaylistUrlException : Exception {
+    constructor(url: String) : super("Invalid playlist url: $url")
+    constructor(cause: Exception?, url: String) : super("Invalid playlist url: $url", cause)
 }

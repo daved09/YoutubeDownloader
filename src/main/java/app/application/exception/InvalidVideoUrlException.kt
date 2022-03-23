@@ -1,12 +1,9 @@
-package app.application.exception;
+package app.application.exception
 
-public class InvalidVideoUrlException extends Exception {
+import java.lang.Exception
+import java.lang.RuntimeException
 
-	public InvalidVideoUrlException(String url) {
-		super("Invalid url: " + url);
-	}
-
-	public InvalidVideoUrlException(Exception e, String url) {
-		super("Invalid url: " + url, e);
-	}
+class InvalidVideoUrlException : Exception {
+    constructor(url: String) : super("Invalid url: $url")
+    constructor(e: Exception?, url: String) : super("Invalid url: $url", e)
 }

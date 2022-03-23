@@ -12,7 +12,7 @@ import java.net.URL
 @Service
 class YoutubeIdExtractor(private val youtubeUrlValidator: YoutubeUrlValidator, private val linkParameterBuilder: LinkParameterBuilder) {
     @Throws(InvalidVideoUrlException::class)
-    fun getVideoIdFromLink(videoLink: String?): String {
+    fun getVideoIdFromLink(videoLink: String): String {
         return try {
             val url = URL(videoLink)
             val parameterMap = linkParameterBuilder.buildParameterMap(url.query)
@@ -23,7 +23,7 @@ class YoutubeIdExtractor(private val youtubeUrlValidator: YoutubeUrlValidator, p
     }
 
     @Throws(InvalidPlaylistUrlException::class)
-    fun getPlayListIdFromLink(playlistLink: String?): String {
+    fun getPlayListIdFromLink(playlistLink: String): String {
         return try {
             val url = URL(playlistLink)
             val parameterMap = linkParameterBuilder.buildParameterMap(url.query)

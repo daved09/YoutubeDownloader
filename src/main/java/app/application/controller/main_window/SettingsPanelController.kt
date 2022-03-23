@@ -1,49 +1,42 @@
-package app.application.controller.main_window;
+package app.application.controller.main_window
 
-import app.application.data.VersionProperties;
-import app.application.utils.DialogManager;
-import app.application.utils.UserConfigHandler;
-import javafx.fxml.FXML;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.TextField;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import app.application.data.VersionProperties
+import app.application.utils.DialogManager
+import app.application.utils.UserConfigHandler
+import javafx.fxml.FXML
+import javafx.scene.control.CheckBox
+import javafx.scene.control.TextField
+import org.springframework.stereotype.Component
 
 @Component
-public class SettingsPanelController {
+class SettingsPanelController(
+        private val userConfigHandler: UserConfigHandler,
+        private val versionProperties: VersionProperties,
+        private val dialogManager: DialogManager) {
 
-	@FXML
-	private TextField txtDownloadPath;
+    @FXML
+    private lateinit var txtDownloadPath: TextField
 
-	@FXML
-	private TextField txtVerion;
+    @FXML
+    private lateinit var txtVerion: TextField
 
-	@FXML
-	private CheckBox chkOverwriteVideos;
+    @FXML
+    private lateinit var chkOverwriteVideos: CheckBox
 
-	@FXML
-	private CheckBox chkSubfolderForPlaylists;
+    @FXML
+    private lateinit var chkSubfolderForPlaylists: CheckBox
 
-	@Autowired
-	private UserConfigHandler userConfigHandler;
+    
+    @FXML
+    fun initialize() {
+        txtDownloadPath.textProperty().bindBidirectional(userConfigHandler.userConfig!!.downloadDir)
+        chkOverwriteVideos.selectedProperty().bindBidirectional(userConfigHandler.userConfig!!.overwriteExistingVideo)
+        chkSubfolderForPlaylists.selectedProperty().bindBidirectional(userConfigHandler.userConfig!!.subFolderForPlaylists)
+        txtVerion.textProperty().bind(versionProperties.version)
+    }
 
-	@Autowired
-	private VersionProperties versionProperties;
-
-	@Autowired
-	private DialogManager dialogManager;
-
-	@FXML
-	public void initialize(){
-		txtDownloadPath.textProperty().bindBidirectional(userConfigHandler.getUserConfig().getDownloadDir());
-		chkOverwriteVideos.selectedProperty().bindBidirectional(userConfigHandler.getUserConfig().getOverwriteExistingVideo());
-		chkSubfolderForPlaylists.selectedProperty().bindBidirectional(userConfigHandler.getUserConfig().getSubFolderForPlaylists());
-		txtVerion.textProperty().bind(versionProperties.getVersion());
-	}
-
-	public void btnSaveClick(){
-		userConfigHandler.writeConfig();
-		dialogManager.openInformationDialog("Speichern erfolgreich", "");
-	}
-
+    fun btnSaveClick() {
+        userConfigHandler.writeConfig()
+        dialogManager.openInformationDialog("Speichern erfolgreich", "")
+    }
 }

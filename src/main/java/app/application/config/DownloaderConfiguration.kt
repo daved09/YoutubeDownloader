@@ -1,44 +1,31 @@
-package app.application.config;
+package app.application.config
 
-import app.application.factories.ConfigurationFactory;
-import app.application.utils.UserConfigHandler;
-import com.github.kiulian.downloader.Config;
-import com.github.kiulian.downloader.YoutubeDownloader;
-import com.google.gson.Gson;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-
-import java.util.concurrent.Executors;
+import app.application.factories.ConfigurationFactory
+import app.application.utils.UserConfigHandler
+import com.github.kiulian.downloader.Config
+import com.github.kiulian.downloader.YoutubeDownloader
+import com.google.gson.Gson
+import org.springframework.boot.context.properties.EnableConfigurationProperties
+import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Configuration
+import java.util.concurrent.Executors
 
 @Configuration
 @EnableConfigurationProperties
-public class DownloaderConfiguration {
+open class DownloaderConfiguration(private val configurationFactory: ConfigurationFactory, private val gson: Gson) {
 
-    private final ConfigurationFactory configurationFactory;
-
-    private final Gson gson;
-
-    public DownloaderConfiguration(ConfigurationFactory configurationFactory, Gson gson) {
-        this.configurationFactory = configurationFactory;
-        this.gson = gson;
+    @Bean
+    open fun youtubeDownloader(): YoutubeDownloader {
+        val config = Config.Builder().maxRetries(1).executorService(Executors.newCachedThreadPool()).build()
+        return YoutubeDownloader(config)
     }
 
     @Bean
-    public YoutubeDownloader youtubeDownloader(){
-        Config config = new Config.Builder().maxRetries(1).executorService(Executors.newCachedThreadPool()).build();
-        return new YoutubeDownloader(config);
+    open fun userConfigHandler(): UserConfigHandler {
+        val userConfigHandler = UserConfigHandler()
+        userConfigHandler.configurationFactory = configurationFactory
+        userConfigHandler.gson = gson
+        userConfigHandler.loadConfig()
+        return userConfigHandler
     }
-
-    @Bean
-    public UserConfigHandler userConfigHandler() {
-        UserConfigHandler userConfigHandler = new UserConfigHandler();
-        userConfigHandler.setConfigurationFactory(configurationFactory);
-        userConfigHandler.setGson(gson);
-        userConfigHandler.loadConfig();
-        return userConfigHandler;
-    }
-
-
-
 }

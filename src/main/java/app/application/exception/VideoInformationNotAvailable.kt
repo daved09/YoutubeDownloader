@@ -1,8 +1,5 @@
-package app.application.exception;
+package app.application.exception
 
-public class VideoInformationNotAvailable extends RuntimeException {
+import java.lang.RuntimeException
 
-	public VideoInformationNotAvailable() {
-		super("The requesting video information are not available.");
-	}
-}
+class VideoInformationNotAvailable : RuntimeException("The requesting video information are not available.")

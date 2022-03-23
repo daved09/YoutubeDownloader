@@ -1,17 +1,16 @@
-package app.application.config;
+package app.application.config
 
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
-import org.springframework.boot.context.properties.ConfigurationPropertiesBinding;
-import org.springframework.core.convert.converter.Converter;
-import org.springframework.stereotype.Component;
+import javafx.beans.property.SimpleStringProperty
+import javafx.beans.property.StringProperty
+import org.springframework.boot.context.properties.ConfigurationPropertiesBinding
+import org.springframework.core.convert.converter.Converter
+import org.springframework.stereotype.Component
 
 @Component
 @ConfigurationPropertiesBinding
-public class StringPropertySpringConverter implements Converter<String, StringProperty> {
+class StringPropertySpringConverter : Converter<String?, StringProperty> {
 
-	@Override
-	public StringProperty convert(String source) {
-		return new SimpleStringProperty(source);
-	}
+    override fun convert(source: String?): StringProperty {
+        return SimpleStringProperty(source)
+    }
 }
