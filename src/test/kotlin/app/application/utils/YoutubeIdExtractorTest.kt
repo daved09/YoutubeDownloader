@@ -10,7 +10,6 @@ import org.mockito.Mockito
 import org.mockito.junit.MockitoJUnitRunner
 import java.net.MalformedURLException
 import java.net.URL
-import java.util.Map
 
 @RunWith(MockitoJUnitRunner::class)
 class YoutubeIdExtractorTest {
@@ -20,8 +19,8 @@ class YoutubeIdExtractorTest {
     @Mock
     private val linkParameterBuilder: LinkParameterBuilder? = null
 
-    private val playlistMap = Map.of("list", "Test123")
-    private val videoMap = Map.of("v", "video")
+    private val playlistMap = mapOf("list" to "Test123")
+    private val videoMap = mapOf("v" to "video")
 
     @Test
     @Throws(MalformedURLException::class, InvalidVideoUrlException::class)
