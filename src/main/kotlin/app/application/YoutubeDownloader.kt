@@ -16,7 +16,7 @@ import java.lang.Exception
 import kotlin.system.exitProcess
 
 class YoutubeDownloader : Application() {
-    private var applicationContext: ConfigurableApplicationContext? = null
+    private lateinit var applicationContext: ConfigurableApplicationContext
     @Throws(Exception::class)
     override fun init() {
         applicationContext = SpringApplicationBuilder().sources(MyApp::class.java)
@@ -26,7 +26,7 @@ class YoutubeDownloader : Application() {
     @Throws(Exception::class)
     override fun start(stage: Stage) {
         setupHostServices()
-        val fxWeaver = applicationContext!!.getBean(FxWeaver::class.java)
+        val fxWeaver = applicationContext.getBean(FxWeaver::class.java)
         val root = fxWeaver.loadView<MainWindowController, Parent>(MainWindowController::class.java)
         val scene = Scene(root)
         stage.title = "Youtube Downloader"
@@ -36,13 +36,13 @@ class YoutubeDownloader : Application() {
 
     @Throws(Exception::class)
     override fun stop() {
-        applicationContext!!.close()
+        applicationContext.close()
         Platform.exit()
         exitProcess(0)
     }
 
     private fun setupHostServices() {
-        val globalObjectHandler = applicationContext!!.getBean(GlobalObjectHandler::class.java)
+        val globalObjectHandler = applicationContext.getBean(GlobalObjectHandler::class.java)
         globalObjectHandler.hostServices = hostServices
     }
 }
