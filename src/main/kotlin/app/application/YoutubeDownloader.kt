@@ -1,10 +1,6 @@
 package app.application
 
-import org.springframework.context.ConfigurableApplicationContext
-import kotlin.Throws
-import org.springframework.boot.builder.SpringApplicationBuilder
 import app.MyApp
-import net.rgielen.fxweaver.core.FxWeaver
 import app.application.controller.main_window.MainWindowController
 import app.application.utils.GlobalObjectHandler
 import javafx.application.Application
@@ -12,7 +8,9 @@ import javafx.application.Platform
 import javafx.scene.Parent
 import javafx.scene.Scene
 import javafx.stage.Stage
-import java.lang.Exception
+import net.rgielen.fxweaver.core.FxWeaver
+import org.springframework.boot.builder.SpringApplicationBuilder
+import org.springframework.context.ConfigurableApplicationContext
 import kotlin.system.exitProcess
 
 class YoutubeDownloader : Application() {
