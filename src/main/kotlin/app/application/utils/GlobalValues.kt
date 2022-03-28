@@ -1,7 +1,5 @@
 package app.application.utils
 
-import java.lang.IllegalStateException
-
 class GlobalValues private constructor() {
 
     init {
@@ -14,6 +12,7 @@ class GlobalValues private constructor() {
         const val YOUTUBE_URL = "youtube.com"
         const val YOUTUBE_SHORT_URL = "youtu.be"
         const val DOWNLOADER_CONFIG_FILENAME = ".ytdl.json"
+        const val DOWNLOAD_PAGE = "http://daluba.de:3000/dave/YoutubeDownloader/releases/latest"
 
         //Exceptions
         const val DOWNLOAD_EXECUTOR_TERMINATION_ERROR = "Termination of download executor was not Successful"

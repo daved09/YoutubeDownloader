@@ -5,4 +5,4 @@ import org.springframework.stereotype.Component
 
 @Component
 @FxmlView("/views/MainWindow.fxml")
-class MainWindowController 
+class MainWindowController
