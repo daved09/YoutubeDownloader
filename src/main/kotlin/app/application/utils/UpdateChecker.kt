@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service
 class UpdateChecker(val versionProperties: VersionProperties) {
 
     private val apiClient: ApiClient = Configuration.getDefaultApiClient()
+    private val versionChecker = VersionChecker()
+
     private var repositoryApi: RepositoryApi? = null
     private var latestReleaseVersion: String? = null
 
@@ -25,15 +27,7 @@ class UpdateChecker(val versionProperties: VersionProperties) {
     fun hasNewUpdate(): Boolean{
         val version = versionProperties.version.get().split(".")
         val gitVersion = latestReleaseVersion?.split(".")
-        for (i in version.indices) {
-            if (gitVersion!![i] > version[i]) {
-                return true
-            }
-            if (gitVersion[i] < version[i]) {
-                return false
-            }
-        }
-        return false
+        return versionChecker.isVersionHigher(version, gitVersion)
     }
 
     private fun getReleaseVersion() {
