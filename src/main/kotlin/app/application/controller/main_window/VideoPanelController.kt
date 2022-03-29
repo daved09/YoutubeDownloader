@@ -1,6 +1,7 @@
 package app.application.controller.main_window
 
 import app.application.data.entities.YoutubeVideo
+import app.application.data.model.QueueManager
 import app.application.exception.CantAbortDownloadException
 import app.application.exception.InvalidVideoUrlException
 import app.application.listener.YoutubeVideoDownloadListener
@@ -24,7 +25,8 @@ class VideoPanelController(
         private val youtubeUrlValidator: YoutubeUrlValidator,
         private val dialogManager: DialogManager,
         private val qualityLabelExtractor: QualityLabelExtractor,
-        private val globalObjectHandler: GlobalObjectHandler) {
+        private val globalObjectHandler: GlobalObjectHandler,
+        private val queueManager: QueueManager) {
 
     @FXML
     private lateinit var txtDownloadLink: TextField
@@ -81,6 +83,10 @@ class VideoPanelController(
                 }
             }
         })
+    }
+
+    fun btnAddToQueueClick(){
+        tmpYoutubeVideo?.let { queueManager.addToDownloadList(it) }
     }
 
     @Throws(CantAbortDownloadException::class)

@@ -1,11 +1,11 @@
 package app.application.data.model
 
 import app.application.data.entities.YoutubeVideo
-import java.util.function.Predicate
+import javafx.collections.FXCollections
 
 class DownloadQueue{
 
-    private var downloadList: MutableList<YoutubeVideo> = ArrayList()
+    private var downloadList: MutableList<YoutubeVideo> = FXCollections.observableArrayList()
 
     fun addToDownloadList(youtubeVideo: YoutubeVideo){
         downloadList.add(youtubeVideo)
