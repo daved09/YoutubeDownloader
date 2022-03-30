@@ -8,20 +8,37 @@
 image: maven:3-jdk-11
 
 pipelines:
-  default:
-    - parallel:
-      - step:
-          name: Build and Test
-          caches:
-            - maven
-          script:
-            - mvn clean install --file pom.xml
-          after-script:
-              # Collect checkstyle results, if any, and convert to Bitbucket Code Insights.
-            - pipe: atlassian/checkstyle-report:0.3.0
-      - step:
-          name: Security Scan
-          script:
-            # Run a security scan for sensitive data.
-            # See more security tools at https://bitbucket.org/product/features/pipelines/integrations?&category=security
-            - pipe: atlassian/git-secrets-scan:0.5.1
+  custom:
+    pull-requests:
+      **:
+        - step:
+            name: Build and Test
+            trigger: automatic
+            caches:
+              - maven
+            script:
+              - mvn clean install --file pom.xml
+            after-script:
+                # Collect checkstyle results, if any, and convert to Bitbucket Code Insights.
+              - pipe: atlassian/checkstyle-report:0.3.0
+        - step:
+            name: Security Scan
+            trigger: automatic
+            script:
+              # Run a security scan for sensitive data.
+              # See more security tools at https://bitbucket.org/product/features/pipelines/integrations?&category=security
+              - pipe: atlassian/git-secrets-scan:0.5.1
+    branches:
+      master: 
+        - step:
+            name: Build and Test
+            trigger: automatic
+            artifacts:
+              - target/YoutubeDownloader.jar
+            caches:
+              - maven
+            script:
+              - mvn clean install --file pom.xml
+            after-script:
+                # Collect checkstyle results, if any, and convert to Bitbucket Code Insights.
+              - pipe: atlassian/checkstyle-report:0.3.0
