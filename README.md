@@ -2,7 +2,7 @@
 
 ## Downloads
 
-[Download](http://daluba.de:3000/dave/YoutubeDownloader_releses/releases/latest)
+[Download](http://daluba.de:3000/dave/YoutubeDownloader_releases/releases/latest)
 
 ## Systemanforderungen
 
