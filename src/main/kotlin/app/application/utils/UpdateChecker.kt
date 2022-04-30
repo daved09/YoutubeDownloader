@@ -31,7 +31,7 @@ class UpdateChecker(val versionProperties: VersionProperties) {
     }
 
     private fun getReleaseVersion() {
-        latestReleaseVersion = repositoryApi?.repoListReleases("Dave", "YoutubeDownloader", false, false, 5, 1, 5)?.get(0)?.tagName
+        latestReleaseVersion = repositoryApi?.repoListReleases("Dave", "YoutubeDownloader_releases", false, false, 5, 1, 5)?.get(0)?.tagName
     }
 
 }
