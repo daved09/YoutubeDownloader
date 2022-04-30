@@ -3,8 +3,8 @@ package app.application.utils.service.download
 import app.application.listener.YoutubeDownloadListener
 import app.application.utils.DialogManager
 import app.application.utils.UserConfigHandler
+import app.application.utils.converter.YoutubeVideoConverter
 import com.github.kiulian.downloader.YoutubeDownloader
-import lombok.Setter
 import org.springframework.beans.factory.annotation.Autowired
 
 abstract class YoutubeDownloadService{
@@ -18,5 +18,7 @@ abstract class YoutubeDownloadService{
     protected lateinit var dialogManager: DialogManager
 
     var youtubeDownloadListener: YoutubeDownloadListener? = null
+
+    val youtubeVideoConverter = YoutubeVideoConverter()
 
 }

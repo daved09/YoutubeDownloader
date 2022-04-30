@@ -12,21 +12,25 @@ import java.nio.file.Paths
 class YoutubeVideoDownloadService : YoutubeDownloadService() {
     @SneakyThrows
     fun downloadVideoAsync(youtubeVideo: YoutubeVideo, quality: String) {
-        downloadAsync(youtubeVideo, selectAudioVideoFormat(youtubeVideo, quality))
+        downloadAsync(youtubeVideo, selectAudioVideoFormat(youtubeVideo, quality), false)
     }
 
     fun downloadAudioOnlyAsync(youtubeVideo: YoutubeVideo) {
-        downloadAsync(youtubeVideo, youtubeVideo.audioFormat)
+        downloadAsync(youtubeVideo, youtubeVideo.videoWithAudioFormat.get(0), true);
     }
 
     @SneakyThrows
-    protected fun downloadAsync(youtubeVideo: YoutubeVideo, format: Format?) {
+    protected fun downloadAsync(youtubeVideo: YoutubeVideo, format: Format?, audioOnly: Boolean) {
         val requestVideoFileDownload = RequestVideoFileDownload(format)
         requestVideoFileDownload.callback(youtubeDownloadListener)
                 .renameTo(youtubeVideo.videoTitle)
                 .overwriteIfExists(userConfigHandler.userConfig!!.overwriteExistingVideo.get())
                 .saveTo(Paths.get(userConfigHandler.userConfig!!.downloadDir.get()).toFile())
-        youtubeDownloader.downloadVideoFile(requestVideoFileDownload).data()
+        val videoFile = youtubeDownloader.downloadVideoFile(requestVideoFileDownload).data()
+        if(audioOnly){
+            youtubeVideoConverter.convert(videoFile)
+            videoFile.delete()
+        }
     }
 
     private fun selectAudioVideoFormat(youtubeVideo: YoutubeVideo, quality: String): VideoWithAudioFormat {

@@ -270,6 +270,11 @@
             <artifactId>kotlin-native-utils</artifactId>
             <version>1.6.10</version>
         </dependency>
+        <dependency>
+            <groupId>ws.schild</groupId>
+            <artifactId>jave-all-deps</artifactId>
+            <version>3.3.1</version>
+        </dependency>
     </dependencies>
 
 </project>
