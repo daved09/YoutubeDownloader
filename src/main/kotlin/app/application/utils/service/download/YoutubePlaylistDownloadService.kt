@@ -40,18 +40,14 @@ class YoutubePlaylistDownloadService(private val youtubeVideoDataService: Youtub
     }
 
     protected fun downloadAsync(youtubePlaylist: YoutubePlaylist, youtubeVideo: YoutubeVideo) {
-        val requestVideoFileDownload = RequestVideoFileDownload(getAudioOrVideoFormat(youtubePlaylist, youtubeVideo))
+        val requestVideoFileDownload = RequestVideoFileDownload(youtubeVideo.bestVideoWithAudioFormat)
         requestVideoFileDownload.renameTo(youtubeVideo.videoTitle).overwriteIfExists(true)
-                .saveTo(Paths.get(userConfigHandler!!.userConfig!!.downloadDir.get() + File.separator +
-                        if (userConfigHandler!!.userConfig!!.subFolderForPlaylists.get()) youtubePlaylist.playlistTitle else "").toFile())
+                .saveTo(Paths.get(
+                    userConfigHandler.userConfig!!.downloadDir.get() + File.separator +
+                        if (userConfigHandler.userConfig!!.subFolderForPlaylists.get()) youtubePlaylist.playlistTitle else "").toFile())
                 .callback(youtubeDownloadListener)
-        youtubeDownloader!!.downloadVideoFile(requestVideoFileDownload)
-    }
-
-    private fun getAudioOrVideoFormat(youtubePlaylist: YoutubePlaylist, youtubeVideo: YoutubeVideo): Format {
-        return if (youtubePlaylist.audioOnly.get()) {
-            youtubeVideo.audioFormat
-        } else youtubeVideo.bestVideoWithAudioFormat
+        val videoFile = youtubeDownloader.downloadVideoFile(requestVideoFileDownload).data()
+        youtubeVideoConverter.convert(videoFile)
     }
 
     private fun setLabelProgress(current: Int, max: Int) {
