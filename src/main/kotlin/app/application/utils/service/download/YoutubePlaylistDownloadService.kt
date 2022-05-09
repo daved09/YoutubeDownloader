@@ -42,10 +42,10 @@ class YoutubePlaylistDownloadService(private val youtubeVideoDataService: Youtub
     protected fun downloadAsync(youtubePlaylist: YoutubePlaylist, youtubeVideo: YoutubeVideo) {
         val requestVideoFileDownload = RequestVideoFileDownload(getAudioOrVideoFormat(youtubePlaylist, youtubeVideo))
         requestVideoFileDownload.renameTo(youtubeVideo.videoTitle).overwriteIfExists(true)
-                .saveTo(Paths.get(userConfigHandler!!.userConfig!!.downloadDir.get() + File.separator +
-                        if (userConfigHandler!!.userConfig!!.subFolderForPlaylists.get()) youtubePlaylist.playlistTitle else "").toFile())
+                .saveTo(Paths.get(userConfigHandler.userConfig!!.downloadDir.get() + File.separator +
+                        if (userConfigHandler.userConfig!!.subFolderForPlaylists.get()) youtubePlaylist.playlistTitle else "").toFile())
                 .callback(youtubeDownloadListener)
-        youtubeDownloader!!.downloadVideoFile(requestVideoFileDownload)
+        youtubeDownloader.downloadVideoFile(requestVideoFileDownload)
     }
 
     private fun getAudioOrVideoFormat(youtubePlaylist: YoutubePlaylist, youtubeVideo: YoutubeVideo): Format {
