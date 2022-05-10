@@ -3,6 +3,7 @@ package app.application.utils.service.download
 import app.application.data.entities.YoutubePlaylist
 import app.application.data.entities.YoutubePlaylistVideoDetail
 import app.application.data.entities.YoutubeVideo
+import app.application.exception.CantDeleteFileException
 import app.application.listener.YoutubePlaylistDownloadListener
 import app.application.utils.GlobalObjectHandler
 import app.application.utils.service.data.YoutubeVideoDataService
@@ -40,18 +41,22 @@ class YoutubePlaylistDownloadService(private val youtubeVideoDataService: Youtub
     }
 
     protected fun downloadAsync(youtubePlaylist: YoutubePlaylist, youtubeVideo: YoutubeVideo) {
-        val requestVideoFileDownload = RequestVideoFileDownload(getAudioOrVideoFormat(youtubePlaylist, youtubeVideo))
+        val requestVideoFileDownload = RequestVideoFileDownload(youtubeVideo.bestVideoWithAudioFormat)
         requestVideoFileDownload.renameTo(youtubeVideo.videoTitle).overwriteIfExists(true)
-                .saveTo(Paths.get(userConfigHandler!!.userConfig!!.downloadDir.get() + File.separator +
-                        if (userConfigHandler!!.userConfig!!.subFolderForPlaylists.get()) youtubePlaylist.playlistTitle else "").toFile())
+                .saveTo(Paths.get(
+                    userConfigHandler.userConfig!!.downloadDir.get() + File.separator +
+                        if (userConfigHandler.userConfig!!.subFolderForPlaylists.get()) youtubePlaylist.playlistTitle else "").toFile())
                 .callback(youtubeDownloadListener)
-        youtubeDownloader!!.downloadVideoFile(requestVideoFileDownload)
+        val videoFile = youtubeDownloader.downloadVideoFile(requestVideoFileDownload).data()
+        youtubeVideoConverter.convert(videoFile)
+        deleteOldVideoFile(videoFile)
     }
 
-    private fun getAudioOrVideoFormat(youtubePlaylist: YoutubePlaylist, youtubeVideo: YoutubeVideo): Format {
-        return if (youtubePlaylist.audioOnly.get()) {
-            youtubeVideo.audioFormat
-        } else youtubeVideo.bestVideoWithAudioFormat
+    private fun deleteOldVideoFile(videoFile: File){
+        val success = videoFile.delete()
+        if(!success){
+            throw CantDeleteFileException("File ${videoFile.absoluteFile} couldn´t be deleted.")
+        }
     }
 
     private fun setLabelProgress(current: Int, max: Int) {
