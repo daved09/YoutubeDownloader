@@ -3,6 +3,7 @@ package app.application.utils.service.download
 import app.application.data.entities.YoutubePlaylist
 import app.application.data.entities.YoutubePlaylistVideoDetail
 import app.application.data.entities.YoutubeVideo
+import app.application.exception.CantDeleteFileException
 import app.application.listener.YoutubePlaylistDownloadListener
 import app.application.utils.GlobalObjectHandler
 import app.application.utils.service.data.YoutubeVideoDataService
@@ -48,6 +49,14 @@ class YoutubePlaylistDownloadService(private val youtubeVideoDataService: Youtub
                 .callback(youtubeDownloadListener)
         val videoFile = youtubeDownloader.downloadVideoFile(requestVideoFileDownload).data()
         youtubeVideoConverter.convert(videoFile)
+        deleteOldVideoFile(videoFile)
+    }
+
+    private fun deleteOldVideoFile(videoFile: File){
+        val success = videoFile.delete()
+        if(!success){
+            throw CantDeleteFileException("File ${videoFile.absoluteFile} couldn´t be deleted.")
+        }
     }
 
     private fun setLabelProgress(current: Int, max: Int) {

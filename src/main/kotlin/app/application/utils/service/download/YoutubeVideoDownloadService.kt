@@ -1,11 +1,13 @@
 package app.application.utils.service.download
 
 import app.application.data.entities.YoutubeVideo
+import app.application.exception.CantDeleteFileException
 import com.github.kiulian.downloader.downloader.request.RequestVideoFileDownload
 import com.github.kiulian.downloader.model.videos.formats.Format
 import com.github.kiulian.downloader.model.videos.formats.VideoWithAudioFormat
 import lombok.SneakyThrows
 import org.springframework.stereotype.Service
+import java.io.File
 import java.nio.file.Paths
 
 @Service
@@ -29,7 +31,14 @@ class YoutubeVideoDownloadService : YoutubeDownloadService() {
         val videoFile = youtubeDownloader.downloadVideoFile(requestVideoFileDownload).data()
         if(audioOnly){
             youtubeVideoConverter.convert(videoFile)
-            videoFile.delete()
+            deleteOldVideoFile(videoFile)
+        }
+    }
+
+    private fun deleteOldVideoFile(videoFile: File){
+        val success = videoFile.delete()
+        if(!success){
+            throw CantDeleteFileException("File ${videoFile.absoluteFile} couldn´t be deleted.")
         }
     }
 
