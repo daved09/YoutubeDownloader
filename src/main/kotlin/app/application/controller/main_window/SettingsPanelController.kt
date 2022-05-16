@@ -1,6 +1,10 @@
 package app.application.controller.main_window
 
 import app.application.data.VersionProperties
+import app.application.spring.service.DialogManager
+import app.application.spring.service.GlobalObjectHandler
+import app.application.spring.service.UpdateChecker
+import app.application.spring.service.UserConfigHandler
 import app.application.utils.*
 import javafx.fxml.FXML
 import javafx.scene.control.CheckBox
@@ -10,11 +14,12 @@ import org.springframework.stereotype.Component
 
 @Component
 class SettingsPanelController(
-        private val userConfigHandler: UserConfigHandler,
-        private val versionProperties: VersionProperties,
-        private val dialogManager: DialogManager,
-        private val updateChecker: UpdateChecker,
-        private val globalObjectHandler: GlobalObjectHandler) {
+    private val userConfigHandler: UserConfigHandler,
+    private val versionProperties: VersionProperties,
+    private val dialogManager: DialogManager,
+    private val updateChecker: UpdateChecker,
+    private val globalObjectHandler: GlobalObjectHandler
+) {
 
     @FXML
     private lateinit var txtDownloadPath: TextField

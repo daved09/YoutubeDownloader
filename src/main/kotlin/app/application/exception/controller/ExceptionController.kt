@@ -1,6 +1,6 @@
 package app.application.exception.controller
 
-import app.application.utils.DialogManager
+import app.application.spring.service.DialogManager
 import org.springframework.stereotype.Service
 import javax.annotation.PostConstruct
 

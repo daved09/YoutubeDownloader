@@ -1,7 +1,7 @@
 package app.application.listener
 
-import app.application.utils.DialogManager
-import app.application.utils.GlobalObjectHandler
+import app.application.spring.service.DialogManager
+import app.application.spring.service.GlobalObjectHandler
 import javafx.application.Platform
 import javafx.scene.control.ProgressBar
 import java.io.File

@@ -2,6 +2,9 @@ package app.application.utils
 
 import app.application.exception.InvalidPlaylistUrlException
 import app.application.exception.InvalidVideoUrlException
+import app.application.spring.service.LinkParameterBuilder
+import app.application.spring.service.YoutubeIdExtractor
+import app.application.spring.service.YoutubeUrlValidator
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith

@@ -2,7 +2,7 @@ package app.application
 
 import app.MyApp
 import app.application.controller.main_window.MainWindowController
-import app.application.utils.GlobalObjectHandler
+import app.application.spring.service.GlobalObjectHandler
 import javafx.application.Application
 import javafx.application.Platform
 import javafx.scene.Parent

@@ -1,4 +1,4 @@
-package app.application.utils
+package app.application.spring.service
 
 import org.springframework.stereotype.Service
 import java.util.HashMap

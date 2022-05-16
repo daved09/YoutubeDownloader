@@ -1,4 +1,4 @@
-package app.application.utils.converter
+package app.application.utils
 
 import ws.schild.jave.Encoder
 import ws.schild.jave.MultimediaObject

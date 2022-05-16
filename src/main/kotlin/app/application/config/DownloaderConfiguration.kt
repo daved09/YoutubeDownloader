@@ -1,7 +1,7 @@
 package app.application.config
 
-import app.application.factories.ConfigurationFactory
-import app.application.utils.UserConfigHandler
+import app.application.spring.factories.ConfigurationFactory
+import app.application.spring.service.UserConfigHandler
 import com.github.kiulian.downloader.Config
 import com.github.kiulian.downloader.YoutubeDownloader
 import com.google.gson.Gson

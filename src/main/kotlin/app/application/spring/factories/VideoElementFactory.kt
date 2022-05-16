@@ -1,4 +1,4 @@
-package app.application.factories
+package app.application.spring.factories
 
 import app.application.components.VideoElement
 import app.application.data.entities.YoutubePlaylistVideoDetail

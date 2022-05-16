@@ -1,9 +1,9 @@
-package app.application.utils.service.download
+package app.application.spring.service.download
 
 import app.application.listener.YoutubeDownloadListener
-import app.application.utils.DialogManager
-import app.application.utils.UserConfigHandler
-import app.application.utils.converter.YoutubeVideoConverter
+import app.application.spring.service.DialogManager
+import app.application.spring.service.UserConfigHandler
+import app.application.utils.YoutubeVideoConverter
 import com.github.kiulian.downloader.YoutubeDownloader
 import org.springframework.beans.factory.annotation.Autowired
 

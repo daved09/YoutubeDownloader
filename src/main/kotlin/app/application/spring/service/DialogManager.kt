@@ -1,4 +1,4 @@
-package app.application.utils
+package app.application.spring.service
 
 import javafx.scene.control.Alert
 import javafx.scene.control.Alert.AlertType
