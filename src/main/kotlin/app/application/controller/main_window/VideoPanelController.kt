@@ -4,7 +4,6 @@ import app.application.data.entities.YoutubeVideo
 import app.application.exception.CantAbortDownloadException
 import app.application.exception.InvalidVideoUrlException
 import app.application.listener.YoutubeVideoDownloadListener
-import app.application.service.spring.*
 import app.application.spring.service.*
 import app.application.utils.*
 import app.application.utils.DownloadExecutorHandler.DownloaderTask
