@@ -1,4 +1,4 @@
-package app.application.factories
+package app.application.spring.factories
 
 import app.application.data.UserConfig
 import org.springframework.stereotype.Service

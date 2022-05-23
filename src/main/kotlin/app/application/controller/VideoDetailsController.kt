@@ -1,7 +1,7 @@
 package app.application.controller
 
-import app.application.utils.GlobalObjectHandler
-import app.application.utils.service.data.YoutubeVideoDataService
+import app.application.spring.service.GlobalObjectHandler
+import app.application.spring.service.data.YoutubeVideoDataService
 import javafx.fxml.FXML
 import javafx.scene.Parent
 import javafx.scene.Scene
@@ -21,9 +21,10 @@ import org.springframework.stereotype.Component
 @Component
 @FxmlView("/views/VideoDetails.fxml")
 class VideoDetailsController(
-        private val fxWeaver: FxWeaver, 
-        private val youtubeVideoDataService: YoutubeVideoDataService, 
-        private val globalObjectHandler: GlobalObjectHandler) {
+    private val fxWeaver: FxWeaver,
+    private val youtubeVideoDataService: YoutubeVideoDataService,
+    private val globalObjectHandler: GlobalObjectHandler
+) {
     
     @FXML
     private lateinit var imgThumbnail: ImageView

@@ -1,4 +1,4 @@
-package app.application.utils.service.download
+package app.application.spring.service.download
 
 import app.application.data.entities.YoutubeVideo
 import app.application.exception.CantDeleteFileException

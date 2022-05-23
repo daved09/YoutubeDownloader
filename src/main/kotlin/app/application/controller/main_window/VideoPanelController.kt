@@ -4,10 +4,12 @@ import app.application.data.entities.YoutubeVideo
 import app.application.exception.CantAbortDownloadException
 import app.application.exception.InvalidVideoUrlException
 import app.application.listener.YoutubeVideoDownloadListener
+import app.application.service.spring.*
+import app.application.spring.service.*
 import app.application.utils.*
 import app.application.utils.DownloadExecutorHandler.DownloaderTask
-import app.application.utils.service.data.YoutubeVideoDataService
-import app.application.utils.service.download.YoutubeVideoDownloadService
+import app.application.spring.service.data.YoutubeVideoDataService
+import app.application.spring.service.download.YoutubeVideoDownloadService
 import javafx.beans.binding.Bindings
 import javafx.fxml.FXML
 import javafx.scene.control.*
@@ -18,13 +20,14 @@ import org.springframework.stereotype.Component
 
 @Component
 class VideoPanelController(
-        private val youtubeVideoDownloadService: YoutubeVideoDownloadService,
-        private val youtubeVideoDataService: YoutubeVideoDataService,
-        private val youtubeIdExtractor: YoutubeIdExtractor,
-        private val youtubeUrlValidator: YoutubeUrlValidator,
-        private val dialogManager: DialogManager,
-        private val qualityLabelExtractor: QualityLabelExtractor,
-        private val globalObjectHandler: GlobalObjectHandler) {
+    private val youtubeVideoDownloadService: YoutubeVideoDownloadService,
+    private val youtubeVideoDataService: YoutubeVideoDataService,
+    private val youtubeIdExtractor: YoutubeIdExtractor,
+    private val youtubeUrlValidator: YoutubeUrlValidator,
+    private val dialogManager: DialogManager,
+    private val qualityLabelExtractor: QualityLabelExtractor,
+    private val globalObjectHandler: GlobalObjectHandler
+) {
 
     @FXML
     private lateinit var txtDownloadLink: TextField

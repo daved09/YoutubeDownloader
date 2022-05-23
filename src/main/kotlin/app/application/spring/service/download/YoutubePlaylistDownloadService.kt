@@ -1,14 +1,13 @@
-package app.application.utils.service.download
+package app.application.spring.service.download
 
 import app.application.data.entities.YoutubePlaylist
 import app.application.data.entities.YoutubePlaylistVideoDetail
 import app.application.data.entities.YoutubeVideo
 import app.application.exception.CantDeleteFileException
 import app.application.listener.YoutubePlaylistDownloadListener
-import app.application.utils.GlobalObjectHandler
-import app.application.utils.service.data.YoutubeVideoDataService
+import app.application.spring.service.GlobalObjectHandler
+import app.application.spring.service.data.YoutubeVideoDataService
 import com.github.kiulian.downloader.downloader.request.RequestVideoFileDownload
-import com.github.kiulian.downloader.model.videos.formats.Format
 import javafx.application.Platform
 import javafx.scene.control.Label
 import lombok.SneakyThrows

@@ -1,4 +1,4 @@
-package app.application.utils.service.data
+package app.application.spring.service.data
 
 import app.application.data.entities.YoutubeVideo
 import com.github.kiulian.downloader.YoutubeDownloader

@@ -1,4 +1,4 @@
-package app.application.utils
+package app.application.spring.service
 
 import app.application.data.entities.YoutubeVideo
 import com.github.kiulian.downloader.model.videos.formats.VideoWithAudioFormat

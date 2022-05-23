@@ -1,6 +1,7 @@
-package app.application.utils
+package app.application.spring.service
 
 import app.application.data.VersionProperties
+import app.application.utils.VersionChecker
 import io.gitea.ApiClient
 import io.gitea.Configuration
 import io.gitea.api.RepositoryApi
