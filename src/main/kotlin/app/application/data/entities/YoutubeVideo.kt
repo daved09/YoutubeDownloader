@@ -5,12 +5,21 @@ import com.github.kiulian.downloader.model.videos.VideoInfo
 import com.github.kiulian.downloader.model.videos.formats.AudioFormat
 import com.github.kiulian.downloader.model.videos.formats.Format
 import com.github.kiulian.downloader.model.videos.formats.VideoWithAudioFormat
+import javafx.scene.image.Image
 
 class YoutubeVideo(videoInfo: VideoInfo?) : YoutubeEntity<VideoInfo?>() {
     init {
         reference = videoInfo
     }
 
+    var _thumbnailImage: Image? = null
+    val thumbnailImage: Image
+    get() {
+        if(_thumbnailImage == null){
+            _thumbnailImage = Image(videoThumbnailUrl)
+        }
+        return _thumbnailImage!!
+    }
     val videoId: String
         get() = videoDetails.videoId()
     val videoDescription: String

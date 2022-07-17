@@ -1,6 +1,7 @@
 package app.application.spring.service.download
 
 import app.application.data.entities.YoutubeVideo
+import app.application.data.entities.YoutubeVideoSettingsEntity
 import app.application.exception.CantDeleteFileException
 import com.github.kiulian.downloader.downloader.request.RequestVideoFileDownload
 import com.github.kiulian.downloader.model.videos.formats.Format
@@ -13,12 +14,11 @@ import java.nio.file.Paths
 @Service
 class YoutubeVideoDownloadService : YoutubeDownloadService() {
     @SneakyThrows
-    fun downloadVideoAsync(youtubeVideo: YoutubeVideo, quality: String) {
-        downloadAsync(youtubeVideo, selectAudioVideoFormat(youtubeVideo, quality), false)
-    }
-
-    fun downloadAudioOnlyAsync(youtubeVideo: YoutubeVideo) {
-        downloadAsync(youtubeVideo, youtubeVideo.videoWithAudioFormat.get(0), true);
+    fun downloadVideoAsync(youtubeVideoSettingsEntity: YoutubeVideoSettingsEntity) {
+        downloadAsync(
+            youtubeVideoSettingsEntity.youtubeEntity!!,
+            youtubeVideoSettingsEntity.settingsEntity?.qualityProperty?.get(),
+        youtubeVideoSettingsEntity.settingsEntity?.audioOnlyProperty!!.get())
     }
 
     @SneakyThrows
@@ -42,7 +42,4 @@ class YoutubeVideoDownloadService : YoutubeDownloadService() {
         }
     }
 
-    private fun selectAudioVideoFormat(youtubeVideo: YoutubeVideo, quality: String): VideoWithAudioFormat {
-        return youtubeVideo.videoWithAudioFormat.stream().filter{ audioVideoFormats: VideoWithAudioFormat -> audioVideoFormats.qualityLabel() == quality }.findFirst().get()
-    }
 }
