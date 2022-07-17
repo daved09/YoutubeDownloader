@@ -9,6 +9,6 @@ import org.springframework.stereotype.Service
 class YoutubeVideoDataService(youtubeDownloader: YoutubeDownloader) : YoutubeDataService(youtubeDownloader) {
     fun getYoutubeVideo(videoId: String?): YoutubeVideo {
         val requestVideoInfo = RequestVideoInfo(videoId)
-        return YoutubeVideo(youtubeDownloader!!.getVideoInfo(requestVideoInfo).data())
+        return YoutubeVideo(youtubeDownloader.getVideoInfo(requestVideoInfo).data())
     }
 }
