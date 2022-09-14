@@ -33,7 +33,7 @@ class VideoElement : AnchorPane() {
 
     fun loadVideoDetails(youtubePlaylistVideoDetail: YoutubePlaylistVideoDetail) {
         this.youtubePlaylistVideoDetail = youtubePlaylistVideoDetail
-        imgThumbnail.image = Image(youtubePlaylistVideoDetail.videoThumbnailUrl)
+        imgThumbnail.image = youtubePlaylistVideoDetail.thumbnailImage
         lblVideoTitle.text = youtubePlaylistVideoDetail.videoTitle
         chkIgnore.selectedProperty().bindBidirectional(youtubePlaylistVideoDetail.ignore)
     }

@@ -1,4 +1,4 @@
-package app.application.utils
+package app.application.spring.service
 
 import javafx.application.HostServices
 import lombok.Data

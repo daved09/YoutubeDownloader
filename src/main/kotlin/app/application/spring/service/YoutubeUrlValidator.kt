@@ -1,4 +1,4 @@
-package app.application.utils
+package app.application.spring.service
 
 import kotlin.Throws
 import app.application.exception.InvalidVideoUrlException

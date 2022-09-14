@@ -1,7 +1,8 @@
-package app.application.utils
+package app.application.spring.service
 
 import app.application.data.UserConfig
-import app.application.factories.ConfigurationFactory
+import app.application.spring.factories.ConfigurationFactory
+import app.application.utils.GlobalValues
 import com.google.gson.Gson
 import lombok.SneakyThrows
 import java.io.File

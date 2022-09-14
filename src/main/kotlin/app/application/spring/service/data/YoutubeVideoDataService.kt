@@ -1,4 +1,4 @@
-package app.application.utils.service.data
+package app.application.spring.service.data
 
 import app.application.data.entities.YoutubeVideo
 import com.github.kiulian.downloader.YoutubeDownloader
@@ -9,6 +9,6 @@ import org.springframework.stereotype.Service
 class YoutubeVideoDataService(youtubeDownloader: YoutubeDownloader) : YoutubeDataService(youtubeDownloader) {
     fun getYoutubeVideo(videoId: String?): YoutubeVideo {
         val requestVideoInfo = RequestVideoInfo(videoId)
-        return YoutubeVideo(youtubeDownloader!!.getVideoInfo(requestVideoInfo).data())
+        return YoutubeVideo(youtubeDownloader.getVideoInfo(requestVideoInfo).data())
     }
 }

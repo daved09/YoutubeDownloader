@@ -1,30 +1,37 @@
 package app.application.controller.main_window
 
-import app.application.data.entities.YoutubeVideo
+import app.application.data.entities.*
 import app.application.exception.CantAbortDownloadException
 import app.application.exception.InvalidVideoUrlException
 import app.application.listener.YoutubeVideoDownloadListener
+import app.application.spring.service.*
 import app.application.utils.*
+import app.application.spring.service.data.YoutubeVideoDataService
+import app.application.spring.service.download.YoutubeVideoDownloadService
 import app.application.utils.DownloadExecutorHandler.DownloaderTask
-import app.application.utils.service.data.YoutubeVideoDataService
-import app.application.utils.service.download.YoutubeVideoDownloadService
+import com.github.kiulian.downloader.model.videos.VideoInfo
+import com.github.kiulian.downloader.model.videos.formats.VideoWithAudioFormat
 import javafx.beans.binding.Bindings
+import javafx.beans.property.ObjectProperty
+import javafx.beans.property.SimpleBooleanProperty
+import javafx.beans.property.SimpleObjectProperty
 import javafx.fxml.FXML
 import javafx.scene.control.*
 import javafx.scene.image.Image
 import javafx.scene.image.ImageView
 import javafx.scene.layout.AnchorPane
+import javafx.util.Callback
 import org.springframework.stereotype.Component
 
 @Component
 class VideoPanelController(
-        private val youtubeVideoDownloadService: YoutubeVideoDownloadService,
-        private val youtubeVideoDataService: YoutubeVideoDataService,
-        private val youtubeIdExtractor: YoutubeIdExtractor,
-        private val youtubeUrlValidator: YoutubeUrlValidator,
-        private val dialogManager: DialogManager,
-        private val qualityLabelExtractor: QualityLabelExtractor,
-        private val globalObjectHandler: GlobalObjectHandler) {
+    private val youtubeVideoDownloadService: YoutubeVideoDownloadService,
+    private val youtubeVideoDataService: YoutubeVideoDataService,
+    private val youtubeIdExtractor: YoutubeIdExtractor,
+    private val youtubeUrlValidator: YoutubeUrlValidator,
+    private val dialogManager: DialogManager,
+    private val globalObjectHandler: GlobalObjectHandler
+) {
 
     @FXML
     private lateinit var txtDownloadLink: TextField
@@ -39,7 +46,7 @@ class VideoPanelController(
     private lateinit var lblVideoTitle: Label
 
     @FXML
-    private lateinit var boxQuality: ComboBox<String>
+    private lateinit var boxQuality: ComboBox<VideoWithAudioFormat>
 
     @FXML
     private lateinit var txtDescription: TextArea
@@ -55,30 +62,34 @@ class VideoPanelController(
 
     private val downloadExecutorHandler: DownloadExecutorHandler = DownloadExecutorHandler()
 
-    private var tmpYoutubeVideo: YoutubeVideo? = null
+    private var actualYoutubeSettingsEntity: YoutubeVideoSettingsEntity? = null
 
     @FXML
     private fun initialize() {
         youtubeVideoDownloadService.youtubeDownloadListener = YoutubeVideoDownloadListener(downloadProgress, dialogManager, globalObjectHandler)
         btnSearch.disableProperty().bind(Bindings.isEmpty(txtDownloadLink.textProperty()))
+        setupQualityBoxRendering()
+    }
+
+    private fun setupQualityBoxRendering() {
+        boxQuality.cellFactory = Callback<ListView<VideoWithAudioFormat>, ListCell<VideoWithAudioFormat>> {
+            QualityLabelListCell()
+        }
+        boxQuality.buttonCell = QualityLabelListCell()
     }
 
     @Throws(InvalidVideoUrlException::class)
     fun btnSearchClick() {
         youtubeUrlValidator.checkVideoUrl(txtDownloadLink.text)
-        tmpYoutubeVideo = youtubeVideoDataService.getYoutubeVideo(youtubeIdExtractor.getVideoIdFromLink(txtDownloadLink.text))
-        updateGui(tmpYoutubeVideo!!)
+        actualYoutubeSettingsEntity = YoutubeVideoSettingsEntity(youtubeVideoDataService.getYoutubeVideo(youtubeIdExtractor.getVideoIdFromLink(txtDownloadLink.text)))
+        updateGui()
         videoPane.isVisible = true
     }
 
     fun btnDownloadVideoClick() {
         downloadExecutorHandler.executeTask(object : DownloaderTask {
             override fun execute() {
-                if (chkAudioOnly.isSelected) {
-                    youtubeVideoDownloadService.downloadAudioOnlyAsync(tmpYoutubeVideo!!)
-                } else {
-                    youtubeVideoDownloadService.downloadVideoAsync(tmpYoutubeVideo!!, boxQuality.selectionModel.selectedItem)
-                }
+                youtubeVideoDownloadService.downloadVideoAsync(actualYoutubeSettingsEntity!!)
             }
         })
     }
@@ -88,16 +99,19 @@ class VideoPanelController(
         downloadExecutorHandler.killTask()
     }
 
-    private fun updateGui(youtubeVideo: YoutubeVideo) {
-        imgThumbnail.image = Image(youtubeVideo.videoThumbnailUrl)
-        lblVideoTitle.text = youtubeVideo.videoTitle
-        refreshQualityBox(qualityLabelExtractor.getQualityLabels(youtubeVideo))
-        txtDescription.text = youtubeVideo.videoDescription
+    private fun updateGui() {
+        imgThumbnail.image = actualYoutubeSettingsEntity?.youtubeEntity?.thumbnailImage
+        lblVideoTitle.text = actualYoutubeSettingsEntity?.youtubeEntity?.videoTitle
+        refreshQualityBox(actualYoutubeSettingsEntity?.youtubeEntity?.videoWithAudioFormat)
+        txtDescription.text = actualYoutubeSettingsEntity?.youtubeEntity?.videoDescription
+        actualYoutubeSettingsEntity?.settingsEntity = SettingsEntity(SimpleObjectProperty(actualYoutubeSettingsEntity?.youtubeEntity?.videoWithAudioFormat!![0]), SimpleBooleanProperty(chkAudioOnly.isSelected))
+        actualYoutubeSettingsEntity?.settingsEntity?.qualityProperty?.bind(boxQuality.valueProperty())
+        actualYoutubeSettingsEntity?.settingsEntity?.audioOnlyProperty?.bind(chkAudioOnly.selectedProperty())
     }
 
-    private fun refreshQualityBox(listWithOptions: List<String>) {
+    private fun refreshQualityBox(listWithOptions: List<VideoWithAudioFormat>?) {
         boxQuality.items.clear()
-        boxQuality.items.addAll(listWithOptions)
+        listWithOptions?.let { boxQuality.items.addAll(it) }
         boxQuality.selectionModel.select(0)
     }
 }

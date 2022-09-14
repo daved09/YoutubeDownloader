@@ -1,7 +1,5 @@
-package app.application.utils
+package app.application.spring.service
 
-import app.application.utils.YoutubeUrlValidator
-import app.application.utils.LinkParameterBuilder
 import kotlin.Throws
 import app.application.exception.InvalidVideoUrlException
 import java.net.MalformedURLException
