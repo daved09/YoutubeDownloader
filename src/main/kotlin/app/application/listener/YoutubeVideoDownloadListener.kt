@@ -10,7 +10,7 @@ class YoutubeVideoDownloadListener(private val progressBar: ProgressBar, dialogM
     private var currentProgress = 0
     override fun onFinished(data: File) {
         globalObjectHandler.hostServices!!.showDocument(data.parent)
-        Platform.runLater { dialogManager!!.openInformationDialog("Download fertig.", "") }
+        Platform.runLater { dialogManager.openInformationDialog("Download finished.", "") }
     }
 
     override fun onDownloading(progress: Int) {

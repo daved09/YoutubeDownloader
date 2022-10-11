@@ -14,7 +14,7 @@
             <fx:include source="PlaylistPanel.fxml"/>
         </content>
       </Tab>
-      <Tab closable="false" text="Einstellungen">
+      <Tab closable="false" text="Settings">
         <content>
             <fx:include source="SettingsPanel.fxml"/>
         </content>
