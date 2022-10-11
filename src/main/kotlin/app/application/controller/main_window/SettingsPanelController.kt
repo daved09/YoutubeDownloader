@@ -43,12 +43,12 @@ class SettingsPanelController(
         chkOverwriteVideos.selectedProperty().bindBidirectional(userConfigHandler.userConfig!!.overwriteExistingVideo)
         chkSubfolderForPlaylists.selectedProperty().bindBidirectional(userConfigHandler.userConfig!!.subFolderForPlaylists)
         txtVersion.textProperty().bind(versionProperties.version)
-        checkForUpdate()
+//        checkForUpdate()
     }
 
     fun btnSaveClick() {
         userConfigHandler.writeConfig()
-        dialogManager.openInformationDialog("Speichern erfolgreich", "")
+        dialogManager.openInformationDialog("Save successful", "")
     }
 
     fun openDownloaderPage(){

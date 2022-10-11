@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service
 @Service
 class DialogManager(private val exceptionExtractor: ExceptionExtractor) {
     fun openWarningDialog(title: String, message: String?) {
-        openDialog(AlertType.WARNING, "Warnung", title, message)
+        openDialog(AlertType.WARNING, "Warning", title, message)
     }
 
     fun openInformationDialog(title: String, message: String?) {
@@ -19,7 +19,7 @@ class DialogManager(private val exceptionExtractor: ExceptionExtractor) {
     }
 
     fun openExceptionDialog(e: Exception?) {
-        openDialog(AlertType.ERROR, "Error", "Es ist ein Fehler aufgetreten.", exceptionExtractor.getTargetOfException(e)?.message)
+        openDialog(AlertType.ERROR, "Error", "An error has occurred.", exceptionExtractor.getTargetOfException(e)?.message)
     }
 
     private fun openDialog(alertType: AlertType, title: String, headerText: String, contentText: String?) {
