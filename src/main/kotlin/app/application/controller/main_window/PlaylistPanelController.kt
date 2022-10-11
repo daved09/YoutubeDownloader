@@ -59,7 +59,7 @@ class PlaylistPanelController(
     }
 
     @Throws(InvalidPlaylistUrlException::class)
-    fun btnSearchPlaylistClick() {
+    fun btnLoadPlaylistClick() {
         listPlaylist.items.clear()
         youtubeUrlValidator.checkPlaylistUrl(txtPlaylistLink.text)
         youtubePlaylist = youtubePlaylistDataService.getPlaylistInfo(youtubeIdExtractor.getPlayListIdFromLink(txtPlaylistLink.text))
