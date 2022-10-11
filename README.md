@@ -4,19 +4,19 @@
 
 [Download](http://daluba.de:3000/dave/YoutubeDownloader_releases/releases/latest)
 
-## Systemanforderungen
+## System requirements
 
 ---
-**Hinweis**
+**Hint**
 
-Java 11 muss installiert sein.
+Java 11 must be installed.
 
 ---
 
 ## Screenshots
 
-### Haupttab
+### Maintab
 ![Main Screen](screenshots/MainScreen.png)
 
-### Einstellungen
+### Settings
 ![Settings](screenshots/Settings.png)
