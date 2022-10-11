@@ -48,7 +48,7 @@ class SettingsPanelController(
 
     fun btnSaveClick() {
         userConfigHandler.writeConfig()
-        dialogManager.openInformationDialog("Speichern erfolgreich", "")
+        dialogManager.openInformationDialog("Save successful", "")
     }
 
     fun openDownloaderPage(){

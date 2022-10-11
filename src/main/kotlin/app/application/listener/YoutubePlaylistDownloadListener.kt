@@ -15,7 +15,7 @@ class YoutubePlaylistDownloadListener(dialogManager: DialogManager, private val 
         actualVideo++
         if (actualVideo == videoAmount) {
             globalObjectHandler.hostServices!!.showDocument(data.parent)
-            Platform.runLater { dialogManager!!.openInformationDialog("Download fertig.", "") }
+            Platform.runLater { dialogManager.openInformationDialog("Download finished.", "") }
         }
     }
 
