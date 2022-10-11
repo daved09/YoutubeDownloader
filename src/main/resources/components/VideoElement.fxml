@@ -8,6 +8,6 @@
    <children>
       <ImageView fx:id="imgThumbnail" fitHeight="84.0" fitWidth="149.0" layoutX="14.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true" />
       <Label fx:id="lblVideoTitle" layoutX="200.0" layoutY="14.0" prefHeight="16.0" prefWidth="251.0" text="Label" AnchorPane.leftAnchor="200.0" AnchorPane.rightAnchor="14.0" />
-      <CheckBox fx:id="chkIgnore" layoutX="200.0" layoutY="81.0" mnemonicParsing="false" text="Ignorieren" />
+      <CheckBox fx:id="chkIgnore" layoutX="200.0" layoutY="81.0" mnemonicParsing="false" text="Ignore" />
    </children>
 </fx:root>

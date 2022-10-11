@@ -44,7 +44,7 @@ class PlaylistPanelController(
     private lateinit var lblDownloadProgress: Label
 
     @FXML
-    private lateinit var btnSearchPlaylist: Button
+    private lateinit var btnLoadPlaylist: Button
 
     @FXML
     private lateinit var chkAudioOnly: CheckBox
@@ -55,7 +55,7 @@ class PlaylistPanelController(
     @FXML
     fun initialize() {
         youtubePlaylistDownloadService.label = lblDownloadProgress
-        btnSearchPlaylist.disableProperty().bind(Bindings.isEmpty(txtPlaylistLink.textProperty()))
+        btnLoadPlaylist.disableProperty().bind(Bindings.isEmpty(txtPlaylistLink.textProperty()))
     }
 
     @Throws(InvalidPlaylistUrlException::class)
