@@ -233,9 +233,9 @@
             <version>1.7</version>
         </dependency>
         <dependency>
-            <groupId>com.github.zeripath</groupId>
-            <artifactId>java-gitea-api</artifactId>
-            <version>1.15.0</version>
+            <groupId>org.kohsuke</groupId>
+            <artifactId>github-api</artifactId>
+            <version>1.313</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
