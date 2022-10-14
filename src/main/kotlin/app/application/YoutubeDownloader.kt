@@ -7,6 +7,7 @@ import javafx.application.Application
 import javafx.application.Platform
 import javafx.scene.Parent
 import javafx.scene.Scene
+import javafx.scene.image.Image
 import javafx.stage.Stage
 import net.rgielen.fxweaver.core.FxWeaver
 import org.springframework.boot.builder.SpringApplicationBuilder
@@ -27,6 +28,7 @@ class YoutubeDownloader : Application() {
         val fxWeaver = applicationContext.getBean(FxWeaver::class.java)
         val root = fxWeaver.loadView<MainWindowController, Parent>(MainWindowController::class.java)
         val scene = Scene(root)
+        stage.icons.add(Image(YoutubeDownloader::class.java.classLoader.getResourceAsStream("icons/youtube.png")))
         stage.title = "Youtube Downloader"
         stage.scene = scene
         stage.show()
