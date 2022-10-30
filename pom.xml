@@ -11,7 +11,7 @@
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
-        <kotlin.version>1.7.10</kotlin.version>
+        <kotlin.version>1.7.20</kotlin.version>
     </properties>
 
     <repositories>
@@ -270,26 +270,6 @@
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-native-utils</artifactId>
             <version>${kotlin.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>ws.schild</groupId>
-            <artifactId>jave-core</artifactId>
-            <version>3.3.1</version>
-        </dependency>
-        <dependency>
-            <groupId>ws.schild</groupId>
-            <artifactId>jave-nativebin-linux64</artifactId>
-            <version>3.3.1</version>
-        </dependency>
-        <dependency>
-            <groupId>ws.schild</groupId>
-            <artifactId>jave-nativebin-win64</artifactId>
-            <version>3.3.1</version>
-        </dependency>
-        <dependency>
-            <groupId>ws.schild</groupId>
-            <artifactId>jave-nativebin-osx64</artifactId>
-            <version>3.3.1</version>
         </dependency>
     </dependencies>
 </project>
