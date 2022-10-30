@@ -14,12 +14,12 @@ class DialogManager(private val exceptionExtractor: ExceptionExtractor) {
         openDialog(AlertType.INFORMATION, "Information", title, message)
     }
 
-    fun openErrorDialog(title: String, message: String?) {
+    private fun openErrorDialog(title: String, message: String?) {
         openDialog(AlertType.ERROR, "Error", title, message)
     }
 
     fun openExceptionDialog(e: Exception?) {
-        openDialog(AlertType.ERROR, "Error", "An error has occurred.", exceptionExtractor.getTargetOfException(e)?.message)
+        openErrorDialog("An error has occurred.", exceptionExtractor.getTargetOfException(e)?.message)
     }
 
     private fun openDialog(alertType: AlertType, title: String, headerText: String, contentText: String?) {

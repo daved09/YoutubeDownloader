@@ -8,6 +8,7 @@ import app.application.listener.YoutubePlaylistDownloadListener
 import app.application.spring.service.GlobalObjectHandler
 import app.application.spring.service.data.YoutubeVideoDataService
 import com.github.kiulian.downloader.downloader.request.RequestVideoFileDownload
+import com.github.kiulian.downloader.model.videos.formats.Format
 import javafx.application.Platform
 import javafx.scene.control.Label
 import lombok.SneakyThrows
@@ -40,22 +41,19 @@ class YoutubePlaylistDownloadService(private val youtubeVideoDataService: Youtub
     }
 
     protected fun downloadAsync(youtubePlaylist: YoutubePlaylist, youtubeVideo: YoutubeVideo) {
-        val requestVideoFileDownload = RequestVideoFileDownload(youtubeVideo.bestVideoWithAudioFormat)
+        val requestVideoFileDownload = RequestVideoFileDownload(getAudioOrVideoFormat(youtubePlaylist, youtubeVideo))
         requestVideoFileDownload.renameTo(youtubeVideo.videoTitle).overwriteIfExists(true)
                 .saveTo(Paths.get(
                     userConfigHandler.userConfig!!.downloadDir.get() + File.separator +
                         if (userConfigHandler.userConfig!!.subFolderForPlaylists.get()) youtubePlaylist.playlistTitle else "").toFile())
                 .callback(youtubeDownloadListener)
-        val videoFile = youtubeDownloader.downloadVideoFile(requestVideoFileDownload).data()
-        youtubeVideoConverter.convert(videoFile)
-        deleteOldVideoFile(videoFile)
+        youtubeDownloader.downloadVideoFile(requestVideoFileDownload).data()
     }
 
-    private fun deleteOldVideoFile(videoFile: File){
-        val success = videoFile.delete()
-        if(!success){
-            throw CantDeleteFileException("File ${videoFile.absoluteFile} couldn´t be deleted.")
-        }
+    private fun getAudioOrVideoFormat(youtubePlaylist: YoutubePlaylist, youtubeVideo: YoutubeVideo): Format {
+        return if (youtubePlaylist.audioOnly.get()) {
+            youtubeVideo.audioFormat
+        } else youtubeVideo.bestVideoWithAudioFormat
     }
 
     private fun setLabelProgress(current: Int, max: Int) {
