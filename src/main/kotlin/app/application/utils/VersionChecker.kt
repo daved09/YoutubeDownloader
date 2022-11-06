@@ -4,14 +4,18 @@ class VersionChecker {
 
     fun isVersionHigher(currentVersion: List<String>, gitVersion: List<String>?): Boolean{
         for (i in currentVersion.indices) {
-            if (gitVersion!![i] > currentVersion[i]) {
+            if (getAsInt(gitVersion!![i]) > getAsInt(currentVersion[i])) {
                 return true
             }
-            if (gitVersion[i] < currentVersion[i]) {
+            if (getAsInt(gitVersion[i]) < getAsInt(currentVersion[i])) {
                 return false
             }
         }
         return false
+    }
+
+    private fun getAsInt(version: String) : Int {
+        return version.toInt()
     }
 
 }
