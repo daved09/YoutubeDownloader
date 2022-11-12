@@ -1,8 +1,5 @@
 # Youtube Video Downloader
 
-## Downloads
-
-[Download](http://daluba.de:3000/dave/YoutubeDownloader_releases/releases/latest)
 
 ## System requirements
 
