@@ -6,6 +6,8 @@ import app.application.spring.service.GlobalObjectHandler
 import app.application.spring.service.UpdateChecker
 import app.application.spring.service.UserConfigHandler
 import app.application.utils.*
+import app.application.utils.DownloadExecutorHandler.DownloaderTask
+import javafx.application.Platform
 import javafx.fxml.FXML
 import javafx.scene.control.CheckBox
 import javafx.scene.control.Hyperlink
@@ -36,6 +38,8 @@ class SettingsPanelController(
     @FXML
     private lateinit var lnkUpdate: Hyperlink
 
+    private val downloadExecutorHandler = DownloadExecutorHandler()
+
     
     @FXML
     fun initialize() {
@@ -56,8 +60,12 @@ class SettingsPanelController(
     }
 
     private fun checkForUpdate(){
-        if(updateChecker.hasNewUpdate()){
-            lnkUpdate.isVisible = true
-        }
+        downloadExecutorHandler.executeTask(object : DownloaderTask {
+            override fun execute() {
+                if(updateChecker.hasNewUpdate()){
+                    Platform.runLater { lnkUpdate.isVisible = true }
+                }
+            }
+        })
     }
 }

@@ -11,26 +11,19 @@ class UpdateChecker(val versionProperties: VersionProperties) {
 
     private val versionChecker = VersionChecker()
 
-    private var github: GitHub? = null
-    private var repository: GHRepository? = null
     private var latestReleaseVersion: String? = null
 
-    init {
-        try{
-            github = GitHub.connectAnonymously()
-            repository = github?.getRepository("daved09/YoutubeDownloader");
-            getReleaseVersion()
-        }
-        catch (ignored: Exception){}
-    }
 
     fun hasNewUpdate(): Boolean{
+        getReleaseVersion()
         val version = versionProperties.version.get().split(".")
         val gitVersion = latestReleaseVersion?.split(".")
         return versionChecker.isVersionHigher(version, gitVersion)
     }
 
     private fun getReleaseVersion() {
+        val github = GitHub.connectAnonymously()
+        val repository = github?.getRepository("daved09/YoutubeDownloader")
         latestReleaseVersion = repository?.latestRelease?.tagName
     }
 
