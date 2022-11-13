@@ -60,13 +60,16 @@ class VideoPanelController(
     @FXML
     private lateinit var btnSearch: Button
 
+    @FXML
+    private lateinit var lblPercent: Label
+
     private val downloadExecutorHandler: DownloadExecutorHandler = DownloadExecutorHandler()
 
     private var actualYoutubeSettingsEntity: YoutubeVideoSettingsEntity? = null
 
     @FXML
     private fun initialize() {
-        youtubeVideoDownloadService.youtubeDownloadListener = YoutubeVideoDownloadListener(downloadProgress, dialogManager, globalObjectHandler)
+        youtubeVideoDownloadService.youtubeDownloadListener = YoutubeVideoDownloadListener(downloadProgress, lblPercent, dialogManager, globalObjectHandler)
         btnSearch.disableProperty().bind(Bindings.isEmpty(txtDownloadLink.textProperty()))
         setupQualityBoxRendering()
     }

@@ -21,9 +21,10 @@
                 <ComboBox fx:id="boxQuality" layoutX="252.0" layoutY="175.0" prefWidth="150.0" AnchorPane.bottomAnchor="175.0" />
                 <TextArea fx:id="txtDescription" editable="false" layoutX="252.0" layoutY="44.0" prefHeight="112.0" prefWidth="511.0" wrapText="true" AnchorPane.bottomAnchor="219.0" AnchorPane.leftAnchor="252.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="44.0" />
                 <Button layoutX="767.0" layoutY="176.0" mnemonicParsing="false" onAction="#btnDownloadVideoClick" text="Download" AnchorPane.bottomAnchor="175.0" />
-                <ProgressBar fx:id="downloadProgress" layoutX="11.0" layoutY="343.0" prefHeight="18.0" prefWidth="757.0" progress="0.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" />
+                <ProgressBar fx:id="downloadProgress" layoutX="11.0" layoutY="343.0" prefHeight="18.0" prefWidth="786.0" progress="0.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="64.0" />
                 <CheckBox fx:id="chkAudioOnly" layoutX="482.0" layoutY="179.0" mnemonicParsing="false" text="Audio only" AnchorPane.bottomAnchor="179.0" />
             <Button layoutX="637.0" layoutY="176.0" mnemonicParsing="false" onAction="#btnAbortClick" text="Cancel" AnchorPane.bottomAnchor="175.0" />
+            <Label fx:id="lblPercent" layoutX="809.0" layoutY="337.0" prefHeight="18.0" prefWidth="50.0" text="0%" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="5.0" />
             </children>
         </AnchorPane>
     </children>
