@@ -12,7 +12,9 @@ import javafx.fxml.FXML
 import javafx.scene.control.CheckBox
 import javafx.scene.control.Hyperlink
 import javafx.scene.control.TextField
+import javafx.stage.DirectoryChooser
 import org.springframework.stereotype.Component
+import java.io.File
 
 @Component
 class SettingsPanelController(
@@ -57,6 +59,15 @@ class SettingsPanelController(
 
     fun openDownloaderPage(){
         globalObjectHandler.hostServices?.showDocument(GlobalValues.DOWNLOAD_PAGE)
+    }
+
+    fun openFileDialog(){
+        val directoryChooser = DirectoryChooser()
+        directoryChooser.initialDirectory = File(txtDownloadPath.text)
+        val directory = directoryChooser.showDialog(txtDownloadPath.scene.window)
+        if(directory != null){
+            txtDownloadPath.text = directory.absolutePath
+        }
     }
 
     private fun checkForUpdate(){
