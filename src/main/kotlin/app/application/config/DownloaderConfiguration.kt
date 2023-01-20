@@ -1,6 +1,5 @@
 package app.application.config
 
-import app.application.spring.factories.ConfigurationFactory
 import app.application.spring.service.UserConfigHandler
 import com.github.kiulian.downloader.Config
 import com.github.kiulian.downloader.YoutubeDownloader
@@ -12,7 +11,7 @@ import java.util.concurrent.Executors
 
 @Configuration
 @EnableConfigurationProperties
-open class DownloaderConfiguration(private val configurationFactory: ConfigurationFactory, private val gson: Gson) {
+open class DownloaderConfiguration(private val gson: Gson) {
 
     @Bean
     open fun youtubeDownloader(): YoutubeDownloader {
@@ -23,7 +22,6 @@ open class DownloaderConfiguration(private val configurationFactory: Configurati
     @Bean
     open fun userConfigHandler(): UserConfigHandler {
         val userConfigHandler = UserConfigHandler()
-        userConfigHandler.configurationFactory = configurationFactory
         userConfigHandler.gson = gson
         userConfigHandler.loadConfig()
         return userConfigHandler

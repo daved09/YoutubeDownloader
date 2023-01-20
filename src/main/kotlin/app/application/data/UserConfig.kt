@@ -11,12 +11,11 @@ import java.io.File
 @Data
 class UserConfig {
 
-    val downloadDir: StringProperty
+    var downloadDir: StringProperty = SimpleStringProperty(System.getProperty("user.home") + File.separator + GlobalValues.VIDEO_DIRECTORY)
     val overwriteExistingVideo: BooleanProperty
     val subFolderForPlaylists: BooleanProperty
 
     init {
-        downloadDir = SimpleStringProperty(System.getProperty("user.home") + File.separator + GlobalValues.VIDEO_DIRECTORY)
         overwriteExistingVideo = SimpleBooleanProperty(false)
         subFolderForPlaylists = SimpleBooleanProperty(true)
     }
