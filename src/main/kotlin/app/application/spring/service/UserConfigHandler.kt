@@ -1,7 +1,6 @@
 package app.application.spring.service
 
 import app.application.data.UserConfig
-import app.application.spring.factories.ConfigurationFactory
 import app.application.utils.GlobalValues
 import com.google.gson.Gson
 import lombok.SneakyThrows
@@ -13,13 +12,15 @@ class UserConfigHandler {
     var userConfig: UserConfig? = null
         private set
 
-    var configurationFactory: ConfigurationFactory? = null
-
     var gson: Gson? = null
 
     private fun initConfig() {
-        userConfig = configurationFactory!!.createDefaultConfiguration()
-        writeConfig()
+        userConfig = loadDefaultConfiguration()
+//        userConfig?.downloadDir?.set(System.getProperty(GlobalValues.USER_HOME) + File.separator + GlobalValues.VIDEO_DIRECTORY)
+    }
+
+    private fun loadDefaultConfiguration(): UserConfig{
+        return gson!!.fromJson(FileReader(DEFAULT_CONFIG_FILE), UserConfig::class.java)
     }
 
     @SneakyThrows
@@ -41,5 +42,6 @@ class UserConfigHandler {
 
     companion object {
         private val USER_CONFIG_FILE = System.getProperty(GlobalValues.USER_HOME) + File.separator + GlobalValues.DOWNLOADER_CONFIG_FILENAME
+        private val DEFAULT_CONFIG_FILE = UserConfigHandler::class.java.classLoader.getResource("default/.ytdl.json")!!.file
     }
 }

@@ -14,10 +14,10 @@
     <Button layoutX="729.0" layoutY="407.0" mnemonicParsing="false" onAction="#btnSaveClick" text="Save" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0" />
     <Label layoutX="14.0" layoutY="411.0" text="Version: " AnchorPane.bottomAnchor="18.0" AnchorPane.leftAnchor="14.0" />
     <TextField fx:id="txtVersion" editable="false" layoutX="72.0" layoutY="407.0" onAction="#openDownloaderPage" prefHeight="24.0" prefWidth="64.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="72.0" />
-    <Label layoutX="14.0" layoutY="51.0" prefHeight="17.0" prefWidth="673.0" text="Override existing videos" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="132.0" />
+    <Label layoutX="14.0" layoutY="51.0" prefHeight="17.0" prefWidth="673.0" text="Override existing videos" AnchorPane.leftAnchor="14.0" />
     <CheckBox fx:id="chkOverwriteVideos" layoutX="605.0" layoutY="50.0" mnemonicParsing="false" AnchorPane.rightAnchor="14.0" />
     <CheckBox fx:id="chkSubfolderForPlaylists" layoutX="787.0" layoutY="97.0" mnemonicParsing="false" AnchorPane.rightAnchor="14.0" />
-    <Label layoutX="14.0" layoutY="98.0" prefHeight="17.0" prefWidth="673.0" text="Subdirectories for playlists" />
+    <Label layoutX="14.0" layoutY="98.0" prefHeight="17.0" prefWidth="673.0" text="Subdirectories for playlists" AnchorPane.leftAnchor="14.0" />
     <Hyperlink fx:id="lnkUpdate" layoutX="143.0" layoutY="407.0" onAction="#openDownloaderPage" text="New version available" visible="false" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="143.0" />
       <Button layoutX="781.0" layoutY="10.0" mnemonicParsing="false" onAction="#openFileDialog" text="..." AnchorPane.rightAnchor="7.0" AnchorPane.topAnchor="10.0" />
 </children>
