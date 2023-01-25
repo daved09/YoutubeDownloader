@@ -16,7 +16,6 @@ class UserConfigHandler {
 
     private fun initConfig() {
         userConfig = loadDefaultConfiguration()
-//        userConfig?.downloadDir?.set(System.getProperty(GlobalValues.USER_HOME) + File.separator + GlobalValues.VIDEO_DIRECTORY)
     }
 
     private fun loadDefaultConfiguration(): UserConfig{
