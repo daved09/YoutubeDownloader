@@ -15,11 +15,11 @@ class UserConfigHandler {
     var gson: Gson? = null
 
     private fun initConfig() {
-        userConfig = loadDefaultConfiguration()
+        userConfig = useDefaultConfig()
     }
 
-    private fun loadDefaultConfiguration(): UserConfig{
-        return gson!!.fromJson(FileReader(DEFAULT_CONFIG_FILE), UserConfig::class.java)
+    private fun useDefaultConfig(): UserConfig{
+        return UserConfig()
     }
 
     @SneakyThrows
@@ -41,6 +41,5 @@ class UserConfigHandler {
 
     companion object {
         private val USER_CONFIG_FILE = System.getProperty(GlobalValues.USER_HOME) + File.separator + GlobalValues.DOWNLOADER_CONFIG_FILENAME
-        private val DEFAULT_CONFIG_FILE = UserConfigHandler::class.java.classLoader.getResource("default/.ytdl.json")!!.file
     }
 }
