@@ -83,8 +83,9 @@ class VideoPanelController(
 
     @Throws(InvalidVideoUrlException::class)
     fun btnSearchClick() {
-        youtubeUrlValidator.checkVideoUrl(txtDownloadLink.text)
-        actualYoutubeSettingsEntity = YoutubeVideoSettingsEntity(youtubeVideoDataService.getYoutubeVideo(youtubeIdExtractor.getVideoIdFromLink(txtDownloadLink.text)))
+        val url = txtDownloadLink.text.trim()
+        youtubeUrlValidator.checkVideoUrl(url)
+        actualYoutubeSettingsEntity = YoutubeVideoSettingsEntity(youtubeVideoDataService.getYoutubeVideo(youtubeIdExtractor.getVideoIdFromLink(url)))
         updateGui()
         videoPane.isVisible = true
     }

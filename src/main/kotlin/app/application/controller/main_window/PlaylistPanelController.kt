@@ -60,9 +60,10 @@ class PlaylistPanelController(
 
     @Throws(InvalidPlaylistUrlException::class)
     fun btnLoadPlaylistClick() {
+        val url = txtPlaylistLink.text.trim()
         listPlaylist.items.clear()
-        youtubeUrlValidator.checkPlaylistUrl(txtPlaylistLink.text)
-        youtubePlaylist = youtubePlaylistDataService.getPlaylistInfo(youtubeIdExtractor.getPlayListIdFromLink(txtPlaylistLink.text))
+        youtubeUrlValidator.checkPlaylistUrl(url)
+        youtubePlaylist = youtubePlaylistDataService.getPlaylistInfo(youtubeIdExtractor.getPlayListIdFromLink(url))
         lblDownloadProgress.text = "Videos: 0/" + youtubePlaylist!!.playlistSize
         txtPlaylistTitle.text = youtubePlaylist!!.playlistTitle
         youtubePlaylist!!.playlistVideos.forEach(Consumer { video: YoutubePlaylistVideoDetail? -> listPlaylist.items.add(videoElementFactory.createVideoElement(video)) }
