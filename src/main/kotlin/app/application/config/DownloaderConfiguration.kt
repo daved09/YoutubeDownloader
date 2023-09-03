@@ -1,5 +1,6 @@
 package app.application.config
 
+import app.application.spring.service.DialogManager
 import app.application.spring.service.UserConfigHandler
 import com.github.kiulian.downloader.Config
 import com.github.kiulian.downloader.YoutubeDownloader
@@ -11,7 +12,8 @@ import java.util.concurrent.Executors
 
 @Configuration
 @EnableConfigurationProperties
-open class DownloaderConfiguration(private val gson: Gson) {
+open class DownloaderConfiguration(private val gson: Gson,
+private val dialogManager: DialogManager) {
 
     @Bean
     open fun youtubeDownloader(): YoutubeDownloader {
@@ -23,6 +25,7 @@ open class DownloaderConfiguration(private val gson: Gson) {
     open fun userConfigHandler(): UserConfigHandler {
         val userConfigHandler = UserConfigHandler()
         userConfigHandler.gson = gson
+        userConfigHandler.dialogManager = dialogManager
         userConfigHandler.loadConfig()
         return userConfigHandler
     }
