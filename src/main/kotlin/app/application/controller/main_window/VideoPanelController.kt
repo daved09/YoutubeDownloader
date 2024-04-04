@@ -19,6 +19,8 @@ import javafx.fxml.FXML
 import javafx.scene.control.*
 import javafx.scene.image.Image
 import javafx.scene.image.ImageView
+import javafx.scene.input.KeyCode
+import javafx.scene.input.KeyEvent
 import javafx.scene.layout.AnchorPane
 import javafx.util.Callback
 import org.springframework.stereotype.Component
@@ -101,6 +103,12 @@ class VideoPanelController(
     @Throws(CantAbortDownloadException::class)
     fun btnAbortClick() {
         downloadExecutorHandler.killTask()
+    }
+
+    fun searchKeyPressed(keyEvent: KeyEvent){
+        if(keyEvent.code == KeyCode.ENTER){
+            btnSearchClick()
+        }
     }
 
     private fun updateGui() {

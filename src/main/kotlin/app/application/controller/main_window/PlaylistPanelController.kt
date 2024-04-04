@@ -15,6 +15,8 @@ import app.application.spring.service.download.YoutubePlaylistDownloadService
 import javafx.beans.binding.Bindings
 import javafx.fxml.FXML
 import javafx.scene.control.*
+import javafx.scene.input.KeyCode
+import javafx.scene.input.KeyEvent
 import javafx.scene.layout.AnchorPane
 import org.springframework.stereotype.Component
 import java.util.function.Consumer
@@ -78,6 +80,12 @@ class PlaylistPanelController(
                 youtubePlaylist?.let { youtubePlaylistDownloadService.downloadPlaylist(it) }
             }
         })
+    }
+
+    fun loadKeyPressed(keyEvent: KeyEvent){
+        if(keyEvent.code == KeyCode.ENTER){
+            btnLoadPlaylistClick()
+        }
     }
 
     @Throws(CantAbortDownloadException::class)
