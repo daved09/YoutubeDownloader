@@ -45,9 +45,9 @@ class SettingsPanelController(
     
     @FXML
     fun initialize() {
-        txtDownloadPath.textProperty().bindBidirectional(userConfigHandler.userConfig!!.downloadDir)
-        chkOverwriteVideos.selectedProperty().bindBidirectional(userConfigHandler.userConfig!!.overwriteExistingVideo)
-        chkSubfolderForPlaylists.selectedProperty().bindBidirectional(userConfigHandler.userConfig!!.subFolderForPlaylists)
+        txtDownloadPath.textProperty().bindBidirectional(userConfigHandler.userConfig.downloadDir)
+        chkOverwriteVideos.selectedProperty().bindBidirectional(userConfigHandler.userConfig.overwriteExistingVideo)
+        chkSubfolderForPlaylists.selectedProperty().bindBidirectional(userConfigHandler.userConfig.subFolderForPlaylists)
         txtVersion.textProperty().bind(versionProperties.version)
         checkForUpdate()
     }

@@ -23,10 +23,10 @@ class YoutubeVideoDownloadService : YoutubeDownloadService() {
         val requestVideoFileDownload = RequestVideoFileDownload(youtubeVideoSettingsEntity.settingsEntity?.qualityProperty?.get())
         requestVideoFileDownload.callback(youtubeDownloadListener)
                 .renameTo(youtubeVideoSettingsEntity.youtubeEntity?.videoTitle)
-                .overwriteIfExists(userConfigHandler.userConfig!!.overwriteExistingVideo.get())
-                .saveTo(Paths.get(userConfigHandler.userConfig!!.downloadDir.get()).toFile())
+                .overwriteIfExists(userConfigHandler.userConfig.overwriteExistingVideo.get())
+                .saveTo(Paths.get(userConfigHandler.userConfig.downloadDir.get()).toFile())
         val videoFile = youtubeDownloader.downloadVideoFile(requestVideoFileDownload).data()
-        if(youtubeVideoSettingsEntity.settingsEntity?.audioOnlyProperty?.get()!!){
+        if(youtubeVideoSettingsEntity.settingsEntity?.audioOnlyProperty?.get() as Boolean){
             youtubeVideoConverter.convert(videoFile)
             deleteOldVideoFile(videoFile)
         }

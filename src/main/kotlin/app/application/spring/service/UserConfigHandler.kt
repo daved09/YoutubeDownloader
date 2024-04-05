@@ -6,23 +6,18 @@ import app.application.utils.USER_HOME
 import com.google.gson.Gson
 import lombok.SneakyThrows
 import java.io.File
-import java.io.FileNotFoundException
 import java.io.FileReader
 import java.io.FileWriter
 import java.nio.file.Files
 import java.nio.file.Paths
 
 class UserConfigHandler {
-    var userConfig: UserConfig? = null
+    var userConfig: UserConfig = useDefaultConfig()
         private set
 
     lateinit var gson: Gson
 
-    var dialogManager: DialogManager? = null
-
-    private fun initConfig() {
-        userConfig = useDefaultConfig()
-    }
+    lateinit var dialogManager: DialogManager
 
     private fun useDefaultConfig(): UserConfig{
         return UserConfig()
@@ -34,12 +29,8 @@ class UserConfigHandler {
             if(Files.exists(Paths.get(USER_CONFIG_FILE))){
                 userConfig = gson.fromJson(FileReader(USER_CONFIG_FILE), UserConfig::class.java)
             }
-            else{
-                initConfig()
-            }
         } catch (e: Exception){
-            dialogManager?.openExceptionDialog(e)
-            initConfig()
+            //TODO: Handle exception here (issue #58)
         }
     }
 

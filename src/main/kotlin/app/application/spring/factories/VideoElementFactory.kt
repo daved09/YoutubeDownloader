@@ -11,7 +11,7 @@ class VideoElementFactory(private val autowireCapableBeanFactory: AutowireCapabl
     fun createVideoElement(youtubePlaylistVideoDetail: YoutubePlaylistVideoDetail?): VideoElement {
         val videoElement = VideoElement()
         autowireCapableBeanFactory.autowireBean(videoElement)
-        videoElement.loadVideoDetails(youtubePlaylistVideoDetail!!)
+        videoElement.loadVideoDetails(youtubePlaylistVideoDetail)
         return videoElement
     }
 
