@@ -58,7 +58,7 @@ class SettingsPanelController(
     }
 
     fun openDownloaderPage(){
-        globalObjectHandler.hostServices?.showDocument(GlobalValues.DOWNLOAD_PAGE)
+        globalObjectHandler.hostServices?.showDocument(DOWNLOAD_PAGE)
     }
 
     fun openFileDialog(){

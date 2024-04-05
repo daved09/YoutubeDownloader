@@ -1,9 +1,9 @@
 package app.application.spring.service
 
-import kotlin.Throws
-import app.application.exception.InvalidVideoUrlException
 import app.application.exception.InvalidPlaylistUrlException
-import app.application.utils.GlobalValues
+import app.application.exception.InvalidVideoUrlException
+import app.application.utils.YOUTUBE_SHORT_URL
+import app.application.utils.YOUTUBE_URL
 import org.apache.commons.validator.routines.UrlValidator
 import org.springframework.stereotype.Service
 
@@ -27,11 +27,11 @@ class YoutubeUrlValidator {
     }
 
     fun isShortUrl(url: String): Boolean {
-        return url.contains(GlobalValues.YOUTUBE_SHORT_URL)
+        return url.contains(YOUTUBE_SHORT_URL)
     }
 
     private fun isYoutubeUrl(url: String): Boolean {
-        return url.contains(GlobalValues.YOUTUBE_URL) || isShortUrl(url)
+        return url.contains(YOUTUBE_URL) || isShortUrl(url)
     }
 
     private fun hasVideoID(url: String): Boolean {

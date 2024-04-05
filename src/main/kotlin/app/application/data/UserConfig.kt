@@ -1,6 +1,8 @@
 package app.application.data
 
-import app.application.utils.GlobalValues
+import app.application.utils.USER_HOME
+import app.application.utils.VIDEO_DIRECTORY
+import app.application.utils.VIDEO_DIRECTORY_MAC
 import javafx.beans.property.BooleanProperty
 import javafx.beans.property.SimpleBooleanProperty
 import javafx.beans.property.SimpleStringProperty
@@ -23,11 +25,11 @@ class UserConfig {
     }
 
     private fun initDefaultVideosDir(): StringProperty {
-        val dirBuilder = StringBuilder(System.getProperty("user.home") + File.separator)
+        val dirBuilder = StringBuilder(System.getProperty(USER_HOME) + File.separator)
         if(SystemUtils.IS_OS_MAC){
-            dirBuilder.append(GlobalValues.VIDEO_DIRECTORY_MAC)
+            dirBuilder.append(VIDEO_DIRECTORY_MAC)
         }else{
-            dirBuilder.append(GlobalValues.VIDEO_DIRECTORY)
+            dirBuilder.append(VIDEO_DIRECTORY)
         }
         return SimpleStringProperty(dirBuilder.toString())
     }

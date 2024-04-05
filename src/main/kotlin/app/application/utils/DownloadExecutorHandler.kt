@@ -1,15 +1,10 @@
 package app.application.utils
 
+import app.application.exception.CantAbortDownloadException
+import app.application.exception.ExecutorTerminationException
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
-import app.application.utils.DownloadExecutorHandler.DownloaderTask
-import java.lang.Runnable
-import kotlin.Throws
-import app.application.exception.CantAbortDownloadException
 import java.util.concurrent.TimeUnit
-import app.application.exception.ExecutorTerminationException
-import app.application.utils.GlobalValues
-import java.lang.InterruptedException
 
 class DownloadExecutorHandler {
     private var downloadExecutorService: ExecutorService
@@ -36,7 +31,7 @@ class DownloadExecutorHandler {
             val terminationSuccess = downloadExecutorService.awaitTermination(10,
                     TimeUnit.SECONDS)
             if (!terminationSuccess) {
-                throw ExecutorTerminationException(GlobalValues.DOWNLOAD_EXECUTOR_TERMINATION_ERROR)
+                throw ExecutorTerminationException(DOWNLOAD_EXECUTOR_TERMINATION_ERROR)
             }
         } catch (e: InterruptedException) {
             Thread.currentThread().interrupt()
