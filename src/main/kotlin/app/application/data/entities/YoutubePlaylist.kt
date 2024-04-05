@@ -21,7 +21,7 @@ class YoutubePlaylist(playlistInfo: PlaylistInfo?) : YoutubeEntity<PlaylistInfo?
         get() {
             if (youtubePlaylistVideoDetailsCache.isEmpty()) {
                 reference?.also {
-                    for (video in reference!!.videos()) {
+                    for (video in it.videos()) {
                         youtubePlaylistVideoDetailsCache.add(YoutubePlaylistVideoDetail(video))
                     }
                 }

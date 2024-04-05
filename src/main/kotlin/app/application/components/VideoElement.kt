@@ -31,11 +31,13 @@ class VideoElement : AnchorPane() {
         loadComponent(this)
     }
 
-    fun loadVideoDetails(youtubePlaylistVideoDetail: YoutubePlaylistVideoDetail) {
+    fun loadVideoDetails(youtubePlaylistVideoDetail: YoutubePlaylistVideoDetail?) {
         this.youtubePlaylistVideoDetail = youtubePlaylistVideoDetail
-        imgThumbnail.image = youtubePlaylistVideoDetail.thumbnailImage
-        lblVideoTitle.text = youtubePlaylistVideoDetail.videoTitle
-        chkIgnore.selectedProperty().bindBidirectional(youtubePlaylistVideoDetail.ignore)
+        youtubePlaylistVideoDetail?.also {
+            imgThumbnail.image = it.thumbnailImage
+            lblVideoTitle.text = it.videoTitle
+            chkIgnore.selectedProperty().bindBidirectional(it.ignore)
+        }
     }
 
     fun mouseClicked(event: MouseEvent) {
@@ -43,6 +45,6 @@ class VideoElement : AnchorPane() {
             return
         }
         videoDetailsController.open()
-        videoDetailsController.setVideoInfos(youtubePlaylistVideoDetail!!.videoId)
+        youtubePlaylistVideoDetail?.videoId?.also { videoDetailsController.setVideoInfos(it) }
     }
 }

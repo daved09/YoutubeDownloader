@@ -7,7 +7,7 @@ import org.kohsuke.github.GitHub
 import org.springframework.stereotype.Service
 
 @Service
-class UpdateChecker(val versionProperties: VersionProperties) {
+class UpdateChecker(private val versionProperties: VersionProperties) {
 
     private val versionChecker = VersionChecker()
 

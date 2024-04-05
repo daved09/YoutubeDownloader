@@ -13,15 +13,15 @@ class YoutubeVideoDownloadListener(private val progressBar: ProgressBar,
                                    private val globalObjectHandler: GlobalObjectHandler) : YoutubeDownloadListener(dialogManager) {
     private var currentProgress = 0
     override fun onFinished(data: File) {
-        globalObjectHandler.hostServices!!.showDocument(data.parent)
+        globalObjectHandler.hostServices?.showDocument(data.parent)
         Platform.runLater { dialogManager.openInformationDialog("Download finished.", "") }
     }
 
     override fun onDownloading(progress: Int) {
         currentProgress = progress
         Platform.runLater {
-            progressBar.progress = Integer.toString(progress).toDouble() / 100
-            percentLabel.text = Integer.toString(progress) + "%"
+            progressBar.progress = progress.toString().toDouble() / 100
+            percentLabel.text = "$progress%"
         }
     }
 

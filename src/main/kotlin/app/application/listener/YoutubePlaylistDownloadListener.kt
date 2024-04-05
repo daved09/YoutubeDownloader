@@ -8,13 +8,13 @@ import java.io.File
 class YoutubePlaylistDownloadListener(dialogManager: DialogManager, private val videoAmount: Int, private val globalObjectHandler: GlobalObjectHandler) : YoutubeDownloadListener(dialogManager) {
     private var actualVideo = 0
     override fun onDownloading(progress: Int) {
-        // Wird nicht verwendet
+        // Not used
     }
 
     override fun onFinished(data: File) {
         actualVideo++
         if (actualVideo == videoAmount) {
-            globalObjectHandler.hostServices!!.showDocument(data.parent)
+            globalObjectHandler.hostServices?.showDocument(data.parent)
             Platform.runLater { dialogManager.openInformationDialog("Download finished.", "") }
         }
     }

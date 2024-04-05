@@ -9,7 +9,7 @@ class ExceptionController(private val dialogManager: DialogManager) {
 
     @PostConstruct
     fun error() {
-        Thread.setDefaultUncaughtExceptionHandler { thread: Thread?, throwable: Throwable? -> dialogManager.openExceptionDialog(throwable as Exception?) }
+        Thread.setDefaultUncaughtExceptionHandler { _: Thread?, throwable: Throwable? -> dialogManager.openExceptionDialog(throwable as Exception?) }
     }
 
 }
