@@ -9,12 +9,14 @@ import java.io.File
 import java.io.FileNotFoundException
 import java.io.FileReader
 import java.io.FileWriter
+import java.nio.file.Files
+import java.nio.file.Paths
 
 class UserConfigHandler {
     var userConfig: UserConfig? = null
         private set
 
-    var gson: Gson? = null
+    lateinit var gson: Gson
 
     var dialogManager: DialogManager? = null
 
@@ -29,9 +31,12 @@ class UserConfigHandler {
     @SneakyThrows
     fun loadConfig() {
         try {
-            userConfig = gson!!.fromJson(FileReader(USER_CONFIG_FILE), UserConfig::class.java)
-        } catch (e: FileNotFoundException) {
-            initConfig()
+            if(Files.exists(Paths.get(USER_CONFIG_FILE))){
+                userConfig = gson.fromJson(FileReader(USER_CONFIG_FILE), UserConfig::class.java)
+            }
+            else{
+                initConfig()
+            }
         } catch (e: Exception){
             dialogManager?.openExceptionDialog(e)
             initConfig()
@@ -41,7 +46,7 @@ class UserConfigHandler {
     @SneakyThrows
     fun writeConfig() {
         val fileWriter = FileWriter(USER_CONFIG_FILE)
-        gson!!.toJson(userConfig, fileWriter)
+        gson.toJson(userConfig, fileWriter)
         fileWriter.flush()
         fileWriter.close()
     }
