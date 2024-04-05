@@ -5,19 +5,16 @@ import app.application.exception.CantAbortDownloadException
 import app.application.exception.InvalidVideoUrlException
 import app.application.listener.YoutubeVideoDownloadListener
 import app.application.spring.service.*
-import app.application.utils.*
 import app.application.spring.service.data.YoutubeVideoDataService
 import app.application.spring.service.download.YoutubeVideoDownloadService
+import app.application.utils.*
 import app.application.utils.DownloadExecutorHandler.DownloaderTask
-import com.github.kiulian.downloader.model.videos.VideoInfo
 import com.github.kiulian.downloader.model.videos.formats.VideoWithAudioFormat
 import javafx.beans.binding.Bindings
-import javafx.beans.property.ObjectProperty
 import javafx.beans.property.SimpleBooleanProperty
 import javafx.beans.property.SimpleObjectProperty
 import javafx.fxml.FXML
 import javafx.scene.control.*
-import javafx.scene.image.Image
 import javafx.scene.image.ImageView
 import javafx.scene.input.KeyCode
 import javafx.scene.input.KeyEvent
@@ -116,7 +113,7 @@ class VideoPanelController(
         lblVideoTitle.text = actualYoutubeSettingsEntity?.youtubeEntity?.videoTitle
         refreshQualityBox(actualYoutubeSettingsEntity?.youtubeEntity?.videoWithAudioFormat)
         txtDescription.text = actualYoutubeSettingsEntity?.youtubeEntity?.videoDescription
-        actualYoutubeSettingsEntity?.settingsEntity = SettingsEntity(SimpleObjectProperty(actualYoutubeSettingsEntity?.youtubeEntity?.videoWithAudioFormat!![0]), SimpleBooleanProperty(chkAudioOnly.isSelected))
+        actualYoutubeSettingsEntity?.settingsEntity = SettingsEntity(SimpleObjectProperty(actualYoutubeSettingsEntity?.youtubeEntity?.videoWithAudioFormat?.get(0)), SimpleBooleanProperty(chkAudioOnly.isSelected))
         actualYoutubeSettingsEntity?.settingsEntity?.qualityProperty?.bind(boxQuality.valueProperty())
         actualYoutubeSettingsEntity?.settingsEntity?.audioOnlyProperty?.bind(chkAudioOnly.selectedProperty())
     }

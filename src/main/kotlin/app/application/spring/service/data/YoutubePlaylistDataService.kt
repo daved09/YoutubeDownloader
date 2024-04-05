@@ -11,7 +11,6 @@ class YoutubePlaylistDataService(youtubeDownloader: YoutubeDownloader) : Youtube
     @SneakyThrows
     fun getPlaylistInfo(playListId: String?): YoutubePlaylist {
         val requestPlaylistInfo = RequestPlaylistInfo(playListId)
-        val playlistInfo = youtubeDownloader!!.getPlaylistInfo(requestPlaylistInfo).data()
-        return YoutubePlaylist(playlistInfo)
+        return YoutubePlaylist(youtubeDownloader.getPlaylistInfo(requestPlaylistInfo).data())
     }
 }

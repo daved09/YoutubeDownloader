@@ -66,11 +66,10 @@ class PlaylistPanelController(
         listPlaylist.items.clear()
         youtubeUrlValidator.checkPlaylistUrl(url)
         youtubePlaylist = youtubePlaylistDataService.getPlaylistInfo(youtubeIdExtractor.getPlayListIdFromLink(url))
-        lblDownloadProgress.text = "Videos: 0/" + youtubePlaylist!!.playlistSize
-        txtPlaylistTitle.text = youtubePlaylist!!.playlistTitle
-        youtubePlaylist!!.playlistVideos.forEach(Consumer { video: YoutubePlaylistVideoDetail? -> listPlaylist.items.add(videoElementFactory.createVideoElement(video)) }
-        )
-        chkAudioOnly.selectedProperty().bindBidirectional(youtubePlaylist!!.audioOnly)
+        lblDownloadProgress.text = "Videos: 0/" + youtubePlaylist?.playlistSize
+        txtPlaylistTitle.text = youtubePlaylist?.playlistTitle
+        youtubePlaylist?.playlistVideos?.forEach(Consumer { video: YoutubePlaylistVideoDetail? -> listPlaylist.items.add(videoElementFactory.createVideoElement(video)) })
+        chkAudioOnly.selectedProperty().bindBidirectional(youtubePlaylist?.audioOnly)
         playlistPanel.isVisible = true
     }
 

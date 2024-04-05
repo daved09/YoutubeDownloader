@@ -13,22 +13,22 @@ class YoutubePlaylistVideoDetail(playlistVideoDetails: PlaylistVideoDetails?) : 
         ignore = SimpleBooleanProperty(false)
     }
 
-    var _thumbnailImage: Image? = null
+    private var _thumbnailImage: Image? = null
 
     val thumbnailImage: Image
     get() {
         if(_thumbnailImage == null){
             _thumbnailImage = Image(videoThumbnailUrl)
         }
-        return _thumbnailImage!!
+        return _thumbnailImage as Image
     }
 
-    val videoThumbnailUrl: String
-        get() = reference!!.thumbnails()[0].split("\\?sqp").toTypedArray()[0]
+    private val videoThumbnailUrl: String?
+        get() = reference?.thumbnails()?.get(0)?.split("\\?sqp")?.toTypedArray()?.get(0)
 
-    val videoTitle: String
-        get() = reference!!.title()
+    val videoTitle: String?
+        get() = reference?.title()
 
-    val videoId: String
-        get() = reference!!.videoId()
+    val videoId: String?
+        get() = reference?.videoId()
 }

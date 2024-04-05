@@ -1,22 +1,23 @@
 package app.application.spring.service
 
 import app.application.data.UserConfig
-import app.application.utils.GlobalValues
+import app.application.utils.DOWNLOADER_CONFIG_FILENAME
+import app.application.utils.USER_HOME
 import com.google.gson.Gson
 import lombok.SneakyThrows
 import java.io.File
 import java.io.FileReader
 import java.io.FileWriter
+import java.nio.file.Files
+import java.nio.file.Paths
 
 class UserConfigHandler {
-    var userConfig: UserConfig? = null
+    var userConfig: UserConfig = useDefaultConfig()
         private set
 
-    var gson: Gson? = null
+    lateinit var gson: Gson
 
-    private fun initConfig() {
-        userConfig = useDefaultConfig()
-    }
+    lateinit var dialogManager: DialogManager
 
     private fun useDefaultConfig(): UserConfig{
         return UserConfig()
@@ -25,21 +26,23 @@ class UserConfigHandler {
     @SneakyThrows
     fun loadConfig() {
         try {
-            userConfig = gson!!.fromJson(FileReader(USER_CONFIG_FILE), UserConfig::class.java)
-        } catch (e: Exception) {
-            initConfig()
+            if(Files.exists(Paths.get(USER_CONFIG_FILE))){
+                userConfig = gson.fromJson(FileReader(USER_CONFIG_FILE), UserConfig::class.java)
+            }
+        } catch (e: Exception){
+            //TODO: Handle exception here (issue #58)
         }
     }
 
     @SneakyThrows
     fun writeConfig() {
         val fileWriter = FileWriter(USER_CONFIG_FILE)
-        gson!!.toJson(userConfig, fileWriter)
+        gson.toJson(userConfig, fileWriter)
         fileWriter.flush()
         fileWriter.close()
     }
 
     companion object {
-        private val USER_CONFIG_FILE = System.getProperty(GlobalValues.USER_HOME) + File.separator + GlobalValues.DOWNLOADER_CONFIG_FILENAME
+        private val USER_CONFIG_FILE = System.getProperty(USER_HOME) + File.separator + DOWNLOADER_CONFIG_FILENAME
     }
 }

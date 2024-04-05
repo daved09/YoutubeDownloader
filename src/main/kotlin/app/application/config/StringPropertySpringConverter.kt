@@ -8,9 +8,9 @@ import org.springframework.stereotype.Component
 
 @Component
 @ConfigurationPropertiesBinding
-class StringPropertySpringConverter : Converter<String?, StringProperty> {
+class StringPropertySpringConverter : Converter<String, StringProperty> {
 
-    override fun convert(source: String?): StringProperty {
+    override fun convert(source: String): StringProperty {
         return SimpleStringProperty(source)
     }
 }
