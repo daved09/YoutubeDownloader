@@ -15,18 +15,20 @@ class YoutubePlaylist(playlistInfo: PlaylistInfo?) : YoutubeEntity<PlaylistInfo?
     }
 
     val playlistSize: Int
-        get() = reference!!.details().videoCount()
+        get() = reference?.details()?.videoCount() ?: 0
 
     val playlistVideos: List<YoutubePlaylistVideoDetail>
         get() {
             if (youtubePlaylistVideoDetailsCache.isEmpty()) {
-                for (video in reference!!.videos()) {
-                    youtubePlaylistVideoDetailsCache.add(YoutubePlaylistVideoDetail(video))
+                reference?.also {
+                    for (video in reference!!.videos()) {
+                        youtubePlaylistVideoDetailsCache.add(YoutubePlaylistVideoDetail(video))
+                    }
                 }
             }
             return youtubePlaylistVideoDetailsCache
         }
 
     val playlistTitle: String
-        get() = reference!!.details().title()
+        get() = reference?.details()?.title() ?: "No Playlist"
 }
