@@ -51,7 +51,7 @@ class VideoDetailsController(
         val stage = Stage()
         val root = fxWeaver.loadView<VideoDetailsController, Parent>(VideoDetailsController::class.java)
         val scene = Scene(root)
-        stage.title = "Videodetails"
+        stage.title = "Video details"
         stage.scene = scene
         stage.show()
     }
