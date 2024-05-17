@@ -82,7 +82,7 @@ class PlaylistPanelController(
     }
 
     fun loadKeyPressed(keyEvent: KeyEvent){
-        if(keyEvent.code == KeyCode.ENTER){
+        if(keyEvent.code == KeyCode.ENTER && !btnLoadPlaylist.isDisabled){
             btnLoadPlaylistClick()
         }
     }

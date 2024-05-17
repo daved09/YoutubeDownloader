@@ -103,7 +103,7 @@ class VideoPanelController(
     }
 
     fun searchKeyPressed(keyEvent: KeyEvent){
-        if(keyEvent.code == KeyCode.ENTER){
+        if(keyEvent.code == KeyCode.ENTER && !btnSearch.isDisabled){
             btnSearchClick()
         }
     }
