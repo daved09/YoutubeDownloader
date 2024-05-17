@@ -13,7 +13,7 @@
 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="439.0" prefWidth="864.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.application.controller.main_window.VideoPanelController">
     <children>
         <TextField fx:id="txtDownloadLink" layoutX="15.0" layoutY="14.0" onKeyPressed="#searchKeyPressed" prefHeight="25.0" prefWidth="786.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="64.0" />
-        <Button fx:id="btnSearch" layoutX="787.0" layoutY="15.0" mnemonicParsing="false" onAction="#btnSearchClick" text="Load" AnchorPane.rightAnchor="10.0" />
+        <Button fx:id="btnLoadVideo" layoutX="787.0" layoutY="15.0" mnemonicParsing="false" onAction="#btnLoadVideoClick" text="Load" AnchorPane.rightAnchor="10.0" />
         <AnchorPane fx:id="videoPane" layoutX="14.0" layoutY="50.0" prefHeight="375.0" prefWidth="791.0" visible="false" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="56.0">
             <children>
                 <ImageView fx:id="imgThumbnail" fitHeight="190.0" fitWidth="222.0" layoutX="14.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="171.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="555.0" AnchorPane.topAnchor="14.0" />
