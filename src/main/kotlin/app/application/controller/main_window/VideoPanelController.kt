@@ -57,7 +57,7 @@ class VideoPanelController(
     private lateinit var chkAudioOnly: CheckBox
 
     @FXML
-    private lateinit var btnSearch: Button
+    private lateinit var btnLoadVideo: Button
 
     @FXML
     private lateinit var lblPercent: Label
@@ -69,7 +69,7 @@ class VideoPanelController(
     @FXML
     private fun initialize() {
         youtubeVideoDownloadService.youtubeDownloadListener = YoutubeVideoDownloadListener(downloadProgress, lblPercent, dialogManager, globalObjectHandler)
-        btnSearch.disableProperty().bind(Bindings.isEmpty(txtDownloadLink.textProperty()))
+        btnLoadVideo.disableProperty().bind(Bindings.isEmpty(txtDownloadLink.textProperty()))
         setupQualityBoxRendering()
     }
 
@@ -81,7 +81,7 @@ class VideoPanelController(
     }
 
     @Throws(InvalidVideoUrlException::class)
-    fun btnSearchClick() {
+    fun btnLoadVideoClick() {
         val url = txtDownloadLink.text.trim()
         youtubeUrlValidator.checkVideoUrl(url)
         actualYoutubeSettingsEntity = YoutubeVideoSettingsEntity(youtubeVideoDataService.getYoutubeVideo(youtubeIdExtractor.getVideoIdFromLink(url)))
@@ -103,8 +103,8 @@ class VideoPanelController(
     }
 
     fun searchKeyPressed(keyEvent: KeyEvent){
-        if(keyEvent.code == KeyCode.ENTER){
-            btnSearchClick()
+        if(keyEvent.code == KeyCode.ENTER && !btnLoadVideo.isDisabled){
+            btnLoadVideoClick()
         }
     }
 
